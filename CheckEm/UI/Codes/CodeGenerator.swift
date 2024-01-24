@@ -9,19 +9,24 @@ import Foundation
 
 final class CodeGenerator {
     
-    static let shared = CodeGenerator()
+    private let account: Account
     
-    private init() { }
-    
-    func currentCode() -> OTP {
-        OTP()
+    init(account: Account) { 
+        self.account = account
     }
     
-    // idea: generate these with paging, and every time an interesting one gets created, set the notif. immediately; then update a datepicker with the date it sends 
+    func currentCode() -> OTP {
+        OTP(account: account)
+    }
+    
+    // TODO: generate these with paging,
+    // and every time an interesting one gets created,
+    // set the notif. immediately; then update a
+    // datepicker with the date it sends
     func generateCodes() -> [OTP] {
         let date = Date()
-        return (0..<10_000)
-            .map { OTP(date: date, increment: $0) }
+        return (0..<100_000)
+            .map { OTP(account: account, date: date, increment: $0) }
             .filter { $0.interestingness != nil }
     }
 }

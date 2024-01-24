@@ -17,7 +17,7 @@ struct CodeView: View {
     var body: some View {
         NavigationStack {
             List {
-                OTPView(name: "Current OTP",
+                OTPView(name: viewModel.accountName,
                         currentCode: viewModel.currentCode,
                         dateString: viewModel.dateString,
                         countdown: viewModel.countdown)
@@ -39,7 +39,11 @@ struct CodeView: View {
                 })
             }
             .sheet(isPresented: $showScanner) {
-                ScanView()
+                ScanView {
+                    showScanner = false
+                    viewModel.create(account: $0)
+                    print($0)
+                }
             }
             .sheet(isPresented: $showSettings) {
                 SettingsView()
