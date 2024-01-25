@@ -9,24 +9,32 @@ import Foundation
 
 final class CodeGenerator {
     
-    private let account: Account
+    static let shared = CodeGenerator()
     
-    init(account: Account) { 
-        self.account = account
+    private init() { }
+    
+    func currentCode(account: Account) -> OTP? {
+        guard let secret = account.secret else { return nil }
+        return OTP(secret: secret)
     }
     
-    func currentCode() -> OTP {
-        OTP(account: account)
-    }
-    
-    // TODO: generate these with paging,
-    // and every time an interesting one gets created,
-    // set the notif. immediately; then update a
-    // datepicker with the date it sends
-    func generateCodes() -> [OTP] {
+    // There is a 64 notification limit on locally-scheduled notifications
+    func generateCodes(accounts: [Account]) -> [OTP] {
+        let secrets = accounts.compactMap { $0.secret }
         let date = Date()
-        return (0..<100_000)
-            .map { OTP(account: account, date: date, increment: $0) }
-            .filter { $0.interestingness != nil }
+        var interestingCodes = [OTP]()
+        var increment = 0
+        var interestingCodesCount = 0
+        while interestingCodesCount < 64 {
+            secrets.forEach {
+                let otp = OTP(secret: $0, date: date, increment: increment)
+                if otp.interestingness != nil {
+                    interestingCodes.append(otp)
+                    interestingCodesCount += 1
+                }
+            }
+            increment += 1
+        }
+        return interestingCodes
     }
 }

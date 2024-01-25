@@ -9,37 +9,49 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    @AppStorage("quads") private var quads: Bool = false
-    @AppStorage("quints") private var quints: Bool = false
-    @AppStorage("sexts") private var sexts: Bool = false
+    @AppStorage("trips") private var trips: Bool = true
+    @AppStorage("quads") private var quads: Bool = true
+    @AppStorage("quints") private var quints: Bool = true
+    @AppStorage("sexts") private var sexts: Bool = true
     
     var body: some View {
-        List {
-            Section("Repeated numbers") {
-                Toggle(isOn: $quads, label: {
-                    Text("Quads")
-                        .font(.body)
+        NavigationStack {
+            List {
+                Section("Repeated numbers") {
+                    Toggle(isOn: $trips, label: {
+                        Text("Trips")
+                            .font(.body)
+                        
+                        Text("e.g. 012666")
+                            .font(.caption)
+                    })
                     
-                    Text("e.g. 014444")
-                        .font(.caption)
-                })
-                
-                Toggle(isOn: $quints, label: {
-                    Text("Quints")
-                        .font(.body)
+                    Toggle(isOn: $quads, label: {
+                        Text("Quads")
+                            .font(.body)
+                        
+                        Text("e.g. 014444")
+                            .font(.caption)
+                    })
                     
-                    Text("e.g. 755555")
-                        .font(.caption)
-                })
-                
-                Toggle(isOn: $sexts, label: {
-                    Text("Sexts")
-                        .font(.body)
+                    Toggle(isOn: $quints, label: {
+                        Text("Quints")
+                            .font(.body)
+                        
+                        Text("e.g. 755555")
+                            .font(.caption)
+                    })
                     
-                    Text("e.g. 777777")
-                        .font(.caption)
-                })
+                    Toggle(isOn: $sexts, label: {
+                        Text("Sexts")
+                            .font(.body)
+                        
+                        Text("e.g. 777777")
+                            .font(.caption)
+                    })
+                }
             }
+            .navigationTitle("Settings")
         }
     }
 }

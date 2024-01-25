@@ -14,8 +14,7 @@ struct ScanView: View {
     
     var body: some View {
         CodeScannerView(codeTypes: [.qr],
-                        scanMode: .continuous,
-                        showViewfinder: true) {
+                        scanMode: .continuous) {
             handleScan($0)
         }
             .edgesIgnoringSafeArea(.all)
@@ -32,22 +31,21 @@ struct ScanView: View {
     }
     
     private func account2FA(from url: URL) -> Account? {
-        print(url)
         guard url.scheme == "otpauth" else { return nil }
         
         guard let name = url.path
             .removingPercentEncoding?
             .replacingOccurrences(of: "/", with: "")
-            .replacingOccurrences(of: ":", with: " - ") else { return nil }
-
+            .split(separator: ":")
+            .last else { return nil }
+        
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let queryItems = components.queryItems,
               let secretItem = queryItems.first(where: { $0.name == "secret" }),
               let secret = secretItem.value else { return nil }
-        print(secret)
-        return Account(name: name, base32String: secret)
+        
+        return try? Account(name: String(name), base32String: secret)
     }
-
 }
 
 #Preview {

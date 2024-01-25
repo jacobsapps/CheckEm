@@ -17,13 +17,13 @@ struct CodeView: View {
     var body: some View {
         NavigationStack {
             List {
-                OTPView(name: viewModel.accountName,
-                        currentCode: viewModel.currentCode,
-                        dateString: viewModel.dateString,
-                        countdown: viewModel.countdown)
-                .onReceive(timer) { _ in
-                    viewModel.refresh()
+                ForEach(viewModel.accounts, id: \.self) { account in
+                    OTPView(account: account)
                 }
+                .onDelete(perform: viewModel.delete)
+            }
+            .onReceive(timer) { _ in
+                viewModel.refresh()
             }
             .navigationTitle("Check 'em")
             .toolbar {
@@ -42,41 +42,42 @@ struct CodeView: View {
                 ScanView {
                     showScanner = false
                     viewModel.create(account: $0)
-                    print($0)
                 }
             }
             .sheet(isPresented: $showSettings) {
                 SettingsView()
             }
+            .task {
+                await viewModel.task()
+            }
         }
+    }
+    
+    private func delete(at offsets: IndexSet) {
+        viewModel.delete(at: offsets)
     }
 }
 
-// qrcode.viewfinder
-// qrcode
-// gear
-
 struct OTPView: View {
     
-    let name: String
-    let currentCode: String
-    let dateString: String
-    let countdown: String
+    let account: Account
+//    let name: String
+//    let currentCode: String
+//    let countdown: String
     
     var body: some View {
-        Section(name) {
+        Section(account.name) {
             HStack {
-                Text(currentCode)
+                Text("000000") // currentCode)
                     .fontDesign(.monospaced)
                     .fontWeight(.bold)
                     .font(.largeTitle)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text(countdown)
+                Text("20")//countdown)
                     .fontWeight(.medium)
                     .font(.caption)
             }
-            Text(dateString)
-                .font(.body)
         }
     }
 }
