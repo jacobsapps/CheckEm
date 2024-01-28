@@ -10,23 +10,27 @@ import Foundation
 final class AccountManager {
     
     static let shared = AccountManager()
-
+    
     private init() { }
-
-    @MainActor
-    func getAccounts() throws -> [Account] {
-        let urls = try KeychainManager.shared.fetchAllAccounts()
-        print(urls)
-        return []
-    }
-
-    @MainActor
-    func save(account: Account) throws {
-        // KeychainManager.shared.storeSecret(, for: )
+    
+    func fetchAccounts() throws -> [Account] {
+        try KeychainManager.shared.fetchAll()
+            .compactMap { createAccount(from: $0) }
     }
     
-    @MainActor
+    func save(account: Account, url: URL) throws {
+        try KeychainManager.shared.storeAccount(named: account.name, url: url)
+    }
+    
     func delete(account: Account) throws {
-//         KeychainManager.shared.deleteSecret(for: )
+        try? KeychainManager.shared.deleteAccount(named: account.name)
+    }
+    
+    private func createAccount(from urlString: String) -> Account? {
+        guard let url = URL(string: urlString),
+              let account = SecretURLParser.shared.account2FA(from: url) else {
+            return nil
+        }
+        return account
     }
 }

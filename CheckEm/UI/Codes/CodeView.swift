@@ -17,11 +17,10 @@ struct CodeView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(viewModel.accounts) { account in
+                ForEach(viewModel.accounts, id: \.name) { account in
                     AccountView(account: account)
                 }
                 .onDelete(perform: viewModel.delete)
-                .animation(.bouncy, value: viewModel.accounts)
             }
             .onReceive(timer) { _ in
                 viewModel.refresh()
@@ -42,7 +41,7 @@ struct CodeView: View {
             .sheet(isPresented: $showScanner) {
                 ScanView {
                     showScanner = false
-                    viewModel.create(account: $0)
+                    try? viewModel.create(account: $0, url: $1)
                 }
             }
             .sheet(isPresented: $showSettings) {
@@ -52,10 +51,6 @@ struct CodeView: View {
                 await viewModel.task()
             }
         }
-    }
-    
-    private func delete(at offsets: IndexSet) {
-        viewModel.delete(at: offsets)
     }
 }
 

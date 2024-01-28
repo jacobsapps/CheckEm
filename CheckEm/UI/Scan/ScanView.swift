@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ScanView: View {
     
-    let onScan: (Account) -> Void
+    let onScan: (Account, URL) -> Void
     
     var body: some View {
         CodeScannerView(codeTypes: [.qr],
@@ -25,12 +25,12 @@ struct ScanView: View {
     private func handleScan(_ result: Result<ScanResult, ScanError>) {
         guard case .success(let scan) = result,
               let url = URL(string: scan.string),
-              let account = SecretURLParser.shared.account2FA(from: url),
-              let _ = try? KeychainManager.shared.storeAccount(named: account.name, url: url) else { return }
-        onScan(account)
+              let account = SecretURLParser.shared.account2FA(from: url) else { return }
+        
+        onScan(account, url)
     }
 }
 
 #Preview {
-    ScanView { _ in }
+    ScanView { _, _ in }
 }

@@ -5,7 +5,7 @@
 //  Created by Jacob Bartlett on 24/01/2024.
 //
 
-import Foundation
+import SwiftUI
 
 @Observable
 final class CodeViewModel {
@@ -14,33 +14,38 @@ final class CodeViewModel {
     
     @MainActor
     func task() async {
-        guard let accounts = try? AccountManager.shared.getAccounts() else { return }
-        self.accounts = accounts
+        guard let accounts = try? AccountManager.shared.fetchAccounts() else { return }
+        withAnimation {
+            self.accounts = accounts
+        }
         regenerateNotifications()
     }
     
     @MainActor
-    func create(account: Account) {
-        accounts.append(account)
-        try? AccountManager.shared.save(account: account)
+    func create(account: Account, url: URL) throws {
+        try AccountManager.shared.save(account: account, url: url)
+        withAnimation {
+            accounts.append(account)
+        }
         regenerateNotifications()
     }
     
     @MainActor
     func refresh() {
         let date = Date()
-        accounts.forEach {
-            $0.refresh(date: date)
+        withAnimation {
+            accounts = accounts.map { $0.refreshed(date: date) }
         }
     }
     
-    @MainActor
     func delete(at offsets: IndexSet) {
         let deletedAccounts = accounts.enumerated().filter { offsets.contains($0.offset) }.map { $0.element }
         deletedAccounts.forEach {
-            try? KeychainManager.shared.deleteAccount(named: $0.name)
+            try? AccountManager.shared.delete(account: $0)
         }
-        accounts.remove(atOffsets: offsets)
+        withAnimation {
+            accounts.remove(atOffsets: offsets)
+        }
     }
     
     private func regenerateNotifications() {

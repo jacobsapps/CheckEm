@@ -29,13 +29,13 @@ struct AccountView: View {
                 })
                 .frame(width: iconSize, height: iconSize, alignment: .center)
                 
-                Text(account.currentCode?.code ?? "------")
+                Text(account.code ?? "------")
                     .fontDesign(.monospaced)
                     .fontWeight(.bold)
                     .font(.largeTitle)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                if let countdown = account.currentCode?.countdown {
+                if let countdown = account.countdown {
                     CountdownView(countdown: countdown)
                 }
             }
