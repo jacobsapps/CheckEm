@@ -5,6 +5,7 @@
 //  Created by Jacob Bartlett on 24/01/2024.
 //
 
+import CachedAsyncImage
 import SwiftUI
 
 struct CodeView: View {
@@ -18,9 +19,10 @@ struct CodeView: View {
         NavigationStack {
             List {
                 ForEach(viewModel.accounts, id: \.self) { account in
-                    OTPView(account: account)
+                    AccountView(account: account)
                 }
                 .onDelete(perform: viewModel.delete)
+                .animation(.bouncy, value: viewModel.accounts)
             }
             .onReceive(timer) { _ in
                 viewModel.refresh()
@@ -58,27 +60,48 @@ struct CodeView: View {
     }
 }
 
-struct OTPView: View {
+struct AccountView: View {
     
+    @ScaledMetric(relativeTo: .largeTitle) private var iconSize: CGFloat = 36
     let account: Account
-//    let name: String
-//    let currentCode: String
-//    let countdown: String
     
     var body: some View {
-        Section(account.name) {
-            HStack {
-                Text("000000") // currentCode)
+        Section(String(account.name.split(separator: "—").first ?? "")) {
+            HStack(alignment: .center, spacing: 16) {
+                CachedAsyncImage(url: FavIcon(issuer: account.issuer).url, content: {
+                    $0
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: iconSize, height: iconSize)
+                        .eraseBackground()
+                    
+                }, placeholder: {
+                    Text(String(account.issuer.first ?? Character("")))
+                        .font(.title)
+                })
+                
+                Text(account.code ?? "")
                     .fontDesign(.monospaced)
                     .fontWeight(.bold)
                     .font(.largeTitle)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text("20")//countdown)
+                Text(account.countdown ?? "")
                     .fontWeight(.medium)
                     .font(.caption)
             }
         }
+    }
+}
+
+struct FavIcon {
+    
+    let url: URL
+    
+    init(issuer: String) {
+        let domain = "\(issuer).com"
+        let url = URL(string: "https://www.google.com/s2/favicons?sz=256&domain=\(domain)")!
+        self.url = url
     }
 }
 

@@ -21,8 +21,8 @@ enum Interestingness {
             self = .quints
         } else if code.checkThoseQuads() {
             self = .quads
-        } else if code.checkThoseTrips() {
-            self = .trips
+//        } else if code.checkThoseTrips() {
+//            self = .trips
         } else {
             return nil
         }

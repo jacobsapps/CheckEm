@@ -21,23 +21,22 @@ final class CodeViewModel {
     
     @MainActor
     func create(account: Account) {
+        accounts.append(account)
         try? DatabaseManager.shared.save(account: account)
         regenerateNotifications()
     }
     
     func refresh() {
-//        guard let codeGenerator,
-//            let otp = codeGenerator.currentCode() else { return }
-//        currentCode = otp.code
-//        let date = Date()
-//        dateString = Formatters.shared.fullDateFormatter.string(from: date)
-//        countdown = "\(Int(date.timeLeftInThirtySeconds.rounded()))"
+        let date = Date()
+        accounts.forEach {
+            $0.refresh(date: date)
+        }
     }
     
     func delete(at offsets: IndexSet) {
         let deletedAccounts = accounts.enumerated().filter { offsets.contains($0.offset) }.map { $0.element }
         deletedAccounts.forEach {
-            KeychainManager.fetchSecret(<#T##self: KeychainManager##KeychainManager#>)
+            try? KeychainManager.shared.deleteSecret(for: $0.name)
         }
         accounts.remove(atOffsets: offsets)
     }

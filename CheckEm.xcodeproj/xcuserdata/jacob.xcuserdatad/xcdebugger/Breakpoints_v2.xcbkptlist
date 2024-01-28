@@ -3,4 +3,117 @@
    uuid = "8F53C3D0-ED67-45F0-BC9E-FA93D0C4D901"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0661764B-28C6-44AD-8A1F-DC6C87BE5975"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CheckEm/UI/Codes/CodeGenerator.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "generateCodes(accounts:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0661764B-28C6-44AD-8A1F-DC6C87BE5975 - 620c85f051d2664b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Foundation.Data) -&gt; () in CheckEm.CodeGenerator.generateCodes(accounts: Swift.Array&lt;CheckEm.Account&gt;) -&gt; Swift.Array&lt;CheckEm.OTP&gt;"
+                  moduleName = "CheckEm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacob/Repos/Writing/CheckEm/CheckEm/UI/Codes/CodeGenerator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "368">
+               </Location>
+               <Location
+                  uuid = "0661764B-28C6-44AD-8A1F-DC6C87BE5975 - af8dc5adc0c2c107"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CheckEm.CodeGenerator.generateCodes(accounts: Swift.Array&lt;CheckEm.Account&gt;) -&gt; Swift.Array&lt;CheckEm.OTP&gt;"
+                  moduleName = "CheckEm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacob/Repos/Writing/CheckEm/CheckEm/UI/Codes/CodeGenerator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "568">
+               </Location>
+               <Location
+                  uuid = "0661764B-28C6-44AD-8A1F-DC6C87BE5975 - 620c85f051d2664b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Foundation.Data) -&gt; () in CheckEm.CodeGenerator.generateCodes(accounts: Swift.Array&lt;CheckEm.Account&gt;) -&gt; Swift.Array&lt;CheckEm.OTP&gt;"
+                  moduleName = "CheckEm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacob/Repos/Writing/CheckEm/CheckEm/UI/Codes/CodeGenerator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "356">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "18F1AF5C-11EA-4043-9A7A-2BA553B22862"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CheckEm/UI/Codes/CodeGenerator.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "generateCodes(accounts:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "18F1AF5C-11EA-4043-9A7A-2BA553B22862 - 620c85f051d2662a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Foundation.Data) -&gt; () in CheckEm.CodeGenerator.generateCodes(accounts: Swift.Array&lt;CheckEm.Account&gt;) -&gt; Swift.Array&lt;CheckEm.OTP&gt;"
+                  moduleName = "CheckEm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacob/Repos/Writing/CheckEm/CheckEm/UI/Codes/CodeGenerator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "432">
+               </Location>
+               <Location
+                  uuid = "18F1AF5C-11EA-4043-9A7A-2BA553B22862 - 620c85f051d2662a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Foundation.Data) -&gt; () in CheckEm.CodeGenerator.generateCodes(accounts: Swift.Array&lt;CheckEm.Account&gt;) -&gt; Swift.Array&lt;CheckEm.OTP&gt;"
+                  moduleName = "CheckEm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacob/Repos/Writing/CheckEm/CheckEm/UI/Codes/CodeGenerator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "368">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

@@ -21,6 +21,7 @@ final class CodeGenerator {
     // There is a 64 notification limit on locally-scheduled notifications
     func generateCodes(accounts: [Account]) -> [OTP] {
         let secrets = accounts.compactMap { $0.secret }
+        guard !secrets.isEmpty else { return [] }
         let date = Date()
         var interestingCodes = [OTP]()
         var increment = 0

@@ -14,19 +14,18 @@ struct ScanView: View {
     
     var body: some View {
         CodeScannerView(codeTypes: [.qr],
-                        scanMode: .continuous) {
+                        scanMode: .once) {
             handleScan($0)
         }
             .edgesIgnoringSafeArea(.all)
             .presentationDragIndicator(.visible)
-            .presentationDetents([.fraction(0.75)])
+            .presentationDetents([.fraction(0.55)])
     }
     
     private func handleScan(_ result: Result<ScanResult, ScanError>) {
         guard case .success(let scan) = result,
-            let url = URL(string: scan.string),
-            let account = account2FA(from: url) else { return }
-        print(account)
+              let url = URL(string: scan.string) else { return }
+        guard let account = account2FA(from: url) else { return }
         onScan(account)
     }
     
@@ -36,15 +35,14 @@ struct ScanView: View {
         guard let name = url.path
             .removingPercentEncoding?
             .replacingOccurrences(of: "/", with: "")
-            .split(separator: ":")
-            .last else { return nil }
+            .replacingOccurrences(of: ":", with: " — ") else { return nil }
         
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let queryItems = components.queryItems,
-              let secretItem = queryItems.first(where: { $0.name == "secret" }),
-              let secret = secretItem.value else { return nil }
+              let secret = queryItems.first(where: { $0.name == "secret" })?.value,
+              let issuer = queryItems.first(where: { $0.name == "issuer" })?.value else { return nil }
         
-        return try? Account(name: String(name), base32String: secret)
+        return try? Account(name: String(name), base32String: secret, issuer: issuer)
     }
 }
 

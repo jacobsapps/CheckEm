@@ -27,6 +27,9 @@
 		1644EF7C2B61832E0010C0AF /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 1644EF7B2B61832E0010C0AF /* CodeScanner */; };
 		1644EF7E2B6183B10010C0AF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1644EF7D2B6183B10010C0AF /* SettingsView.swift */; };
 		1644EF842B6196330010C0AF /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1644EF832B6196330010C0AF /* KeychainAccess */; };
+		16F2A9572B65BFEA001F45DD /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 16F2A9562B65BFEA001F45DD /* CachedAsyncImage */; };
+		16F2A95D2B65C43E001F45DD /* View+ColorEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A95B2B65C43E001F45DD /* View+ColorEffect.swift */; };
+		16F2A95E2B65C43E001F45DD /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A95C2B65C43E001F45DD /* Shaders.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +72,8 @@
 		163DB0542B62FA49001E801A /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		1644EF782B61823A0010C0AF /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		1644EF7D2B6183B10010C0AF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		16F2A95B2B65C43E001F45DD /* View+ColorEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+ColorEffect.swift"; sourceTree = "<group>"; };
+		16F2A95C2B65C43E001F45DD /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16F2A9572B65BFEA001F45DD /* CachedAsyncImage in Frameworks */,
 				1644EF842B6196330010C0AF /* KeychainAccess in Frameworks */,
 				1644EF7C2B61832E0010C0AF /* CodeScanner in Frameworks */,
 			);
@@ -183,6 +189,7 @@
 		161349222B60F53C008E4EB7 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				16F2A95A2B65C43E001F45DD /* ColorEffects */,
 				163DB04F2B62F965001E801A /* Storage */,
 				1613492E2B60FA49008E4EB7 /* OTP */,
 				1613492C2B60FA3C008E4EB7 /* Extensions */,
@@ -238,6 +245,15 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
+		16F2A95A2B65C43E001F45DD /* ColorEffects */ = {
+			isa = PBXGroup;
+			children = (
+				16F2A95B2B65C43E001F45DD /* View+ColorEffect.swift */,
+				16F2A95C2B65C43E001F45DD /* Shaders.metal */,
+			);
+			path = ColorEffects;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -257,6 +273,7 @@
 			packageProductDependencies = (
 				1644EF7B2B61832E0010C0AF /* CodeScanner */,
 				1644EF832B6196330010C0AF /* KeychainAccess */,
+				16F2A9562B65BFEA001F45DD /* CachedAsyncImage */,
 			);
 			productName = CheckEm;
 			productReference = 161348EF2B60F4C2008E4EB7 /* CheckEm.app */;
@@ -333,6 +350,7 @@
 			packageReferences = (
 				1644EF7A2B61832E0010C0AF /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				1644EF822B6196330010C0AF /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				16F2A9552B65BFEA001F45DD /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 			);
 			productRefGroup = 161348F02B60F4C2008E4EB7 /* Products */;
 			projectDirPath = "";
@@ -377,6 +395,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				161349242B60F54F008E4EB7 /* Notifications.swift in Sources */,
+				16F2A95D2B65C43E001F45DD /* View+ColorEffect.swift in Sources */,
+				16F2A95E2B65C43E001F45DD /* Shaders.metal in Sources */,
 				163DB0552B62FA49001E801A /* Data+Extensions.swift in Sources */,
 				1613492A2B60F89C008E4EB7 /* CodeGenerator.swift in Sources */,
 				161349212B60F522008E4EB7 /* CodeViewModel.swift in Sources */,
@@ -765,6 +785,14 @@
 				minimumVersion = 4.2.2;
 			};
 		};
+		16F2A9552B65BFEA001F45DD /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -777,6 +805,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1644EF822B6196330010C0AF /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		16F2A9562B65BFEA001F45DD /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 16F2A9552B65BFEA001F45DD /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
