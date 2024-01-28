@@ -11,7 +11,8 @@ import KeychainAccess
 final class KeychainManager {
     
     enum KeychainManagerError: Error {
-        case dataNotFound
+        case accountsNotFound
+        case accountNotFound
     }
     
     static let shared = KeychainManager()
@@ -20,19 +21,29 @@ final class KeychainManager {
     private init() {
         self.keychain = Keychain()
     }
-
-    func fetchSecret(for accountName: String) throws -> Data {
-        guard let data = try keychain.getData(accountName) else {
-            throw KeychainManagerError.dataNotFound
+    
+    func fetchAllAccounts() throws -> [[String: URL]] {
+        guard let items = keychain.allItems() as? [[String: URL]] else {
+            throw KeychainManagerError.accountsNotFound
         }
-        return data
+        print(items)
+        return items
     }
     
-    func storeSecret(_ secret: Data, for accountName: String) throws {
-        try keychain.set(secret, key: accountName)
+    func fetchAccount(named name: String) throws -> Account {
+        guard let urlString = try keychain.get(name),
+              let url = URL(string: urlString),
+              let account = SecretURLParser.shared.account2FA(from: url) else {
+            throw KeychainManagerError.accountNotFound
+        }
+        return account
     }
     
-    func deleteSecret(for accountName: String) throws {
-        try keychain.remove(accountName)
+    func storeAccount(named name: String, url: URL) throws {
+        try keychain.set(url.absoluteString, key: name)
+    }
+    
+    func deleteAccount(named name: String) throws {
+        try keychain.remove(name)
     }
 }

@@ -16,9 +16,9 @@ struct SettingsView: View {
                 
             }
             .navigationTitle("Settings")
-            .presentationDragIndicator(.visible)
-            .presentationDetents([.fraction(0.77)])
         }
+        .presentationDragIndicator(.visible)
+        .presentationDetents([.fraction(0.77)])
     }
 }
 

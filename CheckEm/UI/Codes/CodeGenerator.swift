@@ -9,16 +9,20 @@ import Foundation
 
 final class CodeGenerator {
     
+    private enum Constants {
+        /// There is a limit of 64 locally-scheduled notifications at any one time
+        ///
+        static let localNotificationLimit: Int = 64
+    }
+    
     static let shared = CodeGenerator()
     
     private init() { }
     
-    func currentCode(account: Account) -> OTP? {
-        guard let secret = account.secret else { return nil }
-        return OTP(secret: secret)
+    func currentCode(secret: Data) -> OTP? {
+        OTP(secret: secret)
     }
     
-    // There is a 64 notification limit on locally-scheduled notifications
     func generateCodes(accounts: [Account]) -> [OTP] {
         let secrets = accounts.compactMap { $0.secret }
         guard !secrets.isEmpty else { return [] }
@@ -26,7 +30,7 @@ final class CodeGenerator {
         var interestingCodes = [OTP]()
         var increment = 0
         var interestingCodesCount = 0
-        while interestingCodesCount < 64 {
+        while interestingCodesCount < Constants.localNotificationLimit {
             secrets.forEach {
                 let otp = OTP(secret: $0, date: date, increment: increment)
                 if otp.interestingness != nil {

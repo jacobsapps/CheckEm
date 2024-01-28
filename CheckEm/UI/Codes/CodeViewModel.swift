@@ -14,7 +14,7 @@ final class CodeViewModel {
     
     @MainActor
     func task() async {
-        guard let accounts = try? DatabaseManager.shared.getAccounts() else { return }
+        guard let accounts = try? AccountManager.shared.getAccounts() else { return }
         self.accounts = accounts
         regenerateNotifications()
     }
@@ -22,10 +22,11 @@ final class CodeViewModel {
     @MainActor
     func create(account: Account) {
         accounts.append(account)
-        try? DatabaseManager.shared.save(account: account)
+        try? AccountManager.shared.save(account: account)
         regenerateNotifications()
     }
     
+    @MainActor
     func refresh() {
         let date = Date()
         accounts.forEach {
@@ -33,10 +34,11 @@ final class CodeViewModel {
         }
     }
     
+    @MainActor
     func delete(at offsets: IndexSet) {
         let deletedAccounts = accounts.enumerated().filter { offsets.contains($0.offset) }.map { $0.element }
         deletedAccounts.forEach {
-            try? KeychainManager.shared.deleteSecret(for: $0.name)
+            try? KeychainManager.shared.deleteAccount(named: $0.name)
         }
         accounts.remove(atOffsets: offsets)
     }

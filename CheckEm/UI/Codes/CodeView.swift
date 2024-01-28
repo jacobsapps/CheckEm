@@ -5,7 +5,6 @@
 //  Created by Jacob Bartlett on 24/01/2024.
 //
 
-import CachedAsyncImage
 import SwiftUI
 
 struct CodeView: View {
@@ -18,7 +17,7 @@ struct CodeView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(viewModel.accounts, id: \.self) { account in
+                ForEach(viewModel.accounts) { account in
                     AccountView(account: account)
                 }
                 .onDelete(perform: viewModel.delete)
@@ -57,51 +56,6 @@ struct CodeView: View {
     
     private func delete(at offsets: IndexSet) {
         viewModel.delete(at: offsets)
-    }
-}
-
-struct AccountView: View {
-    
-    @ScaledMetric(relativeTo: .largeTitle) private var iconSize: CGFloat = 36
-    let account: Account
-    
-    var body: some View {
-        Section(String(account.name.split(separator: "—").first ?? "")) {
-            HStack(alignment: .center, spacing: 16) {
-                CachedAsyncImage(url: FavIcon(issuer: account.issuer).url, content: {
-                    $0
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: iconSize, height: iconSize)
-                        .eraseBackground()
-                    
-                }, placeholder: {
-                    Text(String(account.issuer.first ?? Character("")))
-                        .font(.title)
-                })
-                
-                Text(account.code ?? "")
-                    .fontDesign(.monospaced)
-                    .fontWeight(.bold)
-                    .font(.largeTitle)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
-                Text(account.countdown ?? "")
-                    .fontWeight(.medium)
-                    .font(.caption)
-            }
-        }
-    }
-}
-
-struct FavIcon {
-    
-    let url: URL
-    
-    init(issuer: String) {
-        let domain = "\(issuer).com"
-        let url = URL(string: "https://www.google.com/s2/favicons?sz=256&domain=\(domain)")!
-        self.url = url
     }
 }
 

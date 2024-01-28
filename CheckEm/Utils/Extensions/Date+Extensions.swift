@@ -9,10 +9,6 @@ import Foundation
 
 extension Date {
     
-    var timeLeftInThirtySeconds: TimeInterval {
-        abs(30 - self.roundedDownToNearestThirtySeconds.timeIntervalSince(self))
-    }
-    
     var roundedDownToNearestThirtySeconds: Date {
         let startOfMinute = Calendar.current.dateInterval(of: .minute, for: self)?.start ?? self
         let thirtySeconds = TimeInterval(30)

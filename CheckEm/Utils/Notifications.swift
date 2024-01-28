@@ -40,7 +40,7 @@ final class NotificationScheduler {
         content.body = interestingness.body(code: otp.code)
         content.sound = UNNotificationSound.default
 
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: otp.date)
+        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: otp.dateStarted)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
 
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
@@ -49,7 +49,7 @@ final class NotificationScheduler {
             if let error = error {
                 print("Error scheduling notification: \(error)")
             } else {
-                print("Scheduled \(otp.code) at \(otp.date)")
+                print("Scheduled \(otp.code) at \(otp.dateStarted)")
             }
         }
     }

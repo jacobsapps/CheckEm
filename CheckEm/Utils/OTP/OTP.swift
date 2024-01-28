@@ -10,17 +10,15 @@ import Foundation
 
 struct OTP {
     
-    let date: Date
+    let dateStarted: Date
+    let dateExpires: Date
     let code: String
     let interestingness: Interestingness?
-    
-    var dateString: String {
-        Formatters.shared.fullDateFormatter.string(from: date)
-    }
-    
+
     init(secret: Data, date: Date = Date(), increment: Int = 0) {
         let period = TimeInterval(30)
-        let adjustedDate = date.addingTimeInterval(period * Double(increment)).roundedDownToNearestThirtySeconds
+        let roundedDate = date.roundedDownToNearestThirtySeconds
+        let adjustedDate = roundedDate.addingTimeInterval(period * Double(increment))
         let counter = UInt64(adjustedDate.timeIntervalSince1970 / period)
         let counterBytes = (0..<8).reversed().map { UInt8(counter >> (8 * $0) & 0xff) }
         let hash = HMAC<Insecure.SHA1>.authenticationCode(for: counterBytes, using: SymmetricKey(data: secret))
@@ -34,7 +32,8 @@ struct OTP {
         let pad = String(repeating: "0", count: digits)
         let code = String((pad + String(hash31)).suffix(digits))
         
-        self.date = adjustedDate
+        self.dateStarted = adjustedDate
+        self.dateExpires = adjustedDate.addingTimeInterval(period)
         self.code = code
         self.interestingness = Interestingness(code: code)
     }
