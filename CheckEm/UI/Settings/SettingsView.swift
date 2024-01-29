@@ -9,32 +9,64 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    var recomputeNotifications: () -> Void
+    
     var body: some View {
         NavigationStack {
             List {
                 RepeatedNumbersSettingsView()
-                
+                NumbersSequencesSettingsView()
+                ConstantsSettingsView()
             }
             .navigationTitle("Settings")
+            .onDisappear {
+                recomputeNotifications()
+            }
         }
-        .presentationDragIndicator(.visible)
-        .presentationDetents([.fraction(0.77)])
     }
 }
 
 struct RepeatedNumbersSettingsView: View {
     
-    @AppStorage("trips") private var trips: Bool = true
-    @AppStorage("quads") private var quads: Bool = true
-    @AppStorage("quints") private var quints: Bool = true
     @AppStorage("sexts") private var sexts: Bool = true
+    @AppStorage("quints") private var quints: Bool = true
+    @AppStorage("nearlySextuples") private var nearlySextuples: Bool = true
+    @AppStorage("quads") private var quads: Bool = true
+
+    var body: some View {
+        Section("Multi-number GETs") {
+            SettingsToggle($sexts, title: "Sexts", example: "e.g. 777777")
+            SettingsToggle($quints, title: "Quints", example: "e.g. 555556")
+            SettingsToggle($nearlySextuples, title: "Near-sextuples", example: "e.g. 101111")
+            SettingsToggle($quads, title: "Quads", example: "e.g. 324444")
+        }
+    }
+}
+
+struct NumbersSequencesSettingsView: View {
+    
+    @AppStorage("count") private var count: Bool = true
+    @AppStorage("palindrome") private var palindrome: Bool = true
+    @AppStorage("repeated") private var repeated: Bool = true
     
     var body: some View {
-        Section("Repeated numbers") {
-            SettingsToggle($trips, title: "Trips", example: "e.g. 012666")
-            SettingsToggle($quads, title: "Quads", example: "e.g. 014444")
-            SettingsToggle($quints, title: "Quints", example: "e.g. 755555")
-            SettingsToggle($sexts, title: "Sexts", example: "e.g. 777777")
+        Section("Number Sequence GETs") {
+            SettingsToggle($count, title: "Counting sequence", example: "e.g. 012345")
+            SettingsToggle($palindrome, title: "Palindromes", example: "e.g. 123321")
+            SettingsToggle($repeated, title: "Repeated numbers", example: "e.g. 123123")
+        }
+    }
+}
+
+struct ConstantsSettingsView: View {
+    
+    @AppStorage("mathematicalConstants") private var mathematicalConstants: Bool = true
+    @AppStorage("physicalConstants") private var physicalConstants: Bool = true
+
+    var body: some View {
+        Section("Special number GETs") {
+            SettingsToggle($mathematicalConstants, title: "Math Constants", example: "e.g. pi (314159)")
+            SettingsToggle($physicalConstants, title: "Physics constants", example: "e.g. c (299792)")
         }
     }
 }
@@ -63,5 +95,5 @@ struct SettingsToggle: View {
 }
 
 #Preview {
-    SettingsView()
+    SettingsView { }
 }

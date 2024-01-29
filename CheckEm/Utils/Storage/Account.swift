@@ -25,21 +25,29 @@ struct Account {
         self.secret = try Data(base32Encoded: base32String)
     }
     
+    func resetUI() -> Account {
+        var copy = self
+        copy.dateCodeExpires = nil
+        copy.code = nil
+        copy.countdown = nil
+        return copy
+    }
+    
     func refreshed(date: Date) -> Account {
         
         var copy = self
         
         if let dateCodeExpires,
             date < (dateCodeExpires) {
+            let countdown = Int(dateCodeExpires.timeIntervalSince(date).rounded(.up))
+            copy.countdown = (countdown <= 0) ? 0 : countdown
             
         } else {
             guard let otp = CodeGenerator.shared.currentCode(secret: secret) else { return copy }
             copy.code = otp.code
             copy.dateCodeExpires = otp.dateExpires
-        }
-        
-        if let dateCodeExpires {
-            copy.countdown = Int(dateCodeExpires.timeIntervalSince(date).rounded())
+            let countdown = Int(otp.dateExpires.timeIntervalSince(date).rounded(.up))
+            copy.countdown = (countdown <= 0) ? 0 : countdown
         }
         
         return copy

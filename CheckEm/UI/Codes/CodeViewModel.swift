@@ -9,8 +9,8 @@ import SwiftUI
 
 @Observable
 final class CodeViewModel {
-    
-    var accounts: [Account] = [] 
+        
+    var accounts: [Account] = []
     
     @MainActor
     func task() async {
@@ -18,7 +18,7 @@ final class CodeViewModel {
         withAnimation {
             self.accounts = accounts
         }
-        regenerateNotifications()
+        recomputeNotifications()
     }
     
     @MainActor
@@ -27,7 +27,7 @@ final class CodeViewModel {
         withAnimation {
             accounts.append(account)
         }
-        regenerateNotifications()
+        recomputeNotifications()
     }
     
     @MainActor
@@ -35,6 +35,12 @@ final class CodeViewModel {
         let date = Date()
         withAnimation {
             accounts = accounts.map { $0.refreshed(date: date) }
+        }
+    }
+    
+    func resetAccountUI() {
+        withAnimation {
+            accounts = accounts.map { $0.resetUI() }
         }
     }
     
@@ -46,13 +52,18 @@ final class CodeViewModel {
         withAnimation {
             accounts.remove(atOffsets: offsets)
         }
+        recomputeNotifications()
     }
     
-    private func regenerateNotifications() {
-        let interestingCodes = CodeGenerator.shared.generateCodes(accounts: accounts)
-        NotificationScheduler.shared.cancelNotifications()
-        interestingCodes.forEach {
-            NotificationScheduler.shared.scheduleNotification(for: $0)
+    func recomputeNotifications() {
+        let accounts = accounts
+        Task.detached(priority: .high) {
+            let interestingCodes = CodeGenerator.shared.generateCodes(accounts: accounts)
+            NotificationScheduler.shared.cancelNotifications()
+            interestingCodes.forEach {
+                NotificationScheduler.shared.scheduleNotification(for: $0)
+            }
+            NotificationScheduler.shared.scheduleComebackNotifications(after: interestingCodes.last?.dateStarted)
         }
     }
 }

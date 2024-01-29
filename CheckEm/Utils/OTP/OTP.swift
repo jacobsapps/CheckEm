@@ -15,7 +15,7 @@ struct OTP {
     let code: String
     let interestingness: Interestingness?
 
-    init(secret: Data, date: Date = Date(), increment: Int = 0) {
+    init(secret: Data, date: Date = Date(), increment: Int = 0, eligible: Set<Interestingness>) {
         let period = TimeInterval(30)
         let roundedDate = date.roundedDownToNearestThirtySeconds
         let adjustedDate = roundedDate.addingTimeInterval(period * Double(increment))
@@ -35,6 +35,6 @@ struct OTP {
         self.dateStarted = adjustedDate
         self.dateExpires = adjustedDate.addingTimeInterval(period)
         self.code = code
-        self.interestingness = Interestingness(code: code)
+        self.interestingness = Interestingness(code: code, eligible: eligible)
     }
 }

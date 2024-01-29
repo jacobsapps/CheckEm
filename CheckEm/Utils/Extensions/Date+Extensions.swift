@@ -32,4 +32,11 @@ final class Formatters {
         df.dateFormat = "EEE d MMM h:mm:ss aa"
         return df
     }()
+    
+    lazy var timestamp: DateFormatter = {
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "en_US_POSIX")
+        df.dateFormat = "HH:mm:ss.SSSS"
+        return df
+    }()
 }

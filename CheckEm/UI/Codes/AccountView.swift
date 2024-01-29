@@ -7,37 +7,87 @@
 
 import CachedAsyncImage
 import SwiftUI
+import TipKit
 
 struct AccountView: View {
     
     @ScaledMetric(relativeTo: .largeTitle) private var iconSize: CGFloat = 36
+    @State private var showCopied: Bool = false
     let account: Account
     
     var body: some View {
 //        Section(String(account.name.split(separator: "—").first ?? "")) {
         Section(account.name) {
-            HStack(alignment: .center, spacing: 16) {
-                CachedAsyncImage(url: FavIcon(issuer: account.issuer).url, content: {
-                    $0
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .eraseBackground()
-                    
-                }, placeholder: {
-                    Text(String(account.issuer.first ?? Character("")))
-                        .font(.title)
-                })
-                .frame(width: iconSize, height: iconSize, alignment: .center)
-                
-                Text(account.code ?? "------")
-                    .fontDesign(.monospaced)
-                    .fontWeight(.bold)
-                    .font(.largeTitle)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
-                if let countdown = account.countdown {
-                    CountdownView(countdown: countdown)
+            Button(action: {
+                copyCode()
+            }, label: {
+                HStack(alignment: .center, spacing: 16) {
+                    icon
+                    code
+                    countdown
                 }
+                .contentShape(Rectangle())
+            })
+        }
+    }
+    
+    private var icon: some View {
+        CachedAsyncImage(url: FavIcon(issuer: account.issuer).url, content: {
+            $0
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .eraseBackground()
+            
+        }, placeholder: {
+            Text(String(account.issuer.first ?? Character("")))
+                .font(.title)
+        })
+        .frame(width: iconSize, height: iconSize, alignment: .center)
+    }
+    
+    private var code: some View {
+        ViewThatFits {
+            HStack(alignment: .center, spacing: 16) {
+                codeText
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                codeText
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var codeText: some View {
+        Text(account.code ?? "------")
+            .fontDesign(.monospaced)
+            .fontWeight(.bold)
+            .font(.largeTitle)
+            .foregroundStyle(Color.primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        
+        if showCopied {
+            Text("Copied")
+                .font(.caption)
+                .foregroundStyle(Color.primary)
+        }
+    }
+    
+    private var countdown: some View {
+        CountdownView(countdown: account.countdown)
+            .id(account.name)
+    }
+    
+    private func copyCode() {
+        if let code = account.code {
+            UIPasteboard.general.string = code
+            withAnimation {
+                showCopied = true
+            }
+        }
+        Task {
+            try? await Task.sleep(nanoseconds: 1_500_000_000)
+            withAnimation {
+                showCopied = false
             }
         }
     }
@@ -45,34 +95,52 @@ struct AccountView: View {
 
 struct CountdownView: View {
     
-    @ScaledMetric(relativeTo: .body) var tickSize: CGFloat = 3
+    @ScaledMetric(relativeTo: .caption) var tickSize: CGFloat = 3
     @ScaledMetric(relativeTo: .body) var tickOffset: CGFloat = 20
-    let countdown: Int
+    @ScaledMetric(relativeTo: .body) var countdownTextWidth: CGFloat = 28
+    
+    let countdown: Int?
     
     var body: some View {
         ZStack {
             clockFace
             number
         }
-        .padding(.trailing, tickOffset)
+        .animation(.bouncy, value: countdown)
+        .padding(.trailing, tickOffset / 2.0)
+        .overlay {
+            if countdown == nil {
+                ProgressView()
+            }
+        }
     }
     
+    @ViewBuilder
     private var number: some View {
-        Text("\(countdown)")
-            .font(.body)
-            .fontWeight(.medium)
-            .fontDesign(.monospaced)
+        if let countdown {
+            Text("\(countdown)")
+                .font(.body)
+                .fontWeight(.medium)
+                .fontDesign(.monospaced)
+                .foregroundStyle(Color.primary)
+                .transition(.opacity)
+                .frame(width: countdownTextWidth, alignment: .center)
+        }
     }
     
+    @ViewBuilder
     private var clockFace: some View {
-        ForEach(0..<30) {
-            let angle = Angle.degrees(Double($0 * 12))
-            Circle()
-                .frame(width: tickSize)
-                .foregroundColor(countdown <= $0 ? .clear : .green)
-                .rotationEffect(angle)
-                .offset(x: tickOffset * cos(CGFloat(angle.radians)),
-                        y: tickOffset * sin(CGFloat(angle.radians)))
+        if let countdown {
+            ForEach(0..<30) {
+                let angle = Angle.degrees(Double($0 * 12))
+                Circle()
+                    .frame(width: tickSize)
+                    .foregroundColor(countdown <= $0 ? .clear : .green)
+                    .offset(x: -tickOffset * cos(CGFloat(angle.radians)),
+                            y: tickOffset * sin(CGFloat(angle.radians)))
+            }
+            .transition(.opacity)
+            .rotationEffect(.degrees(90))
         }
     }
 }
