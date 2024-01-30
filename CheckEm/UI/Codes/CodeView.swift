@@ -9,6 +9,14 @@ import Combine
 import StoreKit
 import SwiftUI
 
+// TODO: - Fix bug where progress view disappears
+// TODO: - Search for codes in List
+// TODO: - Check iPad for iCloud codes matching 
+// TODO: - Look back/forward one code (maybe only if it's interesting?) - maybe don't do this
+// TODO: - Push notification deep links to an app review prompt
+// TODO: - Add haptics when code
+// TODO: - StoreKit; pay £5 to get it free forever
+
 struct CodeView: View {
     
     @Environment(\.requestReview) var requestReview
@@ -19,13 +27,28 @@ struct CodeView: View {
     @State private var showSettings: Bool = false
     @State private var viewModel = CodeViewModel()
     @State private var timer = Timer.publish(every: 1, tolerance: 0, on: .current, in: .common).autoconnect()
+    @State private var searchText: String = ""
 
+    private var accountSearchResults: [Account] {
+        if searchText.isEmpty {
+            return viewModel.accounts
+            
+        } else {
+            return viewModel.accounts.filter {
+                $0.name.lowercased().contains(searchText.lowercased())
+            }
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             List {
                 accountListContent
                 loadingIndicator
             }
+            .searchable(text: $searchText,
+                        placement: .automatic,
+                        prompt: "Search")
             .onReceive(timer) { _ in
                 viewModel.refresh()
             }
