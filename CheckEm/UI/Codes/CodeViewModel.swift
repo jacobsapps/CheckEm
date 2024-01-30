@@ -9,8 +9,13 @@ import SwiftUI
 
 @Observable
 final class CodeViewModel {
-        
+    
+    var isCalculatingOTPs: Bool = false
+    var calculationPercentage: String = ""
     var accounts: [Account] = []
+    
+    private var otpComputationTask: Task<Void, Never>?
+    private var notificationSchedulingTask: Task<Void, Never>?
     
     @MainActor
     func task() async {
@@ -56,14 +61,45 @@ final class CodeViewModel {
     }
     
     func recomputeNotifications() {
-        let accounts = accounts
-        Task.detached(priority: .high) {
-            let interestingCodes = CodeGenerator.shared.generateCodes(accounts: accounts)
+        withAnimation {
+            isCalculatingOTPs = true
+            calculationPercentage = "0%"
+        }
+        handleNotificationScheduling()
+        handleOTPComputation()
+    }
+    
+    private func handleNotificationScheduling() {
+        notificationSchedulingTask?.cancel()
+        notificationSchedulingTask = Task.detached(priority: .high) {
             NotificationScheduler.shared.cancelNotifications()
-            interestingCodes.forEach {
-                NotificationScheduler.shared.scheduleNotification(for: $0)
+            for await (code, count) in CodeGenerator.shared.codeSubject.values {
+                try? await NotificationScheduler.shared.scheduleNotification(for: code)
+                let completionPercentage = Int(100*Double(count)/Double(CodeGenerator.Constants.localNotificationLimit - 2).rounded(.up))
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    withAnimation {
+                        self.calculationPercentage = "\(completionPercentage)%"
+                    }
+                }
             }
-            NotificationScheduler.shared.scheduleComebackNotifications(after: interestingCodes.last?.dateStarted)
+        }
+    }
+    
+    private func handleOTPComputation() {
+        let accounts = accounts
+        otpComputationTask?.cancel()
+        otpComputationTask = Task.detached(priority: .high) {
+            try? await NotificationScheduler.shared.requestAuthorization()
+            let lastCodeDate = CodeGenerator.shared.generateCodes(accounts: accounts)
+            try? await NotificationScheduler.shared.scheduleComebackNotifications(after: lastCodeDate)
+            try? await Task.sleep(nanoseconds: 700_000_000)
+            await MainActor.run { [weak self] in
+                guard let self else { return }
+                withAnimation {
+                    self.isCalculatingOTPs = false
+                }
+            }
         }
     }
 }

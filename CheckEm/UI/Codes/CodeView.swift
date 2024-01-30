@@ -24,6 +24,7 @@ struct CodeView: View {
         NavigationStack {
             List {
                 accountListContent
+                loadingIndicator
             }
             .onReceive(timer) { _ in
                 viewModel.refresh()
@@ -84,6 +85,24 @@ struct CodeView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     ProgressView()
                 }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var loadingIndicator: some View {
+        if viewModel.isCalculatingOTPs {
+            HStack(spacing: 8) {
+                Text("Processing your numbers...")
+                    .font(.body)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                Text(viewModel.calculationPercentage)
+                    .font(.body)
+                    .fontWeight(.medium)
+                
+                ProgressView()
+                    .tint(.green)
             }
         }
     }

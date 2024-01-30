@@ -18,26 +18,29 @@ final class NotificationScheduler {
         center.removeAllPendingNotificationRequests()
     }
     
-    func scheduleNotification(for otp: OTP) {
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound]) { [weak self] granted, error in
-            guard granted,
-                  let self else { return }
-            self.createNotification(for: otp)
-        }
+    func isAuthorized() async -> Bool {
+        await UNUserNotificationCenter.current().notificationSettings().authorizationStatus == .authorized
     }
     
-    func scheduleComebackNotifications(after date: Date?) {
+    func scheduleNotification(for otp: OTP) async throws {
         let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound]) { [weak self] granted, error in
-            guard granted,
-                  let date,
-                  let self else { return }
-            self.comebackNotification(at: date.addingTimeInterval(10))
-            self.comebackNotification(at: date.addingTimeInterval(60 * 60 * 24 * 3))
-        }
+        try await center.requestAuthorization(options: [.alert, .sound])
+        createNotification(for: otp)
     }
     
+    func requestAuthorization() async throws {
+        try await UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .alert, .badge])
+    }
+    
+    func scheduleComebackNotifications(after date: Date?) async throws {
+        guard let date else { return }
+        let center = UNUserNotificationCenter.current()
+        try await center.requestAuthorization(options: [.alert, .sound])
+        comebackNotification(at: date.addingTimeInterval(10))
+        comebackNotification(at: date.addingTimeInterval(60 * 60 * 24 * 3))
+    }
+    
+    // TODO: Have notification deep link and then request an app review
     private func createNotification(for otp: OTP) {
         
         guard let interestingness = otp.interestingness else { return }
@@ -56,9 +59,9 @@ final class NotificationScheduler {
         
         center.add(request) { (error) in
             if let error = error {
-                print("Error scheduling notification: \(error)")
+                efficientPrint("Error scheduling notification: \(error)")
             } else {
-                print("Scheduled \(otp.code) at \(otp.dateStarted)")
+                efficientPrint("Scheduled \(interestingness): \(otp.code) @ \(otp.dateStarted)")
             }
         }
     }
@@ -78,10 +81,16 @@ final class NotificationScheduler {
         
         center.add(request) { (error) in
             if let error = error {
-                print("Error scheduling notification: \(error)")
+                efficientPrint("Error scheduling notification: \(error)")
             } else {
-                print("Scheduled comeback at \(date)")
+                efficientPrint("Scheduled comeback at \(date)")
             }
         }
     }
+}
+
+private func efficientPrint(_ string: String) {
+    #if DEBUG
+    print(string)
+    #endif
 }
