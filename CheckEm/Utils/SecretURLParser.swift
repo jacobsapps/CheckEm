@@ -26,6 +26,8 @@ final class SecretURLParser {
               let secret = queryItems.first(where: { $0.name == "secret" })?.value,
               let issuer = queryItems.first(where: { $0.name == "issuer" })?.value else { return nil }
         
-        return try? Account(name: String(name), base32String: secret, issuer: issuer)
+        let order = queryItems.first(where: { $0.name == "order" })?.value as? Int ?? 0
+        
+        return try? Account(name: String(name), base32String: secret, issuer: issuer, order: order)
     }
 }

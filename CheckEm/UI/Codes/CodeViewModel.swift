@@ -28,19 +28,25 @@ final class CodeViewModel {
     
     @MainActor
     func create(account: Account, url: URL) throws {
-        try AccountManager.shared.save(account: account, url: url)
+        let accountIncrement = accounts.last?.order ?? 0
+        try AccountManager.shared.save(account: account, url: url, increment: accountIncrement)
         withAnimation {
             accounts.append(account)
         }
         recomputeNotifications()
     }
     
+    /// Returns `true` if the codes rotate on this tick
     @MainActor
-    func refresh() {
+    func refresh() -> Bool {
         let date = Date()
+        let oldCodes = accounts.map { $0.code }
+        let newAccounts = accounts.map { $0.refreshed(date: date) }
+        let newCodes = newAccounts.map { $0.code }
         withAnimation {
-            accounts = accounts.map { $0.refreshed(date: date) }
+            accounts = newAccounts
         }
+        return newCodes != oldCodes
     }
     
     func resetAccountUI() {

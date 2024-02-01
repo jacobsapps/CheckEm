@@ -11,6 +11,8 @@ enum Interestingness {
     
     case counting
     case sexts
+    case units
+    case hunderedThousands
     case pi
     case e
     case phi
@@ -26,6 +28,7 @@ enum Interestingness {
     case vacuumPermittivity
     case charge
     case quints
+    case tens
     case palindrome
     case repeatedTwos
     case repeatedThrees
@@ -37,6 +40,10 @@ enum Interestingness {
             self = .counting
         } else if eligible.contains(.sexts) && code.checkThoseSexts() {
             self = .sexts
+        } else if eligible.contains(.units) && code.checkThoseUnits() {
+            self = .units
+        } else if eligible.contains(.hunderedThousands) && code.checkThoseHunderedThousands() {
+            self = .hunderedThousands
         } else if eligible.contains(.pi) && code == "314159" {
             self = .pi
         } else if eligible.contains(.e) && code == "271828" {
@@ -69,6 +76,8 @@ enum Interestingness {
             self = .quints
         } else if eligible.contains(.repeatedTwos) && code.checkThoseRepeatedTwos() {
             self = .repeatedTwos
+        } else if eligible.contains(.tens) && code.checkThoseTens() {
+            self = .tens
         } else if eligible.contains(.palindrome) && code.checkThatPalindrome() {
             self = .palindrome
         } else if eligible.contains(.repeatedThrees) && code.checkThoseRepeatedThrees() {
@@ -86,6 +95,8 @@ enum Interestingness {
         switch self {
         case .sexts: return "Sexts GET"
         case .counting: return "Sequential numbers GET"
+        case .units: return "Single-digit GET"
+        case .hunderedThousands: return "Six-figure GET"
         case .pi: return "π GET"
         case .e: return "e GET"
         case .phi: return "φ GET"
@@ -103,6 +114,7 @@ enum Interestingness {
         case .quints: return "Quints GET"
         case .palindrome: return "Palindrome GET"
         case .repeatedTwos: return "Repeated twos GET"
+        case .tens: return "Two-digit GET"
         case .repeatedThrees: return "Repeated threes GET"
         case .nearlySextuples: return "Almost-sextuples GET"
         case .quads: return "Quads GET"
@@ -113,6 +125,8 @@ enum Interestingness {
         switch self {
         case .sexts: return "Check those sexts: \(code)"
         case .counting: return "Check that count: \(code)"
+        case .units: return "Check that number: \(code)"
+        case .hunderedThousands: return "Check that number: \(code)"
         case .pi: return "Check that pi: \(code)"
         case .e: return "Check that Euler's number: \(code)"
         case .phi: return "Check that Golden Ratio: \(code)"
@@ -128,6 +142,7 @@ enum Interestingness {
         case .vacuumPermittivity: return "Check that resistance to electric fields (8.854·10⁻¹²): \(code)"
         case .charge: return "Check that electron charge (1.6x10⁻¹⁹): \(code)"
         case .quints: return "Check those quints: \(code)"
+        case .tens: return "Check this number: \(code)"
         case .nearlySextuples: return "Check these nearly-sextuples: \(code)"
         case .palindrome: return "Check that symmetry: \(code)"
         case .repeatedTwos: return "Check this repeat: \(code)"
@@ -185,5 +200,17 @@ extension String {
         let secondPair = (copy.removeFirst(), copy.removeFirst())
         let thirdPair = (copy.removeFirst(), copy.removeFirst())
         return (firstPair == secondPair) && (firstPair == thirdPair)
+    }
+    
+    func checkThoseUnits() -> Bool {
+        prefix(5) == "00000"
+    }
+    
+    func checkThoseHunderedThousands() -> Bool {
+        suffix(5) == "00000"
+    }
+    
+    func checkThoseTens() -> Bool {
+        prefix(4) == "0000"
     }
 }

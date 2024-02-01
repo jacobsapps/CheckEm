@@ -18,7 +18,11 @@ final class AccountManager {
             .compactMap { createAccount(from: $0) }
     }
     
-    func save(account: Account, url: URL) throws {
+    func save(account: Account, url: URL, increment: Int) throws {
+        let orderedAccountURL = url.appending(queryItems: [URLQueryItem(name: "order", value: "\(increment)")])
+        print(orderedAccountURL)
+        print(orderedAccountURL.absoluteString)
+        print()
         try KeychainManager.shared.storeAccount(named: account.name, url: url)
     }
     

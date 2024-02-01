@@ -14,15 +14,17 @@ struct Account {
     let issuer: String
     let dateCreated: Date
     let secret: Data
+    let order: Int
     var code: String?
     var countdown: Int?
     private var dateCodeExpires: Date?
     
-    init(name: String, base32String: String, issuer: String) throws {
+    init(name: String, base32String: String, issuer: String, order: Int) throws {
         self.name = name
         self.issuer = issuer
         self.dateCreated = Date()
         self.secret = try Data(base32Encoded: base32String)
+        self.order = order
     }
     
     func resetUI() -> Account {

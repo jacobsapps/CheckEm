@@ -40,7 +40,6 @@ final class NotificationScheduler {
         comebackNotification(at: date.addingTimeInterval(60 * 60 * 24 * 3))
     }
     
-    // TODO: Have notification deep link and then request an app review
     private func createNotification(for otp: OTP) {
         
         guard let interestingness = otp.interestingness else { return }
@@ -54,7 +53,6 @@ final class NotificationScheduler {
         
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: otp.dateStarted)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         
         center.add(request) { (error) in

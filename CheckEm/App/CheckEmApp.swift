@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct CheckEmApp: App {
+    
     var body: some Scene {
         WindowGroup {
             CodeView()

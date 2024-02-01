@@ -60,6 +60,7 @@ struct SettingsView: View {
     @ViewBuilder
     private var typeSortedView: some View {
         RepeatedNumbersSettingsView()
+        RoundNumberSettingsView()
         NumbersSequencesSettingsView()
         ConstantsSettingsView()
     }
@@ -74,6 +75,8 @@ struct UltraRareSettingsView: View {
     
     @AppStorage("sexts") private var sexts: Bool = true
     @AppStorage("count") private var count: Bool = true
+    @AppStorage("hunderedThousands") private var hunderedThousands: Bool = true
+    @AppStorage("units") private var units: Bool = true
     @AppStorage("mathematicalConstants") private var mathematicalConstants: Bool = true
     @AppStorage("physicalConstants") private var physicalConstants: Bool = false
     
@@ -81,6 +84,8 @@ struct UltraRareSettingsView: View {
         Section("Ultra-rare GETs") {
             SettingsToggle($sexts, title: "Sexts", example: "e.g. 777777")
             SettingsToggle($count, title: "Counting sequence", example: "e.g. 123456")
+            SettingsToggle($hunderedThousands, title: "Hundered thousands", example: "e.g. 300000")
+            SettingsToggle($units, title: "Single-digit numbers", example: "e.g. 000001")
             SettingsToggle($mathematicalConstants, title: "Math Constants", example: "e.g. 314159 (pi = 3.14159)")
             SettingsToggle($physicalConstants, title: "Physics constants", example: "e.g. 299108 (c = 2.99x10⁸)")
         }
@@ -91,11 +96,13 @@ struct RareSettingsView: View {
     
     @AppStorage("quints") private var quints: Bool = true
     @AppStorage("repeatedTwos") private var repeatedTwos: Bool = true
+    @AppStorage("tens") private var tens: Bool = true
     
     var body: some View {
         Section("Rare GETs") {
             SettingsToggle($quints, title: "Quints", example: "e.g. 555556")
             SettingsToggle($repeatedTwos, title: "Repeated pairs", example: "e.g. 121212")
+            SettingsToggle($tens, title: "Two-digit numbers", example: "e.g. 000028")
         }
     }
 }
@@ -130,6 +137,21 @@ struct RepeatedNumbersSettingsView: View {
             SettingsToggle($quints, title: "Quints", example: "e.g. 555556")
             SettingsToggle($nearlySextuples, title: "Near-sextuples", example: "e.g. 101111")
             SettingsToggle($quads, title: "Quads", example: "e.g. 324444")
+        }
+    }
+}
+
+struct RoundNumberSettingsView: View {
+    
+    @AppStorage("hunderedThousands") private var hunderedThousands: Bool = true
+    @AppStorage("units") private var units: Bool = true
+    @AppStorage("tens") private var tens: Bool = true
+    
+    var body: some View {
+        Section("Round Number GETs") {
+            SettingsToggle($hunderedThousands, title: "Hundered thousands", example: "e.g. 300000")
+            SettingsToggle($units, title: "Single-digit numbers", example: "e.g. 000001")
+            SettingsToggle($tens, title: "Two-digit numbers", example: "e.g. 000028")
         }
     }
 }

@@ -19,7 +19,7 @@ final class KeychainManager {
     private let keychain: Keychain
     
     private init() {
-        self.keychain = Keychain()
+        self.keychain = Keychain().synchronizable(true)
     }
     
     func fetchAll() throws -> [String] {

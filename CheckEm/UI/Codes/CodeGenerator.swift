@@ -29,6 +29,7 @@ final class CodeGenerator {
     func generateCodes(accounts: [Account]) -> Date? {
         let secrets = accounts.compactMap { $0.secret }
         let userInterestingnessSettings = eligibleInterestingness()
+        print(userInterestingnessSettings)
         guard !secrets.isEmpty,
               !userInterestingnessSettings.isEmpty else { return nil }
         let date = Date()
@@ -81,6 +82,15 @@ final class CodeGenerator {
         }
         if UserDefaults.standard.bool(forKey: "repeatedTwos") {
             interestingness.insert(.repeatedTwos)
+        }
+        if UserDefaults.standard.bool(forKey: "units") {
+            interestingness.insert(.units)
+        }
+        if UserDefaults.standard.bool(forKey: "hunderedThousands") {
+            interestingness.insert(.hunderedThousands)
+        }
+        if UserDefaults.standard.bool(forKey: "tens") {
+            interestingness.insert(.tens)
         }
         if UserDefaults.standard.bool(forKey: "mathematicalConstants") {
             interestingness.insert(.pi)

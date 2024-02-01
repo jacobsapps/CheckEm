@@ -28,7 +28,7 @@
 		1644EF7E2B6183B10010C0AF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1644EF7D2B6183B10010C0AF /* SettingsView.swift */; };
 		1644EF842B6196330010C0AF /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1644EF832B6196330010C0AF /* KeychainAccess */; };
 		16F2A9572B65BFEA001F45DD /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 16F2A9562B65BFEA001F45DD /* CachedAsyncImage */; };
-		16F2A95D2B65C43E001F45DD /* View+ColorEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A95B2B65C43E001F45DD /* View+ColorEffect.swift */; };
+		16F2A95D2B65C43E001F45DD /* View+Shaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A95B2B65C43E001F45DD /* View+Shaders.swift */; };
 		16F2A95E2B65C43E001F45DD /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A95C2B65C43E001F45DD /* Shaders.metal */; };
 		16F2A9602B66E5C4001F45DD /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A95F2B66E5C4001F45DD /* AccountView.swift */; };
 		16F2A9622B66E5E8001F45DD /* FavIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A9612B66E5E8001F45DD /* FavIcon.swift */; };
@@ -54,6 +54,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1612FAB52B6A2B6700BA40F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		161348EF2B60F4C2008E4EB7 /* CheckEm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheckEm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		161348F22B60F4C2008E4EB7 /* CheckEmApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckEmApp.swift; sourceTree = "<group>"; };
 		161348F42B60F4C2008E4EB7 /* CodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
@@ -76,7 +77,7 @@
 		163DB0542B62FA49001E801A /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		1644EF782B61823A0010C0AF /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		1644EF7D2B6183B10010C0AF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		16F2A95B2B65C43E001F45DD /* View+ColorEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+ColorEffect.swift"; sourceTree = "<group>"; };
+		16F2A95B2B65C43E001F45DD /* View+Shaders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Shaders.swift"; sourceTree = "<group>"; };
 		16F2A95C2B65C43E001F45DD /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		16F2A95F2B66E5C4001F45DD /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		16F2A9612B66E5E8001F45DD /* FavIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavIcon.swift; sourceTree = "<group>"; };
@@ -135,6 +136,7 @@
 		161348F12B60F4C2008E4EB7 /* CheckEm */ = {
 			isa = PBXGroup;
 			children = (
+				1612FAB52B6A2B6700BA40F6 /* Info.plist */,
 				1613492D2B60FA41008E4EB7 /* App */,
 				1613492B2B60FA34008E4EB7 /* UI */,
 				161349222B60F53C008E4EB7 /* Utils */,
@@ -198,7 +200,7 @@
 		161349222B60F53C008E4EB7 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				16F2A95A2B65C43E001F45DD /* ColorEffects */,
+				16F2A95A2B65C43E001F45DD /* Shaders */,
 				163DB04F2B62F965001E801A /* Storage */,
 				1613492E2B60FA49008E4EB7 /* OTP */,
 				1613492C2B60FA3C008E4EB7 /* Extensions */,
@@ -257,13 +259,13 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
-		16F2A95A2B65C43E001F45DD /* ColorEffects */ = {
+		16F2A95A2B65C43E001F45DD /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				16F2A95B2B65C43E001F45DD /* View+ColorEffect.swift */,
+				16F2A95B2B65C43E001F45DD /* View+Shaders.swift */,
 				16F2A95C2B65C43E001F45DD /* Shaders.metal */,
 			);
-			path = ColorEffects;
+			path = Shaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -407,7 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				161349242B60F54F008E4EB7 /* Notifications.swift in Sources */,
-				16F2A95D2B65C43E001F45DD /* View+ColorEffect.swift in Sources */,
+				16F2A95D2B65C43E001F45DD /* View+Shaders.swift in Sources */,
 				16F2A95E2B65C43E001F45DD /* Shaders.metal in Sources */,
 				163DB0552B62FA49001E801A /* Data+Extensions.swift in Sources */,
 				16F2A9602B66E5C4001F45DD /* AccountView.swift in Sources */,
@@ -588,6 +590,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CheckEm/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "What, you thought I was gonna magically guess your 2FA secrets?";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -628,6 +631,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CheckEm/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "What, you thought I was gonna magically guess your 2FA secrets?";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;

@@ -9,25 +9,34 @@ import Combine
 import StoreKit
 import SwiftUI
 
-// TODO: - Fix bug where progress view disappears
-// TODO: - Search for codes in List
-// TODO: - Check iPad for iCloud codes matching 
-// TODO: - Look back/forward one code (maybe only if it's interesting?) - maybe don't do this
-// TODO: - Push notification deep links to an app review prompt
-// TODO: - Add haptics when code
+// High priority -
+// TODO: - Haptic buzz on refresh
+// TODO: - Cancel processing tasks when opening Settings view
+// TODO: - Add ordering as a query item to the stored URL in the keychain
+// TODO: - Push notification deep links to an app review prompt, when the GET is still present - https://www.avanderlee.com/swiftui/deeplink-url-handling/
+// TODO: - Bug - Progress view doesn't appear on the second load
+// TODO: - Bug - Ignore scanned duplicates in the view model accounts - don't append scans to accounts if it's already there
+// TODO: - Bug - There's a bug where the percentage fluctuates up and down when there are 2 concurrent calculations
+// TODO: - Add TipKit to QR and Settings
 // TODO: - StoreKit; pay £5 to get it free forever
+// TODO: - Implement a hard limit on monthly notifications for non-customers
+
+// Low priority -
+// TODO: - Use @SceneStorage for state restoration; so we aren't waiting ages for the keychain operations
+// TODO: - Create a "collection" screen using deep links - collecting the seen GETs as stored items (with a dictionary on the keychain)
+// TODO: - Look back/forward one code (maybe don't do this)
 
 struct CodeView: View {
     
     @Environment(\.requestReview) var requestReview
     @AppStorage("numberOfAccounts") private var numberOfAccounts: Int = 0
-    @AppStorage("requestedAppReviewAccount") var requestedAppReviewAccount: Bool = false
     @AppStorage("requestedAppReviewSettings") var requestedAppReviewSettings: Bool = false
     @State private var showScanner: Bool = false
     @State private var showSettings: Bool = false
     @State private var viewModel = CodeViewModel()
     @State private var timer = Timer.publish(every: 1, tolerance: 0, on: .current, in: .common).autoconnect()
     @State private var searchText: String = ""
+    @State private var hapticTrigger: Bool = false
 
     private var accountSearchResults: [Account] {
         if searchText.isEmpty {
@@ -50,7 +59,10 @@ struct CodeView: View {
                         placement: .automatic,
                         prompt: "Search")
             .onReceive(timer) { _ in
-                viewModel.refresh()
+                let didChange = viewModel.refresh()
+                if didChange {
+                    hapticTrigger.toggle()
+                }
             }
             .navigationTitle("Check 'em")
             .toolbar { toolbarView }
@@ -58,10 +70,6 @@ struct CodeView: View {
                 ScanView {
                     showScanner = false
                     try? viewModel.create(account: $0, url: $1)
-                    if !requestedAppReviewAccount {
-                        requestedAppReviewAccount = true
-                        requestReview()
-                    }
                 }
             }
             .sheet(isPresented: $showSettings) {
@@ -73,14 +81,17 @@ struct CodeView: View {
                     }
                 }
             }
-            .task {
-                await viewModel.task()
-                numberOfAccounts = viewModel.accounts.count
-            }
-            .onAppear {
-                viewModel.resetAccountUI()
-            }
         }
+        .task {
+            await viewModel.task()
+            numberOfAccounts = viewModel.accounts.count
+        }
+        .onAppear {
+            viewModel.resetAccountUI()
+        }
+        .onOpenURL(perform: { url in
+            // handle deep link interestingness type
+        })
     }
     
     @ViewBuilder
@@ -89,13 +100,14 @@ struct CodeView: View {
             emptyAccountsView
             
         } else {
-            ForEach(viewModel.accounts, id: \.name) { account in
+            ForEach(accountSearchResults, id: \.name) { account in
                 AccountView(account: account)
                     .onDisappear {
                         numberOfAccounts = viewModel.accounts.count
                     }
             }
             .onDelete(perform: viewModel.delete)
+            .sensoryFeedback(.levelChange, trigger: hapticTrigger)
         }
     }
     
