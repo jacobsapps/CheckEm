@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Interestingness {
+enum Interestingness: String, CaseIterable {
     
     case counting
     case sexts

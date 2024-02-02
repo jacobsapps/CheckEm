@@ -36,11 +36,12 @@ struct AccountView: View {
             $0
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .eraseBackground()
+//                .eraseBackground()
             
         }, placeholder: {
-            Text(String(account.issuer.first ?? Character("")))
-                .font(.title)
+            Text(String(account.issuer.first ?? account.name.first ?? Character("")))
+                .font(.largeTitle)
+                .monospaced()
         })
         .frame(width: iconSize, height: iconSize, alignment: .center)
     }
@@ -86,8 +87,10 @@ struct AccountView: View {
         }
         Task {
             try? await Task.sleep(nanoseconds: 1_500_000_000)
-            withAnimation {
-                showCopied = false
+            await MainActor.run {
+                withAnimation {
+                    showCopied = false
+                }
             }
         }
     }

@@ -11,6 +11,7 @@ import SwiftUI
 
 // High priority -
 // TODO: - Haptic buzz on refresh
+// TODO: - Create a "collection" screen using deep links - collecting the seen GETs as stored items (with a dictionary on the keychain)
 // TODO: - Cancel processing tasks when opening Settings view
 // TODO: - Add ordering as a query item to the stored URL in the keychain
 // TODO: - Push notification deep links to an app review prompt, when the GET is still present - https://www.avanderlee.com/swiftui/deeplink-url-handling/
@@ -23,7 +24,6 @@ import SwiftUI
 
 // Low priority -
 // TODO: - Use @SceneStorage for state restoration; so we aren't waiting ages for the keychain operations
-// TODO: - Create a "collection" screen using deep links - collecting the seen GETs as stored items (with a dictionary on the keychain)
 // TODO: - Look back/forward one code (maybe don't do this)
 
 struct CodeView: View {
@@ -33,6 +33,7 @@ struct CodeView: View {
     @AppStorage("requestedAppReviewSettings") var requestedAppReviewSettings: Bool = false
     @State private var showScanner: Bool = false
     @State private var showSettings: Bool = false
+    @State private var showCollection: Bool = false
     @State private var viewModel = CodeViewModel()
     @State private var timer = Timer.publish(every: 1, tolerance: 0, on: .current, in: .common).autoconnect()
     @State private var searchText: String = ""
@@ -81,6 +82,9 @@ struct CodeView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showCollection) {
+                CollectionItemsView(collection: viewModel.collection)
+            }
         }
         .task {
             await viewModel.task()
@@ -89,9 +93,6 @@ struct CodeView: View {
         .onAppear {
             viewModel.resetAccountUI()
         }
-        .onOpenURL(perform: { url in
-            // handle deep link interestingness type
-        })
     }
     
     @ViewBuilder
@@ -144,6 +145,13 @@ struct CodeView: View {
     
     @ViewBuilder
     private var toolbarView: some View {
+        if !viewModel.collection.isEmpty {
+            Button(action: {
+                showCollection.toggle()
+            }, label: {
+                Image(systemName: "checkmark.seal")
+            })
+        }
         Button(action: {
             showScanner.toggle()
         }, label: {

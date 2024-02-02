@@ -18,16 +18,15 @@ final class SecretURLParser {
         
         guard let name = url.path
             .removingPercentEncoding?
-            .replacingOccurrences(of: "/", with: "")
-            .replacingOccurrences(of: ":", with: " — ") else { return nil }
+            .replacingOccurrences(of: "/", with: "") else { return nil }
         
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let queryItems = components.queryItems,
-              let secret = queryItems.first(where: { $0.name == "secret" })?.value,
-              let issuer = queryItems.first(where: { $0.name == "issuer" })?.value else { return nil }
+              let secret = queryItems.first(where: { $0.name == "secret" })?.value else { return nil }
         
+        let issuer = queryItems.first(where: { $0.name == "issuer" })?.value ?? String(name.split(separator: ":").first ?? "")
         let order = queryItems.first(where: { $0.name == "order" })?.value as? Int ?? 0
         
-        return try? Account(name: String(name), base32String: secret, issuer: issuer, order: order)
+        return try? Account(name: String(name.replacingOccurrences(of: ":", with: " — ")), base32String: secret, issuer: issuer, order: order)
     }
 }

@@ -14,7 +14,7 @@ final class AccountManager {
     private init() { }
     
     func fetchAccounts() throws -> [Account] {
-        try KeychainManager.shared.fetchAll()
+        try KeychainManager.shared.fetchAccounts()
             .compactMap { createAccount(from: $0) }
     }
     
@@ -35,6 +35,7 @@ final class AccountManager {
               let account = SecretURLParser.shared.account2FA(from: url) else {
             return nil
         }
+        print(account)
         return account
     }
 }

@@ -27,6 +27,11 @@
 		1644EF7C2B61832E0010C0AF /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 1644EF7B2B61832E0010C0AF /* CodeScanner */; };
 		1644EF7E2B6183B10010C0AF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1644EF7D2B6183B10010C0AF /* SettingsView.swift */; };
 		1644EF842B6196330010C0AF /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1644EF832B6196330010C0AF /* KeychainAccess */; };
+		1675274A2B6D8B03001AE09E /* CollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167527492B6D8B02001AE09E /* CollectionManager.swift */; };
+		1675274F2B6D8B3A001AE09E /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1675274E2B6D8B3A001AE09E /* CollectionItem.swift */; };
+		167527512B6D8E08001AE09E /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167527502B6D8E08001AE09E /* URL+Extensions.swift */; };
+		167527532B6D92D9001AE09E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167527522B6D92D9001AE09E /* AppDelegate.swift */; };
+		167527562B6DA6BF001AE09E /* CollectionItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167527552B6DA6BF001AE09E /* CollectionItemsView.swift */; };
 		16F2A9572B65BFEA001F45DD /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 16F2A9562B65BFEA001F45DD /* CachedAsyncImage */; };
 		16F2A95D2B65C43E001F45DD /* View+Shaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A95B2B65C43E001F45DD /* View+Shaders.swift */; };
 		16F2A95E2B65C43E001F45DD /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A95C2B65C43E001F45DD /* Shaders.metal */; };
@@ -77,6 +82,11 @@
 		163DB0542B62FA49001E801A /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		1644EF782B61823A0010C0AF /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		1644EF7D2B6183B10010C0AF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		167527492B6D8B02001AE09E /* CollectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionManager.swift; sourceTree = "<group>"; };
+		1675274E2B6D8B3A001AE09E /* CollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
+		167527502B6D8E08001AE09E /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
+		167527522B6D92D9001AE09E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		167527552B6DA6BF001AE09E /* CollectionItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItemsView.swift; sourceTree = "<group>"; };
 		16F2A95B2B65C43E001F45DD /* View+Shaders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Shaders.swift"; sourceTree = "<group>"; };
 		16F2A95C2B65C43E001F45DD /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		16F2A95F2B66E5C4001F45DD /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
@@ -175,7 +185,6 @@
 			children = (
 				161348F42B60F4C2008E4EB7 /* CodeView.swift */,
 				161349202B60F522008E4EB7 /* CodeViewModel.swift */,
-				161349292B60F89C008E4EB7 /* CodeGenerator.swift */,
 				16F2A95F2B66E5C4001F45DD /* AccountView.swift */,
 			);
 			path = Codes;
@@ -214,6 +223,7 @@
 		1613492B2B60FA34008E4EB7 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				167527542B6DA6B4001AE09E /* Collection */,
 				1613491F2B60F50D008E4EB7 /* Scan */,
 				1613491E2B60F508008E4EB7 /* Settings */,
 				1613491D2B60F504008E4EB7 /* Codes */,
@@ -226,6 +236,7 @@
 			children = (
 				161349272B60F5AF008E4EB7 /* Date+Extensions.swift */,
 				163DB0542B62FA49001E801A /* Data+Extensions.swift */,
+				167527502B6D8E08001AE09E /* URL+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -234,6 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				161348F22B60F4C2008E4EB7 /* CheckEmApp.swift */,
+				167527522B6D92D9001AE09E /* AppDelegate.swift */,
 				161348F62B60F4C4008E4EB7 /* Assets.xcassets */,
 				161348F82B60F4C4008E4EB7 /* CheckEm.entitlements */,
 			);
@@ -243,6 +255,7 @@
 		1613492E2B60FA49008E4EB7 /* OTP */ = {
 			isa = PBXGroup;
 			children = (
+				161349292B60F89C008E4EB7 /* CodeGenerator.swift */,
 				161349252B60F563008E4EB7 /* OTP.swift */,
 				1613492F2B60FA5A008E4EB7 /* Interestingness.swift */,
 			);
@@ -252,11 +265,45 @@
 		163DB04F2B62F965001E801A /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				163DB0502B62F974001E801A /* KeychainManager.swift */,
-				163DB0522B62F98A001E801A /* Account.swift */,
-				16F2A9632B66F19A001F45DD /* AccountManager.swift */,
+				1675274D2B6D8B27001AE09E /* Keychain */,
+				1675274C2B6D8B20001AE09E /* Account */,
+				1675274B2B6D8B1A001AE09E /* Collection */,
 			);
 			path = Storage;
+			sourceTree = "<group>";
+		};
+		1675274B2B6D8B1A001AE09E /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				167527492B6D8B02001AE09E /* CollectionManager.swift */,
+				1675274E2B6D8B3A001AE09E /* CollectionItem.swift */,
+			);
+			path = Collection;
+			sourceTree = "<group>";
+		};
+		1675274C2B6D8B20001AE09E /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				16F2A9632B66F19A001F45DD /* AccountManager.swift */,
+				163DB0522B62F98A001E801A /* Account.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		1675274D2B6D8B27001AE09E /* Keychain */ = {
+			isa = PBXGroup;
+			children = (
+				163DB0502B62F974001E801A /* KeychainManager.swift */,
+			);
+			path = Keychain;
+			sourceTree = "<group>";
+		};
+		167527542B6DA6B4001AE09E /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				167527552B6DA6BF001AE09E /* CollectionItemsView.swift */,
+			);
+			path = Collection;
 			sourceTree = "<group>";
 		};
 		16F2A95A2B65C43E001F45DD /* Shaders */ = {
@@ -412,21 +459,26 @@
 				16F2A95D2B65C43E001F45DD /* View+Shaders.swift in Sources */,
 				16F2A95E2B65C43E001F45DD /* Shaders.metal in Sources */,
 				163DB0552B62FA49001E801A /* Data+Extensions.swift in Sources */,
+				167527562B6DA6BF001AE09E /* CollectionItemsView.swift in Sources */,
 				16F2A9602B66E5C4001F45DD /* AccountView.swift in Sources */,
+				1675274A2B6D8B03001AE09E /* CollectionManager.swift in Sources */,
 				16F2A9642B66F19A001F45DD /* AccountManager.swift in Sources */,
 				1613492A2B60F89C008E4EB7 /* CodeGenerator.swift in Sources */,
 				161349212B60F522008E4EB7 /* CodeViewModel.swift in Sources */,
 				161348F52B60F4C2008E4EB7 /* CodeView.swift in Sources */,
 				161348F32B60F4C2008E4EB7 /* CheckEmApp.swift in Sources */,
+				167527512B6D8E08001AE09E /* URL+Extensions.swift in Sources */,
 				16F2A9622B66E5E8001F45DD /* FavIcon.swift in Sources */,
 				163DB0512B62F974001E801A /* KeychainManager.swift in Sources */,
 				1644EF7E2B6183B10010C0AF /* SettingsView.swift in Sources */,
+				1675274F2B6D8B3A001AE09E /* CollectionItem.swift in Sources */,
 				1644EF792B61823A0010C0AF /* ScanView.swift in Sources */,
 				163DB0532B62F98A001E801A /* Account.swift in Sources */,
 				161349302B60FA5A008E4EB7 /* Interestingness.swift in Sources */,
 				161349262B60F563008E4EB7 /* OTP.swift in Sources */,
 				161349282B60F5AF008E4EB7 /* Date+Extensions.swift in Sources */,
 				16F2A9662B66F72C001F45DD /* SecretURLParser.swift in Sources */,
+				167527532B6D92D9001AE09E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -613,6 +665,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -654,6 +707,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

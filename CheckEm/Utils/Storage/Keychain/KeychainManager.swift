@@ -15,6 +15,10 @@ final class KeychainManager {
         case accountNotFound
     }
     
+    private enum Constants {
+        static let collectionKey = "collection"
+    }
+    
     static let shared = KeychainManager()
     private let keychain: Keychain
     
@@ -22,17 +26,40 @@ final class KeychainManager {
         self.keychain = Keychain().synchronizable(true)
     }
     
-    func fetchAll() throws -> [String] {
+    // MARK: - Account
+    
+    func fetchAccounts() throws -> [String] {
         keychain
             .allItems()
             .compactMap { $0["value"] as? String }
     }
-
+    
     func storeAccount(named name: String, url: URL) throws {
         try keychain.set(url.absoluteString, key: name)
     }
     
     func deleteAccount(named name: String) throws {
         try keychain.remove(name)
+    }
+    
+    // MARK: - Collection
+    
+    func fetchCollection() throws -> String? {
+        try keychain.get(Constants.collectionKey)
+    }
+
+    func storeCollectionItem(code: String) throws {
+        var collection = try keychain.get(Constants.collectionKey) ?? ""
+        if !collection.isEmpty {
+            collection.append(",")
+        }
+        collection.append(code)
+        print(collection)
+        print()
+        try keychain.set(collection, key: Constants.collectionKey)
+    }
+    
+    func deleteCollection() throws {
+        try keychain.remove(Constants.collectionKey)
     }
 }

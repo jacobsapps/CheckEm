@@ -13,6 +13,7 @@ final class CodeViewModel {
     var isCalculatingOTPs: Bool = false
     var calculationPercentage: String = ""
     var accounts: [Account] = []
+    var collection: [CollectionItem] = []
     
     private var otpComputationTask: Task<Void, Never>?
     private var notificationSchedulingTask: Task<Void, Never>?
@@ -24,6 +25,11 @@ final class CodeViewModel {
             self.accounts = accounts
         }
         recomputeNotifications()
+        if let collection = try? CollectionManager.shared.fetchCollection() {
+            withAnimation {
+                self.collection = collection
+            }
+        }
     }
     
     @MainActor
