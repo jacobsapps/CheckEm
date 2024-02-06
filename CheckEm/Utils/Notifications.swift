@@ -51,9 +51,8 @@ final class NotificationScheduler {
         content.body = interestingness.body(code: otp.code)
         content.sound = UNNotificationSound.default
         content.userInfo = ["deepLink": "checkem://\(otp.code)"]
-        let date = Date().addingTimeInterval(TimeInterval(Int.random(in: 10..<1000))) // otp.dateStarted
-        
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+//        let date = Date().addingTimeInterval(TimeInterval(Int.random(in: 10..<1000)))
+        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: otp.dateStarted)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         

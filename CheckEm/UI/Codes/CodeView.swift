@@ -28,6 +28,7 @@ import SwiftUI
 
 struct CodeView: View {
     
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.requestReview) var requestReview
     @AppStorage("numberOfAccounts") private var numberOfAccounts: Int = 0
     @AppStorage("requestedAppReviewSettings") var requestedAppReviewSettings: Bool = false
@@ -86,12 +87,18 @@ struct CodeView: View {
                 CollectionItemsView(collection: viewModel.collection)
             }
         }
-        .task {
-            await viewModel.task()
-            numberOfAccounts = viewModel.accounts.count
-        }
         .onAppear {
+            viewModel.onAppear()
+            numberOfAccounts = viewModel.accounts.count
             viewModel.resetAccountUI()
+        }
+        .onChange(of: scenePhase) { newScenePhase in
+            switch newScenePhase {
+            case .active:
+                viewModel.onAppear()
+                
+            default: break
+            }
         }
     }
     

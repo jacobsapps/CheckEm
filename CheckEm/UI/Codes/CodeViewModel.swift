@@ -19,7 +19,7 @@ final class CodeViewModel {
     private var notificationSchedulingTask: Task<Void, Never>?
     
     @MainActor
-    func task() async {
+    func onAppear() {
         guard let accounts = try? AccountManager.shared.fetchAccounts() else { return }
         withAnimation {
             self.accounts = accounts
