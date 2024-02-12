@@ -7,102 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "70E575A5-6322-48A8-A8C0-E94C4BFE523F"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CheckEm/Utils/Storage/Collection/CollectionManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
-            landmarkName = "fetchCollection()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "70E575A5-6322-48A8-A8C0-E94C4BFE523F - c69ba9d74501af3e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckEm.CollectionManager.fetchCollection() throws -&gt; Swift.Array&lt;CheckEm.CollectionItem&gt;"
-                  moduleName = "CheckEm"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jacob/Repos/CheckEm/CheckEm/Utils/Storage/Collection/CollectionManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20"
-                  offsetFromSymbolStart = "564">
-               </Location>
-               <Location
-                  uuid = "70E575A5-6322-48A8-A8C0-E94C4BFE523F - c69ba9d74501af3e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckEm.CollectionManager.fetchCollection() throws -&gt; Swift.Array&lt;CheckEm.CollectionItem&gt;"
-                  moduleName = "CheckEm"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jacob/Repos/CheckEm/CheckEm/Utils/Storage/Collection/CollectionManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20"
-                  offsetFromSymbolStart = "568">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B01B3650-2A6B-48F3-B587-2BB6A2399700"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CheckEm/Utils/Storage/Keychain/KeychainManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
-            landmarkName = "storeCollectionItem(code:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B01B3650-2A6B-48F3-B587-2BB6A2399700 - 7612dd1e541e4548"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckEm.KeychainManager.storeCollectionItem(code: Swift.String) throws -&gt; ()"
-                  moduleName = "CheckEm"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jacob/Repos/CheckEm/CheckEm/Utils/Storage/Keychain/KeychainManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "628">
-               </Location>
-               <Location
-                  uuid = "B01B3650-2A6B-48F3-B587-2BB6A2399700 - 7612dd1e541e4548"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckEm.KeychainManager.storeCollectionItem(code: Swift.String) throws -&gt; ()"
-                  moduleName = "CheckEm"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jacob/Repos/CheckEm/CheckEm/Utils/Storage/Keychain/KeychainManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "732">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "9360FDAA-9D37-4E2B-9209-CC031175C831"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -114,6 +18,38 @@
             endingLineNumber = "52"
             landmarkName = "storeCollectionItem(code:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9360FDAA-9D37-4E2B-9209-CC031175C831 - 7612dd1e541e4582"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CheckEm.KeychainManager.storeCollectionItem(code: Swift.String) throws -&gt; ()"
+                  moduleName = "CheckEm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacob/Repos/CheckEm/CheckEm/Utils/Storage/Keychain/KeychainManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "52"
+                  endingLineNumber = "52"
+                  offsetFromSymbolStart = "112">
+               </Location>
+               <Location
+                  uuid = "9360FDAA-9D37-4E2B-9209-CC031175C831 - 7612dd1e541e4582"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CheckEm.KeychainManager.storeCollectionItem(code: Swift.String) throws -&gt; ()"
+                  moduleName = "CheckEm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacob/Repos/CheckEm/CheckEm/Utils/Storage/Keychain/KeychainManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "52"
+                  endingLineNumber = "52"
+                  offsetFromSymbolStart = "96">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

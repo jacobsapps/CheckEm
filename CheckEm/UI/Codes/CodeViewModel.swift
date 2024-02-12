@@ -10,8 +10,7 @@ import SwiftUI
 @Observable
 final class CodeViewModel {
     
-    var isCalculatingOTPs: Bool = false
-    var calculationPercentage: String = ""
+    var calculationPercentage: String?
     var accounts: [Account] = []
     var collection: [CollectionItem] = []
     
@@ -27,17 +26,17 @@ final class CodeViewModel {
         recomputeNotifications()
         if let collection = try? CollectionManager.shared.fetchCollection() {
             withAnimation {
-                self.collection = collection
+                self.collection = Array(Set(collection))
             }
         }
     }
     
     @MainActor
     func create(account: Account, url: URL) throws {
-        let accountIncrement = accounts.last?.order ?? 0
-        try AccountManager.shared.save(account: account, url: url, increment: accountIncrement)
+        let orderIncrement = (accounts.map { $0.order }.max() ?? -1) + 1
+        try AccountManager.shared.save(account: account, url: url, increment: orderIncrement)
         withAnimation {
-            accounts.append(account)
+            accounts.append(account.withOrder(orderIncrement))
         }
         recomputeNotifications()
     }
@@ -62,6 +61,7 @@ final class CodeViewModel {
     }
     
     func delete(at offsets: IndexSet) {
+        cancelComputation()
         let deletedAccounts = accounts.enumerated().filter { offsets.contains($0.offset) }.map { $0.element }
         deletedAccounts.forEach {
             try? AccountManager.shared.delete(account: $0)
@@ -69,16 +69,23 @@ final class CodeViewModel {
         withAnimation {
             accounts.remove(atOffsets: offsets)
         }
-        recomputeNotifications()
+        if !accounts.isEmpty {
+            recomputeNotifications()
+        }
     }
     
     func recomputeNotifications() {
         withAnimation {
-            isCalculatingOTPs = true
             calculationPercentage = "0%"
         }
         handleNotificationScheduling()
         handleOTPComputation()
+    }
+    
+    func cancelComputation() {
+        calculationPercentage = nil
+        notificationSchedulingTask?.cancel()
+        otpComputationTask?.cancel()
     }
     
     private func handleNotificationScheduling() {
@@ -109,7 +116,7 @@ final class CodeViewModel {
             await MainActor.run { [weak self] in
                 guard let self else { return }
                 withAnimation {
-                    self.isCalculatingOTPs = false
+                    self.calculationPercentage = nil
                 }
             }
         }

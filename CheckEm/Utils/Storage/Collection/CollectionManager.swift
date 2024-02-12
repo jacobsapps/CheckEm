@@ -14,14 +14,9 @@ final class CollectionManager {
     private init() { }
     
     func fetchCollection() throws -> [CollectionItem] {
-        let collection = try KeychainManager.shared.fetchCollection() ?? ""
-        if !collection.isEmpty {
-            print(collection)
-            print()
-        }
-        return collection
+        try KeychainManager.shared.fetchCollection()?
             .split(separator: ",")
-            .compactMap { CollectionItem(code: String($0)) }
+            .compactMap { CollectionItem(code: String($0)) } ?? []
     }
     
     func save(code: String) throws {

@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import TipKit
 
 @main
 struct CheckEmApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
+    init() {
+        try? Tips.configure()
+    }
     
     var body: some Scene {
         WindowGroup {

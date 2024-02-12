@@ -13,7 +13,7 @@ final class CodeGenerator {
     enum Constants {
         /// There is a limit of 64 locally-scheduled notifications at any one time
         ///
-        static let localNotificationLimit: Int = 40 // 64
+        static let localNotificationLimit: Int = 64
     }
     
     static let shared = CodeGenerator()
@@ -90,6 +90,9 @@ final class CodeGenerator {
         }
         if UserDefaults.standard.bool(forKey: "tens") {
             interestingness.insert(.tens)
+        }
+        if UserDefaults.standard.bool(forKey: "nearlyCounting") {
+            interestingness.insert(.nearlyCounting)
         }
         if UserDefaults.standard.bool(forKey: "mathematicalConstants") {
             interestingness.insert(.pi)

@@ -25,7 +25,7 @@ final class SecretURLParser {
               let secret = queryItems.first(where: { $0.name == "secret" })?.value else { return nil }
         
         let issuer = queryItems.first(where: { $0.name == "issuer" })?.value ?? String(name.split(separator: ":").first ?? "")
-        let order = queryItems.first(where: { $0.name == "order" })?.value as? Int ?? 0
+        let order = Int(queryItems.first(where: { $0.name == "order" })?.value ?? "0") ?? 0
         
         return try? Account(name: String(name.replacingOccurrences(of: ":", with: " — ")), base32String: secret, issuer: issuer, order: order)
     }

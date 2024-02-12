@@ -8,8 +8,8 @@
 import Foundation
 import SwiftData
 
-struct Account {
-    
+struct Account: Comparable {
+
     let name: String
     let issuer: String
     let dateCreated: Date
@@ -19,6 +19,10 @@ struct Account {
     var countdown: Int?
     private var dateCodeExpires: Date?
     
+    static func < (lhs: Account, rhs: Account) -> Bool {
+        lhs.order < rhs.order
+    }
+    
     init(name: String, base32String: String, issuer: String, order: Int) throws {
         self.name = name
         self.issuer = issuer
@@ -26,6 +30,21 @@ struct Account {
         self.secret = try Data(base32Encoded: base32String)
         self.order = order
     }
+    
+    private init(name: String,
+    issuer: String,
+    dateCreated: Date,
+    secret: Data,
+                 order: Int) {
+        self.name = name
+        self.issuer = issuer
+        self.dateCreated = dateCreated
+        self.secret = secret
+        self.order = order
+    }
+    
+    
+    
     
     func resetUI() -> Account {
         var copy = self
@@ -53,5 +72,13 @@ struct Account {
         }
         
         return copy
+    }
+    
+    func withOrder(_ newOrder: Int) -> Account {
+        Account(name: name, 
+                issuer: issuer,
+                dateCreated: dateCreated,
+                secret: secret,
+                order: newOrder)
     }
 }

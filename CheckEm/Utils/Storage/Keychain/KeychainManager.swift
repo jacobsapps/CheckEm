@@ -54,8 +54,6 @@ final class KeychainManager {
             collection.append(",")
         }
         collection.append(code)
-        print(collection)
-        print()
         try keychain.set(collection, key: Constants.collectionKey)
     }
     

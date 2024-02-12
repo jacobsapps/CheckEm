@@ -28,3 +28,52 @@ struct CollectionItem: Hashable {
         hasher.combine(interestingness)
     }
 }
+
+extension [CollectionItem] {
+    
+    var ultraRares: [CollectionItem] {
+        let types: Set<Interestingness> = [.counting,
+                                           .sexts,
+                                           .units,
+                                           .hunderedThousands]
+        return filter { item in types.contains(where: { $0 == item.interestingness }) }
+    }
+    
+    var rares: [CollectionItem] {
+        let types: Set<Interestingness> = [.quints,
+                                           .tens,
+                                           .repeatedTwos]
+        
+        return filter { item in types.contains(where: { $0 == item.interestingness }) }
+    }
+    
+    var mathsConstants: [CollectionItem] {
+        let types: Set<Interestingness> = [.pi,
+                                           .e,
+                                           .phi,
+                                           .rootTwo,
+                                           .aperysConstant,
+                                           .eulersConstant]
+        return filter { item in types.contains(where: { $0 == item.interestingness }) }
+    }
+    
+    var physicsConstants: [CollectionItem] {
+        let types: Set<Interestingness> = [.speedOfLight,
+                                           .planksConstant,
+                                           .avogadrosConstant,
+                                           .gravitationalConstant,
+                                           .boltzmannConstant,
+                                           .fineStructureConstant,
+                                           .vacuumPermittivity,
+                                           .charge]
+        return filter { item in types.contains(where: { $0 == item.interestingness }) }
+    }
+    
+    var commons: [CollectionItem] {
+        let types: Set<Interestingness> = [.palindrome,
+                                           .repeatedThrees,
+                                           .nearlySextuples,
+                                           .quads]
+        return filter { item in types.contains(where: { $0 == item.interestingness }) }
+    }
+}

@@ -28,6 +28,7 @@ enum Interestingness: String, CaseIterable {
     case vacuumPermittivity
     case charge
     case quints
+    case nearlyCounting
     case tens
     case palindrome
     case repeatedTwos
@@ -74,6 +75,8 @@ enum Interestingness: String, CaseIterable {
             self = .vacuumPermittivity
         } else if eligible.contains(.quints) && code.checkThoseQuints() {
             self = .quints
+        } else if eligible.contains(.nearlyCounting) && code.checkThatNearlyCounting() {
+            self = .nearlyCounting
         } else if eligible.contains(.repeatedTwos) && code.checkThoseRepeatedTwos() {
             self = .repeatedTwos
         } else if eligible.contains(.tens) && code.checkThoseTens() {
@@ -93,7 +96,7 @@ enum Interestingness: String, CaseIterable {
     
     var title: String {
         switch self {
-        case .sexts: return "Sexts GET"
+        case .sexts: return "Sextuples GET"
         case .counting: return "Sequential numbers GET"
         case .units: return "Single-digit GET"
         case .hunderedThousands: return "Six-figure GET"
@@ -112,6 +115,7 @@ enum Interestingness: String, CaseIterable {
         case .fineStructureConstant: return "Fine Structure Constant GET"
         case .vacuumPermittivity: return "Vacuum Permittivity GET"
         case .quints: return "Quints GET"
+        case .nearlyCounting: return "Mostly-sequential GET"
         case .palindrome: return "Palindrome GET"
         case .repeatedTwos: return "Repeated twos GET"
         case .tens: return "Two-digit GET"
@@ -124,7 +128,7 @@ enum Interestingness: String, CaseIterable {
     func body(code: String) -> String {
         switch self {
         case .sexts: return "Check those sexts: \(code)"
-        case .counting: return "Check that count: \(code)"
+        case .counting: return "Check that counting: \(code)"
         case .units: return "Check that number: \(code)"
         case .hunderedThousands: return "Check that number: \(code)"
         case .pi: return "Check that pi: \(code)"
@@ -142,6 +146,7 @@ enum Interestingness: String, CaseIterable {
         case .vacuumPermittivity: return "Check that resistance to electric fields (8.854·10⁻¹²): \(code)"
         case .charge: return "Check that electron charge (1.6x10⁻¹⁹): \(code)"
         case .quints: return "Check those quints: \(code)"
+        case .nearlyCounting: return "Check that counting: \(code)"
         case .tens: return "Check this number: \(code)"
         case .nearlySextuples: return "Check these nearly-sextuples: \(code)"
         case .palindrome: return "Check that symmetry: \(code)"
@@ -176,6 +181,12 @@ extension String {
             }
         }
         return true
+    }
+    
+    func checkThatNearlyCounting() -> Bool {
+        let prefix = String(self.dropFirst())
+        let suffix = String(self.dropLast())
+        return prefix.checkThatCounting() || suffix.checkThatCounting()
     }
     
     func checkThoseNearlySextuples() -> Bool {

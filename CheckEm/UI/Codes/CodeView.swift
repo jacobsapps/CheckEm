@@ -8,23 +8,13 @@
 import Combine
 import StoreKit
 import SwiftUI
+import TipKit
 
 // High priority -
-// TODO: - Haptic buzz on refresh
-// TODO: - Create a "collection" screen using deep links - collecting the seen GETs as stored items (with a dictionary on the keychain)
-// TODO: - Cancel processing tasks when opening Settings view
-// TODO: - Add ordering as a query item to the stored URL in the keychain
-// TODO: - Push notification deep links to an app review prompt, when the GET is still present - https://www.avanderlee.com/swiftui/deeplink-url-handling/
-// TODO: - Bug - Progress view doesn't appear on the second load
 // TODO: - Bug - Ignore scanned duplicates in the view model accounts - don't append scans to accounts if it's already there
 // TODO: - Bug - There's a bug where the percentage fluctuates up and down when there are 2 concurrent calculations
-// TODO: - Add TipKit to QR and Settings
 // TODO: - StoreKit; pay £5 to get it free forever
 // TODO: - Implement a hard limit on monthly notifications for non-customers
-
-// Low priority -
-// TODO: - Use @SceneStorage for state restoration; so we aren't waiting ages for the keychain operations
-// TODO: - Look back/forward one code (maybe don't do this)
 
 struct CodeView: View {
     
@@ -32,6 +22,7 @@ struct CodeView: View {
     @Environment(\.requestReview) var requestReview
     @AppStorage("numberOfAccounts") private var numberOfAccounts: Int = 0
     @AppStorage("requestedAppReviewSettings") var requestedAppReviewSettings: Bool = false
+    @AppStorage("requestedAppReviewCollection") var requestedAppReviewCollection: Bool = false
     @State private var showScanner: Bool = false
     @State private var showSettings: Bool = false
     @State private var showCollection: Bool = false
@@ -39,7 +30,8 @@ struct CodeView: View {
     @State private var timer = Timer.publish(every: 1, tolerance: 0, on: .current, in: .common).autoconnect()
     @State private var searchText: String = ""
     @State private var hapticTrigger: Bool = false
-
+    @ScaledMetric private var tipImageSize: CGFloat = 24
+    
     private var accountSearchResults: [Account] {
         if searchText.isEmpty {
             return viewModel.accounts
@@ -56,10 +48,15 @@ struct CodeView: View {
             List {
                 accountListContent
                 loadingIndicator
+                tips
             }
             .searchable(text: $searchText,
                         placement: .automatic,
                         prompt: "Search")
+            .refreshable {
+                refreshUI()
+            }
+            .sensoryFeedback(.impact(flexibility: .solid, intensity: 1), trigger: hapticTrigger)
             .onReceive(timer) { _ in
                 let didChange = viewModel.refresh()
                 if didChange {
@@ -75,31 +72,43 @@ struct CodeView: View {
                 }
             }
             .sheet(isPresented: $showSettings) {
-                SettingsView {
+                SettingsView(onAppear: {
+                    viewModel.cancelComputation()
+                }, onDisappear: {
                     viewModel.recomputeNotifications()
                     if !requestedAppReviewSettings {
                         requestReview()
                         requestedAppReviewSettings = true
                     }
-                }
+                })
             }
             .sheet(isPresented: $showCollection) {
-                CollectionItemsView(collection: viewModel.collection)
+                CollectionItemsView(collection: viewModel.collection) {
+                    if !requestedAppReviewCollection {
+                        requestReview()
+                        requestedAppReviewCollection = true
+                    }
+                }
             }
         }
         .onAppear {
-            viewModel.onAppear()
-            numberOfAccounts = viewModel.accounts.count
-            viewModel.resetAccountUI()
+            refreshUI()
         }
-        .onChange(of: scenePhase) { newScenePhase in
+        .onChange(of: scenePhase, initial: false) { newScenePhase, _ in
             switch newScenePhase {
             case .active:
-                viewModel.onAppear()
+                refreshUI()
                 
             default: break
             }
         }
+    }
+    
+    @MainActor
+    private func refreshUI() {
+        viewModel.onAppear()
+        numberOfAccounts = viewModel.accounts.count
+        viewModel.resetAccountUI()
     }
     
     @ViewBuilder
@@ -115,7 +124,6 @@ struct CodeView: View {
                     }
             }
             .onDelete(perform: viewModel.delete)
-            .sensoryFeedback(.levelChange, trigger: hapticTrigger)
         }
     }
     
@@ -126,6 +134,7 @@ struct CodeView: View {
                     Text(" ")
                         .font(.largeTitle)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                    
                     ProgressView()
                 }
             }
@@ -134,40 +143,45 @@ struct CodeView: View {
     
     @ViewBuilder
     private var loadingIndicator: some View {
-        if viewModel.isCalculatingOTPs {
+        if !viewModel.accounts.isEmpty,
+           let calculationPercentage = viewModel.calculationPercentage {
             HStack(spacing: 8) {
                 Text("Processing your numbers...")
                     .font(.body)
                     .frame(maxWidth: .infinity, alignment: .leading)
-
-                Text(viewModel.calculationPercentage)
+                
+                Text(calculationPercentage)
                     .font(.body)
                     .fontWeight(.medium)
-                
-                ProgressView()
-                    .tint(.green)
             }
         }
     }
     
     @ViewBuilder
+    private var tips: some View {
+        TipView(QRTip()).tipImageSize(CGSize(width: tipImageSize, height: tipImageSize))
+        TipView(SettingsTip()).tipImageSize(CGSize(width: tipImageSize, height: tipImageSize))
+        TipView(CollectionTip()).tipImageSize(CGSize(width: tipImageSize, height: tipImageSize))
+    }
+    
+    @ViewBuilder
     private var toolbarView: some View {
-        if !viewModel.collection.isEmpty {
-            Button(action: {
-                showCollection.toggle()
-            }, label: {
-                Image(systemName: "checkmark.seal")
-            })
-        }
         Button(action: {
-            showScanner.toggle()
+            showCollection.toggle()
         }, label: {
-            Image(systemName: "qrcode")
+            Image(systemName: "checkmark.seal")
         })
+        
         Button(action: {
             showSettings.toggle()
         }, label: {
             Image(systemName: "gear")
+        })
+        
+        Button(action: {
+            showScanner.toggle()
+        }, label: {
+            Image(systemName: "qrcode")
         })
     }
 }

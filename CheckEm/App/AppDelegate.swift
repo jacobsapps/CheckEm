@@ -25,8 +25,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         
         if let deepLinkString = userInfo["deepLink"] as? String,
            let deepLinkURL = URL(string: deepLinkString) {
-            print(deepLinkURL)
-            print()
             guard let code = deepLinkURL.code else { return }
             try? CollectionManager.shared.save(code: code)
         }

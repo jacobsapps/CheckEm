@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		160868E72B7A585C008941DE /* Tips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160868E62B7A585C008941DE /* Tips.swift */; };
 		161348F32B60F4C2008E4EB7 /* CheckEmApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161348F22B60F4C2008E4EB7 /* CheckEmApp.swift */; };
 		161348F52B60F4C2008E4EB7 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161348F42B60F4C2008E4EB7 /* CodeView.swift */; };
 		161348F72B60F4C4008E4EB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 161348F62B60F4C4008E4EB7 /* Assets.xcassets */; };
@@ -59,6 +60,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		160868E62B7A585C008941DE /* Tips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tips.swift; sourceTree = "<group>"; };
 		1612FAB52B6A2B6700BA40F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		161348EF2B60F4C2008E4EB7 /* CheckEm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheckEm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		161348F22B60F4C2008E4EB7 /* CheckEmApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckEmApp.swift; sourceTree = "<group>"; };
@@ -123,6 +125,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		160868E52B7A583E008941DE /* Tips */ = {
+			isa = PBXGroup;
+			children = (
+				160868E62B7A585C008941DE /* Tips.swift */,
+			);
+			path = Tips;
+			sourceTree = "<group>";
+		};
 		161348E62B60F4C2008E4EB7 = {
 			isa = PBXGroup;
 			children = (
@@ -209,6 +219,7 @@
 		161349222B60F53C008E4EB7 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				160868E52B7A583E008941DE /* Tips */,
 				16F2A95A2B65C43E001F45DD /* Shaders */,
 				163DB04F2B62F965001E801A /* Storage */,
 				1613492E2B60FA49008E4EB7 /* OTP */,
@@ -471,6 +482,7 @@
 				16F2A9622B66E5E8001F45DD /* FavIcon.swift in Sources */,
 				163DB0512B62F974001E801A /* KeychainManager.swift in Sources */,
 				1644EF7E2B6183B10010C0AF /* SettingsView.swift in Sources */,
+				160868E72B7A585C008941DE /* Tips.swift in Sources */,
 				1675274F2B6D8B3A001AE09E /* CollectionItem.swift in Sources */,
 				1644EF792B61823A0010C0AF /* ScanView.swift in Sources */,
 				163DB0532B62F98A001E801A /* Account.swift in Sources */,

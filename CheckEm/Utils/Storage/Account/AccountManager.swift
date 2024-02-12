@@ -16,14 +16,12 @@ final class AccountManager {
     func fetchAccounts() throws -> [Account] {
         try KeychainManager.shared.fetchAccounts()
             .compactMap { createAccount(from: $0) }
+            .sorted()
     }
     
     func save(account: Account, url: URL, increment: Int) throws {
         let orderedAccountURL = url.appending(queryItems: [URLQueryItem(name: "order", value: "\(increment)")])
-        print(orderedAccountURL)
-        print(orderedAccountURL.absoluteString)
-        print()
-        try KeychainManager.shared.storeAccount(named: account.name, url: url)
+        try KeychainManager.shared.storeAccount(named: account.name, url: orderedAccountURL)
     }
     
     func delete(account: Account) throws {

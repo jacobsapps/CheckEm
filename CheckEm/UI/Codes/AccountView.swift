@@ -111,11 +111,6 @@ struct CountdownView: View {
         }
         .animation(.bouncy, value: countdown)
         .padding(.trailing, tickOffset / 2.0)
-        .overlay {
-            if countdown == nil {
-                ProgressView()
-            }
-        }
     }
     
     @ViewBuilder
