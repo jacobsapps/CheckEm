@@ -33,6 +33,7 @@ final class CodeViewModel {
     
     @MainActor
     func create(account: Account, url: URL) throws {
+        guard !accounts.contains(where: { $0.name == account.name }) else { return }
         let orderIncrement = (accounts.map { $0.order }.max() ?? -1) + 1
         try AccountManager.shared.save(account: account, url: url, increment: orderIncrement)
         withAnimation {
@@ -90,6 +91,7 @@ final class CodeViewModel {
     private func handleNotificationScheduling() {
         notificationSchedulingTask?.cancel()
         notificationSchedulingTask = Task.detached(priority: .high) {
+            guard await NotificationScheduler.shared.isAuthorized() else { return }
             NotificationScheduler.shared.cancelNotifications()
             for await (code, count) in CodeGenerator.shared.codeSubject.values {
                 try? await NotificationScheduler.shared.scheduleNotification(for: code)
@@ -108,7 +110,7 @@ final class CodeViewModel {
         let accounts = accounts
         otpComputationTask?.cancel()
         otpComputationTask = Task.detached(priority: .high) {
-            try? await NotificationScheduler.shared.requestAuthorization()
+            guard await NotificationScheduler.shared.isAuthorized() else { return }
             let lastCodeDate = CodeGenerator.shared.generateCodes(accounts: accounts)
             try? await NotificationScheduler.shared.scheduleComebackNotifications(after: lastCodeDate)
             try? await Task.sleep(nanoseconds: 700_000_000)

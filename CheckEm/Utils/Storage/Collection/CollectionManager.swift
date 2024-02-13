@@ -16,7 +16,8 @@ final class CollectionManager {
     func fetchCollection() throws -> [CollectionItem] {
         try KeychainManager.shared.fetchCollection()?
             .split(separator: ",")
-            .compactMap { CollectionItem(code: String($0)) } ?? []
+            .compactMap { CollectionItem(code: String($0)) }
+            .reversed() ?? []
     }
     
     func save(code: String) throws {

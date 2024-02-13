@@ -12,9 +12,6 @@
 		161348F52B60F4C2008E4EB7 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161348F42B60F4C2008E4EB7 /* CodeView.swift */; };
 		161348F72B60F4C4008E4EB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 161348F62B60F4C4008E4EB7 /* Assets.xcassets */; };
 		161348FB2B60F4C4008E4EB7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 161348FA2B60F4C4008E4EB7 /* Preview Assets.xcassets */; };
-		161349052B60F4C4008E4EB7 /* CheckEmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161349042B60F4C4008E4EB7 /* CheckEmTests.swift */; };
-		1613490F2B60F4C4008E4EB7 /* CheckEmUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1613490E2B60F4C4008E4EB7 /* CheckEmUITests.swift */; };
-		161349112B60F4C4008E4EB7 /* CheckEmUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161349102B60F4C4008E4EB7 /* CheckEmUITestsLaunchTests.swift */; };
 		161349212B60F522008E4EB7 /* CodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161349202B60F522008E4EB7 /* CodeViewModel.swift */; };
 		161349242B60F54F008E4EB7 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161349232B60F54E008E4EB7 /* Notifications.swift */; };
 		161349262B60F563008E4EB7 /* OTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161349252B60F563008E4EB7 /* OTP.swift */; };
@@ -28,14 +25,13 @@
 		1644EF7C2B61832E0010C0AF /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 1644EF7B2B61832E0010C0AF /* CodeScanner */; };
 		1644EF7E2B6183B10010C0AF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1644EF7D2B6183B10010C0AF /* SettingsView.swift */; };
 		1644EF842B6196330010C0AF /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1644EF832B6196330010C0AF /* KeychainAccess */; };
+		165696402B7C0EA40028CAED /* HapticEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1656963F2B7C0EA40028CAED /* HapticEngine.swift */; };
 		1675274A2B6D8B03001AE09E /* CollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167527492B6D8B02001AE09E /* CollectionManager.swift */; };
 		1675274F2B6D8B3A001AE09E /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1675274E2B6D8B3A001AE09E /* CollectionItem.swift */; };
 		167527512B6D8E08001AE09E /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167527502B6D8E08001AE09E /* URL+Extensions.swift */; };
 		167527532B6D92D9001AE09E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167527522B6D92D9001AE09E /* AppDelegate.swift */; };
 		167527562B6DA6BF001AE09E /* CollectionItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167527552B6DA6BF001AE09E /* CollectionItemsView.swift */; };
 		16F2A9572B65BFEA001F45DD /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 16F2A9562B65BFEA001F45DD /* CachedAsyncImage */; };
-		16F2A95D2B65C43E001F45DD /* View+Shaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A95B2B65C43E001F45DD /* View+Shaders.swift */; };
-		16F2A95E2B65C43E001F45DD /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A95C2B65C43E001F45DD /* Shaders.metal */; };
 		16F2A9602B66E5C4001F45DD /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A95F2B66E5C4001F45DD /* AccountView.swift */; };
 		16F2A9622B66E5E8001F45DD /* FavIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A9612B66E5E8001F45DD /* FavIcon.swift */; };
 		16F2A9642B66F19A001F45DD /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A9632B66F19A001F45DD /* AccountManager.swift */; };
@@ -69,10 +65,7 @@
 		161348F82B60F4C4008E4EB7 /* CheckEm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CheckEm.entitlements; sourceTree = "<group>"; };
 		161348FA2B60F4C4008E4EB7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		161349002B60F4C4008E4EB7 /* CheckEmTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CheckEmTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		161349042B60F4C4008E4EB7 /* CheckEmTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckEmTests.swift; sourceTree = "<group>"; };
 		1613490A2B60F4C4008E4EB7 /* CheckEmUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CheckEmUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1613490E2B60F4C4008E4EB7 /* CheckEmUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckEmUITests.swift; sourceTree = "<group>"; };
-		161349102B60F4C4008E4EB7 /* CheckEmUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckEmUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		161349202B60F522008E4EB7 /* CodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeViewModel.swift; sourceTree = "<group>"; };
 		161349232B60F54E008E4EB7 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		161349252B60F563008E4EB7 /* OTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTP.swift; sourceTree = "<group>"; };
@@ -84,13 +77,12 @@
 		163DB0542B62FA49001E801A /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		1644EF782B61823A0010C0AF /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		1644EF7D2B6183B10010C0AF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		1656963F2B7C0EA40028CAED /* HapticEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticEngine.swift; sourceTree = "<group>"; };
 		167527492B6D8B02001AE09E /* CollectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionManager.swift; sourceTree = "<group>"; };
 		1675274E2B6D8B3A001AE09E /* CollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
 		167527502B6D8E08001AE09E /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		167527522B6D92D9001AE09E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		167527552B6DA6BF001AE09E /* CollectionItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItemsView.swift; sourceTree = "<group>"; };
-		16F2A95B2B65C43E001F45DD /* View+Shaders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Shaders.swift"; sourceTree = "<group>"; };
-		16F2A95C2B65C43E001F45DD /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		16F2A95F2B66E5C4001F45DD /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		16F2A9612B66E5E8001F45DD /* FavIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavIcon.swift; sourceTree = "<group>"; };
 		16F2A9632B66F19A001F45DD /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
@@ -137,8 +129,6 @@
 			isa = PBXGroup;
 			children = (
 				161348F12B60F4C2008E4EB7 /* CheckEm */,
-				161349032B60F4C4008E4EB7 /* CheckEmTests */,
-				1613490D2B60F4C4008E4EB7 /* CheckEmUITests */,
 				161348F02B60F4C2008E4EB7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -173,23 +163,6 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		161349032B60F4C4008E4EB7 /* CheckEmTests */ = {
-			isa = PBXGroup;
-			children = (
-				161349042B60F4C4008E4EB7 /* CheckEmTests.swift */,
-			);
-			path = CheckEmTests;
-			sourceTree = "<group>";
-		};
-		1613490D2B60F4C4008E4EB7 /* CheckEmUITests */ = {
-			isa = PBXGroup;
-			children = (
-				1613490E2B60F4C4008E4EB7 /* CheckEmUITests.swift */,
-				161349102B60F4C4008E4EB7 /* CheckEmUITestsLaunchTests.swift */,
-			);
-			path = CheckEmUITests;
-			sourceTree = "<group>";
-		};
 		1613491D2B60F504008E4EB7 /* Codes */ = {
 			isa = PBXGroup;
 			children = (
@@ -219,8 +192,8 @@
 		161349222B60F53C008E4EB7 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				1656963E2B7C0E980028CAED /* Haptics */,
 				160868E52B7A583E008941DE /* Tips */,
-				16F2A95A2B65C43E001F45DD /* Shaders */,
 				163DB04F2B62F965001E801A /* Storage */,
 				1613492E2B60FA49008E4EB7 /* OTP */,
 				1613492C2B60FA3C008E4EB7 /* Extensions */,
@@ -283,6 +256,14 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
+		1656963E2B7C0E980028CAED /* Haptics */ = {
+			isa = PBXGroup;
+			children = (
+				1656963F2B7C0EA40028CAED /* HapticEngine.swift */,
+			);
+			path = Haptics;
+			sourceTree = "<group>";
+		};
 		1675274B2B6D8B1A001AE09E /* Collection */ = {
 			isa = PBXGroup;
 			children = (
@@ -315,15 +296,6 @@
 				167527552B6DA6BF001AE09E /* CollectionItemsView.swift */,
 			);
 			path = Collection;
-			sourceTree = "<group>";
-		};
-		16F2A95A2B65C43E001F45DD /* Shaders */ = {
-			isa = PBXGroup;
-			children = (
-				16F2A95B2B65C43E001F45DD /* View+Shaders.swift */,
-				16F2A95C2B65C43E001F45DD /* Shaders.metal */,
-			);
-			path = Shaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -467,11 +439,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				161349242B60F54F008E4EB7 /* Notifications.swift in Sources */,
-				16F2A95D2B65C43E001F45DD /* View+Shaders.swift in Sources */,
-				16F2A95E2B65C43E001F45DD /* Shaders.metal in Sources */,
 				163DB0552B62FA49001E801A /* Data+Extensions.swift in Sources */,
 				167527562B6DA6BF001AE09E /* CollectionItemsView.swift in Sources */,
 				16F2A9602B66E5C4001F45DD /* AccountView.swift in Sources */,
+				165696402B7C0EA40028CAED /* HapticEngine.swift in Sources */,
 				1675274A2B6D8B03001AE09E /* CollectionManager.swift in Sources */,
 				16F2A9642B66F19A001F45DD /* AccountManager.swift in Sources */,
 				1613492A2B60F89C008E4EB7 /* CodeGenerator.swift in Sources */,
@@ -498,7 +469,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				161349052B60F4C4008E4EB7 /* CheckEmTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,8 +476,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1613490F2B60F4C4008E4EB7 /* CheckEmUITests.swift in Sources */,
-				161349112B60F4C4008E4EB7 /* CheckEmUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -655,17 +623,17 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CheckEm/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "What, you thought I was gonna magically guess your 2FA secrets?";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan a QR code with the camera to securely store 2FA accounts on your device";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -674,12 +642,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacobbartlett.CheckEm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Debug;
 		};
@@ -697,17 +665,17 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CheckEm/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "What, you thought I was gonna magically guess your 2FA secrets?";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan a QR code with the camera to securely store 2FA accounts on your device";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -716,12 +684,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacobbartlett.CheckEm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Release;
 		};

@@ -33,7 +33,6 @@ final class AccountManager {
               let account = SecretURLParser.shared.account2FA(from: url) else {
             return nil
         }
-        print(account)
         return account
     }
 }

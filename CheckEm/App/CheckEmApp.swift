@@ -15,11 +15,16 @@ struct CheckEmApp: App {
 
     init() {
         try? Tips.configure()
+        initializeDefaults()
     }
     
     var body: some Scene {
         WindowGroup {
             CodeView()
         }
+    }
+    
+    func initializeDefaults() {
+        CodeGenerator.shared.initializeDefaultsIfRequired()
     }
 }

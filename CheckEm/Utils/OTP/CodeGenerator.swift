@@ -13,7 +13,7 @@ final class CodeGenerator {
     enum Constants {
         /// There is a limit of 64 locally-scheduled notifications at any one time
         ///
-        static let localNotificationLimit: Int = 7 // 64
+        static let localNotificationLimit: Int = 64
     }
     
     static let shared = CodeGenerator()
@@ -29,7 +29,7 @@ final class CodeGenerator {
     func generateCodes(accounts: [Account]) -> Date? {
         let secrets = accounts.compactMap { $0.secret }
         let userInterestingnessSettings = eligibleInterestingness()
-        print(userInterestingnessSettings)
+        
         guard !secrets.isEmpty,
               !userInterestingnessSettings.isEmpty else { return nil }
         let date = Date()
@@ -57,45 +57,76 @@ final class CodeGenerator {
         return lastCodeDate
     }
     
+    func initializeDefaultsIfRequired() {
+        let defaults = UserDefaults.standard
+        
+        guard defaults.object(forKey: "sexts") == nil else { return }
+        
+        let defaultTrue = ["sexts",
+                           "count",
+                           "hunderedThousands",
+                           "units",
+                           "mathematicalConstants",
+                           "physicalConstants",
+                           "quints",
+                           "repeatedTwos",
+                           "tens",
+                           "nearlyCounting"]
+        
+        defaultTrue.forEach {
+            defaults.set(true, forKey: $0)
+        }
+        
+        let defaultFalse = ["nearlySextuples",
+                            "palindrome",
+                            "repeatedThrees",
+                            "quads"]
+        
+        defaultFalse.forEach {
+            defaults.set(false, forKey: $0)
+        }
+    }
+    
     private func eligibleInterestingness() -> Set<Interestingness> {
+        let defaults = UserDefaults.standard
         var interestingness = Set<Interestingness>()
-        if UserDefaults.standard.bool(forKey: "sexts") {
+        if defaults.bool(forKey: "sexts") {
             interestingness.insert(.sexts)
         }
-        if UserDefaults.standard.bool(forKey: "quints") {
+        if defaults.bool(forKey: "quints") {
             interestingness.insert(.quints)
         }
-        if UserDefaults.standard.bool(forKey: "nearlySextuples") {
+        if defaults.bool(forKey: "nearlySextuples") {
             interestingness.insert(.nearlySextuples)
         }
-        if UserDefaults.standard.bool(forKey: "quads") {
+        if defaults.bool(forKey: "quads") {
             interestingness.insert(.quads)
         }
-        if UserDefaults.standard.bool(forKey: "count") {
+        if defaults.bool(forKey: "count") {
             interestingness.insert(.counting)
         }
-        if UserDefaults.standard.bool(forKey: "palindrome") {
+        if defaults.bool(forKey: "palindrome") {
             interestingness.insert(.palindrome)
         }
-        if UserDefaults.standard.bool(forKey: "repeatedThrees") {
+        if defaults.bool(forKey: "repeatedThrees") {
             interestingness.insert(.repeatedThrees)
         }
-        if UserDefaults.standard.bool(forKey: "repeatedTwos") {
+        if defaults.bool(forKey: "repeatedTwos") {
             interestingness.insert(.repeatedTwos)
         }
-        if UserDefaults.standard.bool(forKey: "units") {
+        if defaults.bool(forKey: "units") {
             interestingness.insert(.units)
         }
-        if UserDefaults.standard.bool(forKey: "hunderedThousands") {
+        if defaults.bool(forKey: "hunderedThousands") {
             interestingness.insert(.hunderedThousands)
         }
-        if UserDefaults.standard.bool(forKey: "tens") {
+        if defaults.bool(forKey: "tens") {
             interestingness.insert(.tens)
         }
-        if UserDefaults.standard.bool(forKey: "nearlyCounting") {
+        if defaults.bool(forKey: "nearlyCounting") {
             interestingness.insert(.nearlyCounting)
         }
-        if UserDefaults.standard.bool(forKey: "mathematicalConstants") {
+        if defaults.bool(forKey: "mathematicalConstants") {
             interestingness.insert(.pi)
             interestingness.insert(.e)
             interestingness.insert(.phi)
@@ -103,7 +134,7 @@ final class CodeGenerator {
             interestingness.insert(.aperysConstant)
             interestingness.insert(.eulersConstant)
         }
-        if UserDefaults.standard.bool(forKey: "physicalConstants") {
+        if defaults.bool(forKey: "physicalConstants") {
             interestingness.insert(.speedOfLight)
             interestingness.insert(.planksConstant)
             interestingness.insert(.avogadrosConstant)

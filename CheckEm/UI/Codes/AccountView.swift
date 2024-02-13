@@ -16,7 +16,6 @@ struct AccountView: View {
     let account: Account
     
     var body: some View {
-//        Section(String(account.name.split(separator: "—").first ?? "")) {
         Section(account.name) {
             Button(action: {
                 copyCode()
@@ -36,7 +35,6 @@ struct AccountView: View {
             $0
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-//                .eraseBackground()
             
         }, placeholder: {
             Text(String(account.issuer.first?.uppercased() ?? account.name.first?.uppercased() ?? ""))

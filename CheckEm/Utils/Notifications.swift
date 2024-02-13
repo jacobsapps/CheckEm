@@ -18,7 +18,6 @@ final class NotificationScheduler {
         center.removeAllPendingNotificationRequests()
     }
     
-    // TODO: Use this to show/hide a link to Settings
     func isAuthorized() async -> Bool {
         await UNUserNotificationCenter.current().notificationSettings().authorizationStatus == .authorized
     }
@@ -52,8 +51,7 @@ final class NotificationScheduler {
         content.body = interestingness.body(code: otp.code)
         content.sound = UNNotificationSound.default
         content.userInfo = ["deepLink": "checkem://\(otp.code)"]
-        let date = Date().addingTimeInterval(TimeInterval(Int(10)))
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date) // otp.dateStarted)
+        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: otp.dateStarted)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         

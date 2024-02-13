@@ -10,19 +10,8 @@ import StoreKit
 import SwiftUI
 import TipKit
 
-// High priority -
-// TODO: - Only request push notifications when they have entered the Settings Screen
-// TODO: - Add settings link to enable notifications 
-// TODO: - Bug - Ignore scanned duplicates in the view model accounts - don't append scans to accounts if it's already there
-// TODO: - Ultra-rare GETs not being sent?? Can't make them happen locally in simulator, but quints are fine - they appear to be queued
-// TODO: - Bug - There's a bug where the percentage fluctuates up and down when there are 2 concurrent calculations
-// TODO: - Bug - when there is no image, don't show the globe. Count the data in the image before applying it over a letter
-// TODO: - StoreKit; pay £5 to get it free forever
-// TODO: - Implement a hard limit on monthly notifications for non-customers
-
 struct CodeView: View {
     
-    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.requestReview) var requestReview
     @AppStorage("numberOfAccounts") private var numberOfAccounts: Int = 0
     @AppStorage("requestedAppReviewSettings") var requestedAppReviewSettings: Bool = false
@@ -33,7 +22,6 @@ struct CodeView: View {
     @State private var viewModel = CodeViewModel()
     @State private var timer = Timer.publish(every: 1, tolerance: 0, on: .current, in: .common).autoconnect()
     @State private var searchText: String = ""
-    @State private var hapticTrigger: Bool = false
     @ScaledMetric private var tipImageSize: CGFloat = 24
     
     private var accountSearchResults: [Account] {
@@ -60,11 +48,10 @@ struct CodeView: View {
             .refreshable {
                 refreshUI()
             }
-            .sensoryFeedback(.impact(flexibility: .solid, intensity: 1), trigger: hapticTrigger)
             .onReceive(timer) { _ in
                 let didChange = viewModel.refresh()
                 if didChange {
-                    hapticTrigger.toggle()
+                    HapticEngine.shared.play(haptic: .refresh)
                 }
             }
             .navigationTitle("Check 'em")
@@ -79,34 +66,30 @@ struct CodeView: View {
                 SettingsView(onAppear: {
                     viewModel.cancelComputation()
                 }, onDisappear: {
-                    viewModel.recomputeNotifications()
-                    if !requestedAppReviewSettings {
-                        requestReview()
-                        requestedAppReviewSettings = true
+                    Task {
+                        try? await NotificationScheduler.shared.requestAuthorization()
+                        viewModel.recomputeNotifications()
+                        if !requestedAppReviewSettings {
+                            requestReview()
+                            requestedAppReviewSettings = true
+                        }
                     }
                 })
             }
             .sheet(isPresented: $showCollection) {
                 CollectionItemsView(collection: viewModel.collection) {
-                    if !requestedAppReviewCollection {
-                        requestReview()
-                        requestedAppReviewCollection = true
+                    Task {
+                        try? await NotificationScheduler.shared.requestAuthorization()
+                        if !requestedAppReviewCollection {
+                            requestReview()
+                            requestedAppReviewCollection = true
+                        }
                     }
                 }
             }
         }
         .onAppear {
-            #error("This happens simultaneously with foregrounding")
             refreshUI()
-        }
-        .onChange(of: scenePhase, initial: false) { newScenePhase, _ in
-            switch newScenePhase {
-            case .active:
-#error("This happens simultaneously with onAppear")
-                refreshUI()
-                
-            default: break
-            }
         }
     }
     

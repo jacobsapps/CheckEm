@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 struct Account: Comparable {
-
+    
     let name: String
     let issuer: String
     let dateCreated: Date
@@ -32,9 +32,9 @@ struct Account: Comparable {
     }
     
     private init(name: String,
-    issuer: String,
-    dateCreated: Date,
-    secret: Data,
+                 issuer: String,
+                 dateCreated: Date,
+                 secret: Data,
                  order: Int) {
         self.name = name
         self.issuer = issuer
@@ -42,9 +42,6 @@ struct Account: Comparable {
         self.secret = secret
         self.order = order
     }
-    
-    
-    
     
     func resetUI() -> Account {
         var copy = self
@@ -59,7 +56,7 @@ struct Account: Comparable {
         var copy = self
         
         if let dateCodeExpires,
-            date < (dateCodeExpires) {
+           date < (dateCodeExpires) {
             let countdown = Int(dateCodeExpires.timeIntervalSince(date).rounded(.up))
             copy.countdown = (countdown <= 0) ? 0 : countdown
             
@@ -75,7 +72,7 @@ struct Account: Comparable {
     }
     
     func withOrder(_ newOrder: Int) -> Account {
-        Account(name: name, 
+        Account(name: name,
                 issuer: issuer,
                 dateCreated: dateCreated,
                 secret: secret,
