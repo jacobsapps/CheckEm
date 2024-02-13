@@ -11,8 +11,12 @@ import SwiftUI
 import TipKit
 
 // High priority -
+// TODO: - Only request push notifications when they have entered the Settings Screen
+// TODO: - Add settings link to enable notifications 
 // TODO: - Bug - Ignore scanned duplicates in the view model accounts - don't append scans to accounts if it's already there
+// TODO: - Ultra-rare GETs not being sent?? Can't make them happen locally in simulator, but quints are fine - they appear to be queued
 // TODO: - Bug - There's a bug where the percentage fluctuates up and down when there are 2 concurrent calculations
+// TODO: - Bug - when there is no image, don't show the globe. Count the data in the image before applying it over a letter
 // TODO: - StoreKit; pay £5 to get it free forever
 // TODO: - Implement a hard limit on monthly notifications for non-customers
 
@@ -92,11 +96,13 @@ struct CodeView: View {
             }
         }
         .onAppear {
+            #error("This happens simultaneously with foregrounding")
             refreshUI()
         }
         .onChange(of: scenePhase, initial: false) { newScenePhase, _ in
             switch newScenePhase {
             case .active:
+#error("This happens simultaneously with onAppear")
                 refreshUI()
                 
             default: break

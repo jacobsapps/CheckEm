@@ -39,7 +39,7 @@ struct AccountView: View {
 //                .eraseBackground()
             
         }, placeholder: {
-            Text(String(account.issuer.first ?? account.name.first ?? Character("")))
+            Text(String(account.issuer.first?.uppercased() ?? account.name.first?.uppercased() ?? ""))
                 .font(.largeTitle)
                 .monospaced()
         })

@@ -69,12 +69,11 @@ final class CodeViewModel {
         withAnimation {
             accounts.remove(atOffsets: offsets)
         }
-        if !accounts.isEmpty {
-            recomputeNotifications()
-        }
+        recomputeNotifications()
     }
     
     func recomputeNotifications() {
+        guard !accounts.isEmpty else { return }
         withAnimation {
             calculationPercentage = "0%"
         }

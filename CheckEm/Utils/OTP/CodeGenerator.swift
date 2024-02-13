@@ -13,7 +13,7 @@ final class CodeGenerator {
     enum Constants {
         /// There is a limit of 64 locally-scheduled notifications at any one time
         ///
-        static let localNotificationLimit: Int = 64
+        static let localNotificationLimit: Int = 7 // 64
     }
     
     static let shared = CodeGenerator()
@@ -29,6 +29,7 @@ final class CodeGenerator {
     func generateCodes(accounts: [Account]) -> Date? {
         let secrets = accounts.compactMap { $0.secret }
         let userInterestingnessSettings = eligibleInterestingness()
+        print(userInterestingnessSettings)
         guard !secrets.isEmpty,
               !userInterestingnessSettings.isEmpty else { return nil }
         let date = Date()

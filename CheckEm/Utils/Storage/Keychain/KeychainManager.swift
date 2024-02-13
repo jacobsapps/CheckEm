@@ -28,10 +28,20 @@ final class KeychainManager {
     
     // MARK: - Account
     
+    private func hardcodedTestAccounts() -> [String] {
+        [
+            "otpauth://totp/Github?secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD&issuer=github",
+            "otpauth://totp/Cloudflare?secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC&issuer=cloudflare",
+            "otpauth://totp/Google?secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&issuer=google",
+            "otpauth://totp/Outlook?secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB&issuer=outlook"
+        ]
+    }
+    
     func fetchAccounts() throws -> [String] {
-        keychain
-            .allItems()
-            .compactMap { $0["value"] as? String }
+       hardcodedTestAccounts()
+//        keychain
+//            .allItems()
+//            .compactMap { $0["value"] as? String }
     }
     
     func storeAccount(named name: String, url: URL) throws {
@@ -45,7 +55,8 @@ final class KeychainManager {
     // MARK: - Collection
     
     func fetchCollection() throws -> String? {
-        try keychain.get(Constants.collectionKey)
+        "000000,123456,314159,661034,555556,123321,000010,271828"
+//        try keychain.get(Constants.collectionKey)
     }
 
     func storeCollectionItem(code: String) throws {

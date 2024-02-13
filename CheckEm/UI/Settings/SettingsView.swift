@@ -82,7 +82,7 @@ struct UltraRareSettingsView: View {
     @AppStorage("hunderedThousands") private var hunderedThousands: Bool = true
     @AppStorage("units") private var units: Bool = true
     @AppStorage("mathematicalConstants") private var mathematicalConstants: Bool = true
-    @AppStorage("physicalConstants") private var physicalConstants: Bool = false
+    @AppStorage("physicalConstants") private var physicalConstants: Bool = true
     
     var body: some View {
         Section("Ultra-rare GETs") {
@@ -184,7 +184,7 @@ struct NumbersSequencesSettingsView: View {
 struct ConstantsSettingsView: View {
     
     @AppStorage("mathematicalConstants") private var mathematicalConstants: Bool = true
-    @AppStorage("physicalConstants") private var physicalConstants: Bool = false
+    @AppStorage("physicalConstants") private var physicalConstants: Bool = true
     
     var body: some View {
         Section("Special number GETs") {
