@@ -15,7 +15,7 @@ final class HapticEngine {
         
         var intensity: CHHapticEventParameter {
             switch self {
-            case .refresh: return CHHapticEventParameter(parameterID: .hapticIntensity, value: 1)
+            case .refresh: return CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.45)
             }
         }
         
@@ -27,7 +27,7 @@ final class HapticEngine {
         
         var duration: TimeInterval {
             switch self {
-            case .refresh: return 0.3
+            case .refresh: return 0.12
             }
         }
         

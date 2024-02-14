@@ -33,7 +33,7 @@ final class KeychainManager {
             .allItems()
             .compactMap { $0["value"] as? String }
     }
-    
+
     func storeAccount(named name: String, url: URL) throws {
         try keychain.set(url.absoluteString, key: name)
     }
@@ -47,7 +47,7 @@ final class KeychainManager {
     func fetchCollection() throws -> String? {
         try keychain.get(Constants.collectionKey)
     }
-
+    
     func storeCollectionItem(code: String) throws {
         var collection = try keychain.get(Constants.collectionKey) ?? ""
         if !collection.isEmpty {
@@ -59,5 +59,18 @@ final class KeychainManager {
     
     func deleteCollection() throws {
         try keychain.remove(Constants.collectionKey)
+    }
+    
+    private func hardcodedTestAccounts() -> [String] {
+        [
+            "otpauth://totp/Github?secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD&issuer=github&order=0",
+            "otpauth://totp/Cloudflare?secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC&issuer=cloudflare&order=1",
+            "otpauth://totp/Google?secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&issuer=google&order=2",
+            "otpauth://totp/Outlook?secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB&issuer=outlook&order=3"
+        ]
+    }
+    
+    private func hardcodedCollection() -> String {
+        "000000,123456,314159,661034,555556,123321,000010,271828"
     }
 }
