@@ -36,10 +36,10 @@ enum Interestingness: String, CaseIterable {
     case nearlySextuples
     case quads
 
-#error("Precompule all 1 million codes and interestingnesses! As a dict! See if that's the bottleneck")
-#error("-> mention this, but then use instruments to confirm, might be the hashing that's more")
-    #error("Go through w/ instruments and find the bottlenecks, it's probably one of these")
-    #error("Include reverseCounting!! Simply do code.reversed().checkThatCounting()")
+//#error("Precompule all 1 million codes and interestingnesses! As a dict! See if that's the bottleneck")
+//#error("-> mention this, but then use instruments to confirm, might be the hashing that's more")
+//    #error("Go through w/ instruments and find the bottlenecks, it's probably one of these")
+//    #error("Include reverseCounting!! Simply do code.reversed().checkThatCounting()")
 
     init?(code: String, eligible: Set<Interestingness>) {
         if eligible.contains(.counting) && code.checkThatCounting() {
@@ -143,7 +143,7 @@ enum Interestingness: String, CaseIterable {
         case .aperysConstant: return "Check that Apery's constant (1.20206): \(code)"
         case .eulersConstant: return "Check that Euler's constant (0.57722): \(code)"
         case .speedOfLight: return "Check that universal speed limit (2.99x10⁸): \(code)"
-        case .planksConstant: return "Check that quantum of action (6.6x10⁻³⁴): \(code)"
+        case .planksConstant: return "Check that quantum of action (Pa): \(code)"
         case .avogadrosConstant: return "Check that mole of atoms (6.022x10²³): \(code)"
         case .gravitationalConstant: return "Check that Newtonian law (6.7x10⁻¹¹): \(code)"
         case .boltzmannConstant: return "Check that particle energy (1.380649×10⁻²³): \(code)"
@@ -164,16 +164,16 @@ enum Interestingness: String, CaseIterable {
 
 extension String {
     
-//    func checkThoseSexts() -> Bool {
-//        (try? /(\d)\1\1\1\1\1/.firstMatch(in: self)) != nil
-//    }
-    
-    #error("This was the bottleneck, no longer!")
     func checkThoseSexts() -> Bool {
-        (0...9).map {
-            String(repeating: String($0), count: 6)
-        }.contains(self)
+        (try? /(\d)\1\1\1\1\1/.firstMatch(in: self)) != nil
     }
+    
+//    #error("This was the bottleneck, no longer!")
+//    func checkThoseSexts() -> Bool {
+//        (0...9).map {
+//            String(repeating: String($0), count: 6)
+//        }.contains(self)
+//    }
     
 //    func checkRepeatedDigits(count: Int) -> Bool {
 //    self.contains { }

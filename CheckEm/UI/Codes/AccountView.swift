@@ -16,7 +16,8 @@ struct AccountView: View {
     let account: Account
     
     var body: some View {
-        Section(account.name) {
+//        Section(account.name) {
+        Section(String(account.name.split(separator: "—").first!)) {
             Button(action: {
                 copyCode()
             }, label: {
