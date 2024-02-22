@@ -17,17 +17,35 @@ final class CodeViewModel {
     private var otpComputationTask: Task<Void, Never>?
     private var notificationSchedulingTask: Task<Void, Never>?
     
+    #error("Profile launch time")
+    @MainActor
+    init() {
+        timestamp("View model init")
+        configureAccounts()
+//        Task {
+//            await MainActor.run {
+                refresh()
+//            }
+//        }
+    }
+    
     @MainActor
     func onAppear() {
-        guard let accounts = try? AccountManager.shared.fetchAccounts() else { return }
-        withAnimation {
-            self.accounts = accounts
-        }
+//        timestamp("On appear")
+        configureAccounts()
         recomputeNotifications()
         if let collection = try? CollectionManager.shared.fetchCollection() {
             withAnimation {
                 self.collection = Array(Set(collection))
             }
+        }
+    }
+    
+    private func configureAccounts() {
+        guard let accounts = try? AccountManager.shared.fetchAccounts() else { return }
+        withAnimation {
+//            timestamp("Set accounts")
+            self.accounts = accounts
         }
     }
     
@@ -44,7 +62,8 @@ final class CodeViewModel {
     
     /// Returns `true` if the codes rotate on this tick
     @MainActor
-    func refresh() -> Bool {
+    func refresh() {
+//        timestamp("Refresh accounts")
         let date = Date()
         let oldCodes = accounts.map { $0.code }
         let newAccounts = accounts.map { $0.refreshed(date: date) }
@@ -52,7 +71,9 @@ final class CodeViewModel {
         withAnimation {
             accounts = newAccounts
         }
-        return newCodes != oldCodes
+        if newCodes != oldCodes {
+            HapticEngine.shared.play(haptic: .refresh)
+        }
     }
     
     func resetAccountUI() {

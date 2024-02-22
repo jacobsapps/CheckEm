@@ -10,6 +10,7 @@ import StoreKit
 import SwiftUI
 import TipKit
 
+@MainActor
 struct CodeView: View {
     
     @Environment(\.requestReview) var requestReview
@@ -48,11 +49,8 @@ struct CodeView: View {
             .refreshable {
                 refreshUI()
             }
-            .onReceive(timer) { _ in
-                let didChange = viewModel.refresh()
-                if didChange {
-                    HapticEngine.shared.play(haptic: .refresh)
-                }
+            .onReceive(timer) { _ in 
+                viewModel.refresh()
             }
             .navigationTitle("Check 'em")
             .toolbar { toolbarView }
