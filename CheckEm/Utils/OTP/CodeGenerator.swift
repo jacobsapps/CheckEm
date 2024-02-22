@@ -14,11 +14,12 @@ final class CodeGenerator {
         /// There is a limit of 64 locally-scheduled notifications at any one time
         ///
         static let localNotificationLimit: Int = 64
+        static let availableBackgroundCores: Int = max(1, ProcessInfo.processInfo.processorCount - 1)
     }
     
     static let shared = CodeGenerator()
     
-    var codeSubject = PassthroughSubject<(OTP, Int), Never>()
+    var codeSubject = PassthroughSubject<OTP, Never>()
     
     private init() { }
     
@@ -26,25 +27,27 @@ final class CodeGenerator {
         OTP(secret: secret, eligible: eligibleInterestingness())
     }
     
-    func generateCodes(accounts: [Account]) -> Date? {
+    func generateCodes(accounts: [Account], startingIncrement: Int) {
+//    func generateCodes(accounts: [Account], startingIncrement: Int) -> Date? {
         let secrets = accounts.compactMap { $0.secret }
         let userInterestingnessSettings = eligibleInterestingness()
         
         guard !secrets.isEmpty,
-              !userInterestingnessSettings.isEmpty else { return nil }
+              !userInterestingnessSettings.isEmpty else { return }
+//              !userInterestingnessSettings.isEmpty else { return nil }
         let date = Date()
-        var interestingCodes = [OTP]()
-        var increment = 0
+//        var interestingCodes = [OTP]()
+        var increment = startingIncrement
         var interestingCodesCount = 0
         var lastCodeDate: Date?
         // 64 limit, 2 come-back notifications
-        while interestingCodesCount < (Constants.localNotificationLimit - 2) {
+        while Double(interestingCodesCount) < (Double(Constants.localNotificationLimit - 2) / Double(Constants.availableBackgroundCores)).rounded(.up) {
             secrets.forEach {
                 let otp = OTP(secret: $0, date: date, increment: increment, eligible: userInterestingnessSettings)
                 if otp.interestingness != nil {
-                    interestingCodes.append(otp)
+//                    interestingCodes.append(otp)
                     interestingCodesCount += 1
-                    codeSubject.send((otp, interestingCodesCount))
+                    codeSubject.send(otp)
                     if let latestDate = lastCodeDate {
                         lastCodeDate = max(otp.dateStarted, latestDate)
                     } else {
@@ -52,9 +55,9 @@ final class CodeGenerator {
                     }
                 }
             }
-            increment += 1
+            increment += Constants.numberOfConcurrentThreads
         }
-        return lastCodeDate
+//        return lastCodeDate
     }
     
     func initializeDefaultsIfRequired() {

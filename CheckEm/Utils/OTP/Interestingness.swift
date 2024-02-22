@@ -35,12 +35,12 @@ enum Interestingness: String, CaseIterable {
     case repeatedThrees
     case nearlySextuples
     case quads
-
-//#error("Precompule all 1 million codes and interestingnesses! As a dict! See if that's the bottleneck")
-//#error("-> mention this, but then use instruments to confirm, might be the hashing that's more")
-//    #error("Go through w/ instruments and find the bottlenecks, it's probably one of these")
-//    #error("Include reverseCounting!! Simply do code.reversed().checkThatCounting()")
-
+    
+    //#error("Precompule all 1 million codes and interestingnesses! As a dict! See if that's the bottleneck")
+    //#error("-> mention this, but then use instruments to confirm, might be the hashing that's more")
+    //    #error("Go through w/ instruments and find the bottlenecks, it's probably one of these")
+    //    #error("Include reverseCounting!! Simply do code.reversed().checkThatCounting()")
+    
     init?(code: String, eligible: Set<Interestingness>) {
         if eligible.contains(.counting) && code.checkThatCounting() {
             self = .counting
@@ -163,50 +163,86 @@ enum Interestingness: String, CaseIterable {
 }
 
 extension String {
-    
+
     func checkThoseSexts() -> Bool {
-        (try? /(\d)\1\1\1\1\1/.firstMatch(in: self)) != nil
+        Self.sexts.contains(self)
     }
-    
-//    #error("This was the bottleneck, no longer!")
-//    func checkThoseSexts() -> Bool {
-//        (0...9).map {
-//            String(repeating: String($0), count: 6)
-//        }.contains(self)
-//    }
-    
-//    func checkRepeatedDigits(count: Int) -> Bool {
-//    self.contains { }
-//        (0...9).map {
-//            String(repeating: String($0), count: count)
-//        }.contains(self)
-//    }
 
     func checkThoseQuints() -> Bool {
-        (try? /(\d)\1\1\1\1/.firstMatch(in: self)) != nil
+        Self.quints.contains(where: { self.contains($0) })
     }
-    
+
     func checkThoseQuads() -> Bool {
-        (try? /(\d)\1\1\1/.firstMatch(in: self)) != nil
+        Self.quads.contains(where: { self.contains($0) })
     }
     
+    private static let sexts: Set<String> = [
+        "000000",
+        "111111",
+        "222222",
+        "333333",
+        "444444",
+        "555555",
+        "666666",
+        "777777",
+        "888888",
+        "999999"
+    ]
+    
+    private static let quints: Set<String> = [
+        "00000",
+        "11111",
+        "22222",
+        "33333",
+        "44444",
+        "55555",
+        "66666",
+        "77777",
+        "88888",
+        "99999"
+    ]
+
+    private static let quads: Set<String> = [
+        "0000",
+        "1111",
+        "2222",
+        "3333",
+        "4444",
+        "5555",
+        "6666",
+        "7777",
+        "8888",
+        "9999"
+    ]
+
     func checkThatCounting() -> Bool {
-        let characters = Array(self)
-        for i in 1..<characters.count {
-            if let prevDigit = Int(String(characters[i - 1])),
-               let currentDigit = Int(String(characters[i])),
-               currentDigit != prevDigit + 1 {
-                return false
-            }
-        }
-        return true
+        Self.counting.contains(self)
     }
+    
+    private static let counting: Set<String> = [
+        "012345",
+        "123456",
+        "234567",
+        "345678",
+        "456789",
+        "567890"
+    ]
     
     func checkThatNearlyCounting() -> Bool {
         let prefix = String(self.dropFirst())
         let suffix = String(self.dropLast())
-        return prefix.checkThatCounting() || suffix.checkThatCounting()
+        return Self.nearlyCounting.contains(prefix) || Self.nearlyCounting.contains(suffix)
     }
+    
+    private static let nearlyCounting: Set<String> = [
+        "01234",
+        "12345",
+        "23456",
+        "34567",
+        "45678",
+        "56789",
+        "67890"
+    ]
     
     func checkThoseNearlySextuples() -> Bool {
         var digitCounts = [Character: Int]()
@@ -232,15 +268,18 @@ extension String {
         return (firstPair == secondPair) && (firstPair == thirdPair)
     }
     
+    private static let fiveZeroes = "00000"
+    private static let fourZeroes = "0000"
+    
     func checkThoseUnits() -> Bool {
-        prefix(5) == "00000"
+        prefix(5) == Self.fiveZeroes
     }
     
     func checkThoseHunderedThousands() -> Bool {
-        suffix(5) == "00000"
+        suffix(5) == Self.fiveZeroes
     }
     
     func checkThoseTens() -> Bool {
-        prefix(4) == "0000"
+        prefix(4) == Self.fourZeroes
     }
 }

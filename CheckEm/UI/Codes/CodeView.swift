@@ -10,7 +10,6 @@ import StoreKit
 import SwiftUI
 import TipKit
 
-@MainActor
 struct CodeView: View {
     
     @Environment(\.requestReview) var requestReview

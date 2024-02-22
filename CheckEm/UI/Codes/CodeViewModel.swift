@@ -17,21 +17,14 @@ final class CodeViewModel {
     private var otpComputationTask: Task<Void, Never>?
     private var notificationSchedulingTask: Task<Void, Never>?
     
-    #error("Profile launch time")
-    @MainActor
     init() {
         timestamp("View model init")
         configureAccounts()
-//        Task {
-//            await MainActor.run {
-                refresh()
-//            }
-//        }
+        refresh()
     }
     
     @MainActor
     func onAppear() {
-//        timestamp("On appear")
         configureAccounts()
         recomputeNotifications()
         if let collection = try? CollectionManager.shared.fetchCollection() {
@@ -44,7 +37,6 @@ final class CodeViewModel {
     private func configureAccounts() {
         guard let accounts = try? AccountManager.shared.fetchAccounts() else { return }
         withAnimation {
-//            timestamp("Set accounts")
             self.accounts = accounts
         }
     }
@@ -60,10 +52,7 @@ final class CodeViewModel {
         recomputeNotifications()
     }
     
-    /// Returns `true` if the codes rotate on this tick
-    @MainActor
     func refresh() {
-//        timestamp("Refresh accounts")
         let date = Date()
         let oldCodes = accounts.map { $0.code }
         let newAccounts = accounts.map { $0.refreshed(date: date) }
@@ -114,9 +103,11 @@ final class CodeViewModel {
         notificationSchedulingTask = Task.detached(priority: .high) {
             guard await NotificationScheduler.shared.isAuthorized() else { return }
             NotificationScheduler.shared.cancelNotifications()
-            for await (code, count) in CodeGenerator.shared.codeSubject.values {
+            var codeCount = 0
+            for await code in CodeGenerator.shared.codeSubject.values {
+                codeCount += 1
                 try? await NotificationScheduler.shared.scheduleNotification(for: code)
-                let completionPercentage = Int(100*Double(count)/Double(CodeGenerator.Constants.localNotificationLimit - 2).rounded(.up))
+                let completionPercentage = Int(100 * Double(codeCount) / Double(CodeGenerator.Constants.localNotificationLimit - 2).rounded(.up))
                 await MainActor.run { [weak self] in
                     guard let self else { return }
                     withAnimation {
@@ -132,8 +123,16 @@ final class CodeViewModel {
         otpComputationTask?.cancel()
         otpComputationTask = Task.detached(priority: .high) {
             guard await NotificationScheduler.shared.isAuthorized() else { return }
-            let lastCodeDate = CodeGenerator.shared.generateCodes(accounts: accounts)
-            try? await NotificationScheduler.shared.scheduleComebackNotifications(after: lastCodeDate)
+//            let lastCodeDate = CodeGenerator.shared.generateCodes(accounts: accounts, startingIncrement: 0)
+            
+            await withTaskGroup(of: Void.self) { group in
+                (0..<CodeGenerator.Constants.availableBackgroundCores).forEach { startingIncrement in
+                    group.addTask {
+                        CodeGenerator.shared.generateCodes(accounts: accounts, startingIncrement: startingIncrement)
+                    }
+                }
+            }
+//            try? await NotificationScheduler.shared.scheduleComebackNotifications(after: lastCodeDate)
             try? await Task.sleep(nanoseconds: 700_000_000)
             await MainActor.run { [weak self] in
                 guard let self else { return }
