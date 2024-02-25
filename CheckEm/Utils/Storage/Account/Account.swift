@@ -43,15 +43,6 @@ struct Account: Comparable {
         self.order = order
     }
     
-    func resetUI() -> Account {
-        timestamp("Reset UI")
-        var copy = self
-        copy.dateCodeExpires = nil
-        copy.code = nil
-        copy.countdown = nil
-        return copy
-    }
-    
     func refreshed(date: Date) -> Account {
         
         var copy = self
@@ -67,7 +58,6 @@ struct Account: Comparable {
             copy.dateCodeExpires = otp.dateExpires
             let countdown = Int(otp.dateExpires.timeIntervalSince(date).rounded(.up))
             copy.countdown = (countdown <= 0) ? 0 : countdown
-            timestamp("Code displayed")
         }
         
         return copy

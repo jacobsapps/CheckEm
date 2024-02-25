@@ -20,23 +20,28 @@ extension Date {
     }
 }
 
-final class Formatters {
-    
-    static let shared = Formatters()
-    
-    private init() { }
-    
-    lazy var fullDateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.locale = Locale(identifier: "en_US_POSIX")
-        df.dateFormat = "EEE d MMM h:mm:ss aa"
-        return df
-    }()
-    
-    lazy var timestamp: DateFormatter = {
-        let df = DateFormatter()
-        df.locale = Locale(identifier: "en_US_POSIX")
-        df.dateFormat = "HH:mm:ss.SSSS"
-        return df
-    }()
-}
+//func timestamp(_ label: String) {
+//    let dateString = Formatters.shared.timestamp.string(from: Date())
+//    efficientPrint("\(dateString) - \(label)")
+//}
+//
+//final class Formatters {
+//    
+//    static let shared = Formatters()
+//    
+//    private init() { }
+//    
+//    lazy var fullDateFormatter: DateFormatter = {
+//        let df = DateFormatter()
+//        df.locale = Locale(identifier: "en_US_POSIX")
+//        df.dateFormat = "EEE d MMM h:mm:ss aa"
+//        return df
+//    }()
+//    
+//    lazy var timestamp: DateFormatter = {
+//        let df = DateFormatter()
+//        df.locale = Locale(identifier: "en_US_POSIX")
+//        df.dateFormat = "HH:mm:ss.SSSS"
+//        return df
+//    }()
+//}

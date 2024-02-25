@@ -47,7 +47,6 @@ struct CodeView: View {
                         placement: .automatic,
                         prompt: "Search")
             .refreshable {
-                viewModel.resetAccountUI()
                 viewModel.onAppear()
             }
             .onReceive(timer) { _ in 

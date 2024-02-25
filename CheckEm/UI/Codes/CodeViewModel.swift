@@ -18,7 +18,6 @@ final class CodeViewModel {
     private var notificationSchedulingTask: Task<Void, Never>?
     
     init() {
-        timestamp("View model init")
         configureAccounts()
         refresh()
     }
@@ -38,7 +37,6 @@ final class CodeViewModel {
     private func configureAccounts() {
         guard let accounts = try? AccountManager.shared.fetchAccounts() else { return }
         guard self.accounts != accounts else { return }
-        timestamp("Set new accounts")
         withAnimation {
             self.accounts = accounts
         }
@@ -56,7 +54,6 @@ final class CodeViewModel {
     }
     
     func refresh() {
-        timestamp("Refresh")
         let date = Date()
         let oldCodes = accounts.map { $0.code }
         let newAccounts = accounts.map { $0.refreshed(date: date) }
@@ -66,12 +63,6 @@ final class CodeViewModel {
         }
         if newCodes != oldCodes {
             HapticEngine.shared.play(haptic: .refresh)
-        }
-    }
-    
-    func resetAccountUI() {
-        withAnimation {
-            accounts = accounts.map { $0.resetUI() }
         }
     }
     
