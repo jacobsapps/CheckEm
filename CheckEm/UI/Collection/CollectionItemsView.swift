@@ -15,11 +15,16 @@ struct CollectionItemsView: View {
     var body: some View {
         NavigationStack {
             List {
-                CollectionSection(title: "Ultra rare", collection: collection.ultraRares)
-                CollectionSection(title: "Maths constants", collection: collection.mathsConstants)
-                CollectionSection(title: "Physics constants", collection: collection.physicsConstants)
-                CollectionSection(title: "Rare", collection: collection.rares)
-                CollectionSection(title: "Common", collection: collection.commons)
+                CollectionSection(title: "Ultra rare",
+                                  collection: collection.ultraRares.groupedByInterestingness)
+                CollectionSection(title: "Maths constants",
+                                  collection: collection.mathsConstants.groupedByInterestingness)
+                CollectionSection(title: "Physics constants",
+                                  collection: collection.physicsConstants.groupedByInterestingness)
+                CollectionSection(title: "Rare",
+                                  collection: collection.rares.groupedByInterestingness)
+                CollectionSection(title: "Common",
+                                  collection: collection.commons.groupedByInterestingness)
             }
             .navigationTitle("Collection")
             .onDisappear {
@@ -31,8 +36,11 @@ struct CollectionItemsView: View {
 
 struct CollectionSection: View {
     
+    @ScaledMetric(relativeTo: .caption) var dividerHeight: CGFloat = 10
+
+  #error("The order of items here is randomly shuffled between opens - need to fix it by introducing an order to interestingness")
     let title: String
-    let collection: [CollectionItem]
+    let collection: [Interestingness: [String]]
     
     var body: some View {
         Section(title) {
@@ -40,24 +48,39 @@ struct CollectionSection: View {
                 emptyListItem
                 
             } else {
-                ForEach(collection, id: \.interestingness) {
-                    collectionItem($0)
+                ForEach(Array(collection.keys), id: \.self) {
+                    collectionItem(interestingness: $0, codes: collection[$0])
                 }
             }
         }
     }
     
-    private func collectionItem(_ item: CollectionItem) -> some View {
+    private func collectionItem(interestingness: Interestingness, codes: [String]?) -> some View {
         HStack {
-            VStack {
-                Text(item.interestingness.title)
+            VStack(spacing: .zero) {
+                Text(interestingness.title)
                     .font(.body)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text(item.interestingness.body(code: item.code))
+                Text(interestingness.body(code: ""))
                     .font(.caption)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 4)
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(Array(Set(codes ?? [])), id: \.self) {
+                            Text($0)
+                                .font(.caption)
+                            
+                            Divider()
+                                .frame(height: dividerHeight)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 4)
+                    }
+                }
             }
             
             Image(systemName: "checkmark.seal.fill")

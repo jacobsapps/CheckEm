@@ -67,7 +67,7 @@ struct Account: Comparable {
             let countdown = Int(otp.dateExpires.timeIntervalSince(date).rounded(.up))
             copy.countdown = (countdown <= 0) ? 0 : countdown
             
-            timestamp("Code displayed")
+//            timestamp("Code displayed")
         }
         
         return copy

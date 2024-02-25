@@ -18,7 +18,7 @@ final class CodeViewModel {
     private var notificationSchedulingTask: Task<Void, Never>?
     
     init() {
-        timestamp("View model init")
+//        timestamp("View model init")
         configureAccounts()
         refresh()
     }
@@ -29,7 +29,7 @@ final class CodeViewModel {
         recomputeNotifications()
         if let collection = try? CollectionManager.shared.fetchCollection() {
             withAnimation {
-                self.collection = Array(Set(collection))
+                self.collection = collection
             }
         }
     }
@@ -111,6 +111,7 @@ final class CodeViewModel {
                 await MainActor.run { [weak self] in
                     guard let self else { return }
                     withAnimation {
+                      //  #error("This can go higher than 100%, e.g. 117%")
                         self.calculationPercentage = "\(completionPercentage)%"
                     }
                 }
@@ -122,17 +123,25 @@ final class CodeViewModel {
         let accounts = accounts
         otpComputationTask?.cancel()
         otpComputationTask = Task.detached(priority: .high) {
+            let incrementor = CodeIncrementor()
             guard await NotificationScheduler.shared.isAuthorized() else { return }
-//            let lastCodeDate = CodeGenerator.shared.generateCodes(accounts: accounts, startingIncrement: 0)
+            
+            timestamp("Computation started")
+            
+//            let lastCodeDate = CodeGenerator.shared.generateCodes(accounts: accounts)
             
             await withTaskGroup(of: Void.self) { group in
                 (0..<CodeGenerator.Constants.availableBackgroundCores).forEach { startingIncrement in
                     group.addTask {
-                        CodeGenerator.shared.generateCodes(accounts: accounts, startingIncrement: startingIncrement)
+//                        CodeGenerator.shared.generateCodes(accounts: accounts, startingIncrement: startingIncrement)
+                        await CodeGenerator.shared.generateCodes(accounts: accounts, incrementor: incrementor)
                     }
                 }
             }
-//            try? await NotificationScheduler.shared.scheduleComebackNotifications(after: lastCodeDate)
+            
+            timestamp("Computation finished")
+            
+            try? await NotificationScheduler.shared.scheduleComebackNotifications(after: await incrementor.lastCodeDate)
             try? await Task.sleep(nanoseconds: 700_000_000)
             await MainActor.run { [weak self] in
                 guard let self else { return }
@@ -141,5 +150,22 @@ final class CodeViewModel {
                 }
             }
         }
+    }
+}
+
+actor CodeIncrementor {
+    
+    var codes: Int = 0
+    var lastCodeDate: Date?
+    private var _increment: Int = 0
+    
+    func increment() -> Int {
+        defer { _increment += 1 }
+        return _increment
+    }
+    
+    func newCodeFound(at date: Date) {
+        codes += 1
+        lastCodeDate = date
     }
 }

@@ -57,9 +57,9 @@ final class NotificationScheduler {
         
         center.add(request) { (error) in
             if let error = error {
-//                efficientPrint("Error scheduling notification: \(error)")
+                efficientPrint("Error scheduling notification: \(error)")
             } else {
-//                efficientPrint("Scheduled \(interestingness): \(otp.code) @ \(otp.dateStarted)")
+                efficientPrint("Scheduled \(interestingness): \(otp.code) @ \(otp.dateStarted)")
             }
         }
     }
@@ -79,15 +79,15 @@ final class NotificationScheduler {
         
         center.add(request) { (error) in
             if let error = error {
-//                efficientPrint("Error scheduling notification: \(error)")
+                efficientPrint("Error scheduling notification: \(error)")
             } else {
-//                efficientPrint("Scheduled comeback at \(date)")
+                efficientPrint("Scheduled comeback at \(date)")
             }
         }
     }
 }
 
-private func efficientPrint(_ string: String) {
+func efficientPrint(_ string: String) {
     #if DEBUG
     print(string)
     #endif

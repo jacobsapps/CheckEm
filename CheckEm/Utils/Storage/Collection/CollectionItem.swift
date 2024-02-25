@@ -7,7 +7,20 @@
 
 import Foundation
 
-struct CollectionItem: Hashable {
+extension [CollectionItem] {
+    
+    var groupedByInterestingness: [Interestingness: [String]] {
+        reduce(into: [Interestingness: [String]]()) {
+            if let existingCodes = $0[$1.interestingness] {
+                $0[$1.interestingness] = existingCodes + CollectionOfOne($1.code)
+            } else {
+                $0[$1.interestingness] = [$1.code]
+            }
+        }
+    }
+}
+
+struct CollectionItem: Equatable, Hashable {
     
     let code: String
     let interestingness: Interestingness
@@ -18,10 +31,6 @@ struct CollectionItem: Hashable {
         }
         self.code = code
         self.interestingness = interestingness
-    }
-    
-    static func ==(lhs: CollectionItem, rhs: CollectionItem) -> Bool {
-        return lhs.interestingness == rhs.interestingness
     }
     
     func hash(into hasher: inout Hasher) {

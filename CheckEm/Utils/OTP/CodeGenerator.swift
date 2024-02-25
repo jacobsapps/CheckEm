@@ -27,38 +27,80 @@ final class CodeGenerator {
         OTP(secret: secret, eligible: eligibleInterestingness())
     }
     
-    func generateCodes(accounts: [Account], startingIncrement: Int) {
-//    func generateCodes(accounts: [Account], startingIncrement: Int) -> Date? {
+    func generateCodes(accounts: [Account], incrementor: CodeIncrementor) async {
         let secrets = accounts.compactMap { $0.secret }
         let userInterestingnessSettings = eligibleInterestingness()
         
         guard !secrets.isEmpty,
               !userInterestingnessSettings.isEmpty else { return }
-//              !userInterestingnessSettings.isEmpty else { return nil }
+
         let date = Date()
-//        var interestingCodes = [OTP]()
-        var increment = startingIncrement
-        var interestingCodesCount = 0
-        var lastCodeDate: Date?
-        // 64 limit, 2 come-back notifications
-        while Double(interestingCodesCount) < (Double(Constants.localNotificationLimit - 2) / Double(Constants.availableBackgroundCores)).rounded(.up) {
-            secrets.forEach {
-                let otp = OTP(secret: $0, date: date, increment: increment, eligible: userInterestingnessSettings)
+
+        while Double(await incrementor.codes) < (Double(Constants.localNotificationLimit - 2)) {
+            let increment = await incrementor.increment()
+            for secret in secrets {
+                let otp = OTP(secret: secret, date: date, increment: increment, eligible: userInterestingnessSettings)
                 if otp.interestingness != nil {
-//                    interestingCodes.append(otp)
-                    interestingCodesCount += 1
+                    await incrementor.newCodeFound(at: otp.dateStarted)
                     codeSubject.send(otp)
-                    if let latestDate = lastCodeDate {
-                        lastCodeDate = max(otp.dateStarted, latestDate)
-                    } else {
-                        lastCodeDate = otp.dateStarted
-                    }
                 }
             }
-            increment += Constants.numberOfConcurrentThreads
         }
-//        return lastCodeDate
     }
+    
+//    func generateCodes(accounts: [Account], startingIncrement: Int) {
+//        let secrets = accounts.compactMap { $0.secret }
+//        let userInterestingnessSettings = eligibleInterestingness()
+//        
+//        guard !secrets.isEmpty,
+//              !userInterestingnessSettings.isEmpty else { return }
+//
+//        let date = Date()
+//        var increment = startingIncrement
+//        var interestingCodesCount = 0
+//
+//        while Double(interestingCodesCount) < (Double(Constants.localNotificationLimit - 2) / Double(Constants.availableBackgroundCores)).rounded(.up) {
+//            secrets.forEach {
+//                let otp = OTP(secret: $0, date: date, increment: increment, eligible: userInterestingnessSettings)
+//                if otp.interestingness != nil {
+//                    interestingCodesCount += 1
+//                    codeSubject.send(otp)
+//                }
+//            }
+//            increment += Constants.availableBackgroundCores
+//        }
+//    }
+    
+//    func generateCodes(accounts: [Account]) -> Date? {
+//        let secrets = accounts.compactMap { $0.secret }
+//        let userInterestingnessSettings = eligibleInterestingness()
+//        
+//        guard !secrets.isEmpty,
+//              !userInterestingnessSettings.isEmpty else { return nil }
+//        let date = Date()
+//        var interestingCodes = [OTP]()
+//        var increment = 0
+//        var interestingCodesCount = 0
+//        var lastCodeDate: Date?
+//        
+//        while Double(interestingCodesCount) < (Double(Constants.localNotificationLimit - 2)).rounded(.up) {
+//            secrets.forEach {
+//                let otp = OTP(secret: $0, date: date, increment: increment, eligible: userInterestingnessSettings)
+//                if otp.interestingness != nil {
+//                    interestingCodes.append(otp)
+//                    interestingCodesCount += 1
+//                    codeSubject.send(otp)
+//                    if let latestDate = lastCodeDate {
+//                        lastCodeDate = max(otp.dateStarted, latestDate)
+//                    } else {
+//                        lastCodeDate = otp.dateStarted
+//                    }
+//                }
+//            }
+//            increment += 1
+//        }
+//        return lastCodeDate
+//    }
     
     func initializeDefaultsIfRequired() {
         let defaults = UserDefaults.standard

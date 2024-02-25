@@ -56,7 +56,7 @@ final class HapticEngine {
             engine?.isAutoShutdownEnabled = true
             
         } catch {
-            print("There was an error creating the engine: \(error)")
+            efficientPrint("There was an error creating the engine: \(error)")
         }
     }
     
@@ -80,7 +80,7 @@ final class HapticEngine {
             }
             
         } catch {
-            print("Failed to play pattern: \(error)")
+            efficientPrint("Failed to play pattern: \(error)")
         }
     }
 }

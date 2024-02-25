@@ -36,13 +36,10 @@ enum Interestingness: String, CaseIterable {
     case nearlySextuples
     case quads
     
-    //#error("Precompule all 1 million codes and interestingnesses! As a dict! See if that's the bottleneck")
-    //#error("-> mention this, but then use instruments to confirm, might be the hashing that's more")
-    //    #error("Go through w/ instruments and find the bottlenecks, it's probably one of these")
-    //    #error("Include reverseCounting!! Simply do code.reversed().checkThatCounting()")
-    
     init?(code: String, eligible: Set<Interestingness>) {
         if eligible.contains(.counting) && code.checkThatCounting() {
+            self = .counting
+        } else if eligible.contains(.counting) && String(code.reversed()).checkThatCounting() {
             self = .counting
         } else if eligible.contains(.sexts) && code.checkThoseSexts() {
             self = .sexts

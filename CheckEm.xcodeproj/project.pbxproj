@@ -38,23 +38,6 @@
 		16F2A9662B66F72C001F45DD /* SecretURLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F2A9652B66F72C001F45DD /* SecretURLParser.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		161349012B60F4C4008E4EB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 161348E72B60F4C2008E4EB7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 161348EE2B60F4C2008E4EB7;
-			remoteInfo = CheckEm;
-		};
-		1613490B2B60F4C4008E4EB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 161348E72B60F4C2008E4EB7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 161348EE2B60F4C2008E4EB7;
-			remoteInfo = CheckEm;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		160868E62B7A585C008941DE /* Tips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tips.swift; sourceTree = "<group>"; };
 		1612FAB52B6A2B6700BA40F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -64,8 +47,6 @@
 		161348F62B60F4C4008E4EB7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		161348F82B60F4C4008E4EB7 /* CheckEm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CheckEm.entitlements; sourceTree = "<group>"; };
 		161348FA2B60F4C4008E4EB7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		161349002B60F4C4008E4EB7 /* CheckEmTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CheckEmTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1613490A2B60F4C4008E4EB7 /* CheckEmUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CheckEmUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		161349202B60F522008E4EB7 /* CodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeViewModel.swift; sourceTree = "<group>"; };
 		161349232B60F54E008E4EB7 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		161349252B60F563008E4EB7 /* OTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTP.swift; sourceTree = "<group>"; };
@@ -100,20 +81,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		161348FD2B60F4C4008E4EB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		161349072B60F4C4008E4EB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -137,8 +104,6 @@
 			isa = PBXGroup;
 			children = (
 				161348EF2B60F4C2008E4EB7 /* CheckEm.app */,
-				161349002B60F4C4008E4EB7 /* CheckEmTests.xctest */,
-				1613490A2B60F4C4008E4EB7 /* CheckEmUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -323,42 +288,6 @@
 			productReference = 161348EF2B60F4C2008E4EB7 /* CheckEm.app */;
 			productType = "com.apple.product-type.application";
 		};
-		161348FF2B60F4C4008E4EB7 /* CheckEmTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 161349172B60F4C4008E4EB7 /* Build configuration list for PBXNativeTarget "CheckEmTests" */;
-			buildPhases = (
-				161348FC2B60F4C4008E4EB7 /* Sources */,
-				161348FD2B60F4C4008E4EB7 /* Frameworks */,
-				161348FE2B60F4C4008E4EB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				161349022B60F4C4008E4EB7 /* PBXTargetDependency */,
-			);
-			name = CheckEmTests;
-			productName = CheckEmTests;
-			productReference = 161349002B60F4C4008E4EB7 /* CheckEmTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		161349092B60F4C4008E4EB7 /* CheckEmUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1613491A2B60F4C4008E4EB7 /* Build configuration list for PBXNativeTarget "CheckEmUITests" */;
-			buildPhases = (
-				161349062B60F4C4008E4EB7 /* Sources */,
-				161349072B60F4C4008E4EB7 /* Frameworks */,
-				161349082B60F4C4008E4EB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				1613490C2B60F4C4008E4EB7 /* PBXTargetDependency */,
-			);
-			name = CheckEmUITests;
-			productName = CheckEmUITests;
-			productReference = 1613490A2B60F4C4008E4EB7 /* CheckEmUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -371,14 +300,6 @@
 				TargetAttributes = {
 					161348EE2B60F4C2008E4EB7 = {
 						CreatedOnToolsVersion = 15.1;
-					};
-					161348FF2B60F4C4008E4EB7 = {
-						CreatedOnToolsVersion = 15.1;
-						TestTargetID = 161348EE2B60F4C2008E4EB7;
-					};
-					161349092B60F4C4008E4EB7 = {
-						CreatedOnToolsVersion = 15.1;
-						TestTargetID = 161348EE2B60F4C2008E4EB7;
 					};
 				};
 			};
@@ -401,8 +322,6 @@
 			projectRoot = "";
 			targets = (
 				161348EE2B60F4C2008E4EB7 /* CheckEm */,
-				161348FF2B60F4C4008E4EB7 /* CheckEmTests */,
-				161349092B60F4C4008E4EB7 /* CheckEmUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -414,20 +333,6 @@
 			files = (
 				161348FB2B60F4C4008E4EB7 /* Preview Assets.xcassets in Resources */,
 				161348F72B60F4C4008E4EB7 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		161348FE2B60F4C4008E4EB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		161349082B60F4C4008E4EB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,34 +370,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		161348FC2B60F4C4008E4EB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		161349062B60F4C4008E4EB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		161349022B60F4C4008E4EB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 161348EE2B60F4C2008E4EB7 /* CheckEm */;
-			targetProxy = 161349012B60F4C4008E4EB7 /* PBXContainerItemProxy */;
-		};
-		1613490C2B60F4C4008E4EB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 161348EE2B60F4C2008E4EB7 /* CheckEm */;
-			targetProxy = 1613490B2B60F4C4008E4EB7 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		161349122B60F4C4008E4EB7 /* Debug */ = {
@@ -616,7 +494,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CheckEm/App/CheckEm.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"CheckEm/Preview Content\"";
 				DEVELOPMENT_TEAM = 9H7GAWSLA8;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -638,7 +516,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacobbartlett.CheckEm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -658,7 +536,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CheckEm/App/CheckEm.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"CheckEm/Preview Content\"";
 				DEVELOPMENT_TEAM = 9H7GAWSLA8;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -680,7 +558,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacobbartlett.CheckEm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -690,96 +568,6 @@
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		161349182B60F4C4008E4EB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9H7GAWSLA8;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jacobbartlett.CheckEmTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CheckEm.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CheckEm";
-			};
-			name = Debug;
-		};
-		161349192B60F4C4008E4EB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9H7GAWSLA8;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jacobbartlett.CheckEmTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CheckEm.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CheckEm";
-			};
-			name = Release;
-		};
-		1613491B2B60F4C4008E4EB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9H7GAWSLA8;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jacobbartlett.CheckEmUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = CheckEm;
-			};
-			name = Debug;
-		};
-		1613491C2B60F4C4008E4EB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9H7GAWSLA8;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jacobbartlett.CheckEmUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = CheckEm;
 			};
 			name = Release;
 		};
@@ -800,24 +588,6 @@
 			buildConfigurations = (
 				161349152B60F4C4008E4EB7 /* Debug */,
 				161349162B60F4C4008E4EB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		161349172B60F4C4008E4EB7 /* Build configuration list for PBXNativeTarget "CheckEmTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				161349182B60F4C4008E4EB7 /* Debug */,
-				161349192B60F4C4008E4EB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		1613491A2B60F4C4008E4EB7 /* Build configuration list for PBXNativeTarget "CheckEmUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1613491B2B60F4C4008E4EB7 /* Debug */,
-				1613491C2B60F4C4008E4EB7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

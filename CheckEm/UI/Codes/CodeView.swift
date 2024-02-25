@@ -12,10 +12,11 @@ import TipKit
 
 struct CodeView: View {
     
-    @Environment(\.requestReview) var requestReview
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.requestReview) private var requestReview
     @AppStorage("numberOfAccounts") private var numberOfAccounts: Int = 0
-    @AppStorage("requestedAppReviewSettings") var requestedAppReviewSettings: Bool = false
-    @AppStorage("requestedAppReviewCollection") var requestedAppReviewCollection: Bool = false
+    @AppStorage("requestedAppReviewSettings") private var requestedAppReviewSettings: Bool = false
+    @AppStorage("requestedAppReviewCollection") private var requestedAppReviewCollection: Bool = false
     @State private var showScanner: Bool = false
     @State private var showSettings: Bool = false
     @State private var showCollection: Bool = false
@@ -57,6 +58,7 @@ struct CodeView: View {
                 ScanView {
                     showScanner = false
                     try? viewModel.create(account: $0, url: $1)
+                    numberOfAccounts = viewModel.accounts.count
                 }
             }
             .sheet(isPresented: $showSettings) {
@@ -85,15 +87,16 @@ struct CodeView: View {
                 }
             }
         }
-        .onAppear {
-            refreshUI()
+        .onChange(of: scenePhase, initial: true) { _, newScenePhase in
+            if case .active = newScenePhase {
+                refreshUI()
+            }
         }
     }
     
     @MainActor
     private func refreshUI() {
         viewModel.onAppear()
-        numberOfAccounts = viewModel.accounts.count
         viewModel.resetAccountUI()
     }
     

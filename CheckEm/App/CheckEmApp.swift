@@ -14,7 +14,7 @@ struct CheckEmApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     init() {
-        timestamp("App init")
+//        timestamp("App init")
         try? Tips.configure()
         initializeDefaults()
     }
@@ -34,5 +34,5 @@ struct CheckEmApp: App {
 
 func timestamp(_ label: String) {
     let dateString = Formatters.shared.timestamp.string(from: Date())
-    print(dateString, label)
+    efficientPrint("\(dateString) - \(label)")
 }
