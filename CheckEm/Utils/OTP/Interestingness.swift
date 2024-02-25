@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Interestingness: String, CaseIterable {
+enum Interestingness: String, CaseIterable, Comparable {
     
     case counting
     case sexts
@@ -156,6 +156,13 @@ enum Interestingness: String, CaseIterable {
         case .repeatedThrees: return "Check this repeat: \(code)"
         case .quads: return "Check those quads: \(code)"
         }
+    }
+    
+    static func < (lhs: Interestingness, rhs: Interestingness) -> Bool {
+        let all = allCases
+        let lhsIndex = all.firstIndex(of: lhs) ?? 0
+        let rhsIndex = all.firstIndex(of: rhs) ?? 0
+        return lhsIndex < rhsIndex
     }
 }
 

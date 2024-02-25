@@ -38,7 +38,6 @@ struct CollectionSection: View {
     
     @ScaledMetric(relativeTo: .caption) var dividerHeight: CGFloat = 10
 
-  #error("The order of items here is randomly shuffled between opens - need to fix it by introducing an order to interestingness")
     let title: String
     let collection: [Interestingness: [String]]
     
@@ -48,7 +47,7 @@ struct CollectionSection: View {
                 emptyListItem
                 
             } else {
-                ForEach(Array(collection.keys), id: \.self) {
+                ForEach(Array(collection.keys.sorted()), id: \.self) {
                     collectionItem(interestingness: $0, codes: collection[$0])
                 }
             }
