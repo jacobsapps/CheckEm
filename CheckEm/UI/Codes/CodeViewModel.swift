@@ -107,12 +107,11 @@ final class CodeViewModel {
             for await code in CodeGenerator.shared.codeSubject.values {
                 codeCount += 1
                 try? await NotificationScheduler.shared.scheduleNotification(for: code)
-                let completionPercentage = Int(100 * Double(codeCount) / Double(CodeGenerator.Constants.localNotificationLimit - 2).rounded(.up))
+                let completionPercentage = Int(100 * (Double(codeCount) / Double(CodeGenerator.Constants.localNotificationLimit - 2).rounded(.up)))
                 await MainActor.run { [weak self] in
                     guard let self else { return }
                     withAnimation {
-                      //  #error("This can go higher than 100%, e.g. 117%")
-                        self.calculationPercentage = "\(completionPercentage)%"
+                        self.calculationPercentage = "\(min(100, completionPercentage))%"
                     }
                 }
             }
@@ -123,24 +122,15 @@ final class CodeViewModel {
         let accounts = accounts
         otpComputationTask?.cancel()
         otpComputationTask = Task.detached(priority: .high) {
-            let incrementor = CodeIncrementor()
+            let incrementor = CodeIncrementActor()
             guard await NotificationScheduler.shared.isAuthorized() else { return }
-            
-            timestamp("Computation started")
-            
-//            let lastCodeDate = CodeGenerator.shared.generateCodes(accounts: accounts)
-            
             await withTaskGroup(of: Void.self) { group in
                 (0..<CodeGenerator.Constants.availableBackgroundCores).forEach { startingIncrement in
                     group.addTask {
-//                        CodeGenerator.shared.generateCodes(accounts: accounts, startingIncrement: startingIncrement)
                         await CodeGenerator.shared.generateCodes(accounts: accounts, incrementor: incrementor)
                     }
                 }
             }
-            
-            timestamp("Computation finished")
-            
             try? await NotificationScheduler.shared.scheduleComebackNotifications(after: await incrementor.lastCodeDate)
             try? await Task.sleep(nanoseconds: 700_000_000)
             await MainActor.run { [weak self] in
@@ -150,22 +140,5 @@ final class CodeViewModel {
                 }
             }
         }
-    }
-}
-
-actor CodeIncrementor {
-    
-    var codes: Int = 0
-    var lastCodeDate: Date?
-    private var _increment: Int = 0
-    
-    func increment() -> Int {
-        defer { _increment += 1 }
-        return _increment
-    }
-    
-    func newCodeFound(at date: Date) {
-        codes += 1
-        lastCodeDate = date
     }
 }
