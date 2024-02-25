@@ -16,8 +16,8 @@ struct AccountView: View {
     let account: Account
     
     var body: some View {
-//        Section(account.name) {
-        Section(String(account.name.split(separator: "—").first!)) {
+        Section(account.name) {
+//        Section(String(account.name.split(separator: "—").first!)) {
             Button(action: {
                 copyCode()
             }, label: {
@@ -56,9 +56,9 @@ struct AccountView: View {
         }
     }
     
+//#error("When the view first appears, it switches between code -> ----- -> code, even though it's refreshed - is the code being erased somewhere?")
     @ViewBuilder
     private var codeText: some View {
-// #error("When the view first appears, it switches between code -> ----- -> code, even though it's refreshed - is the code being erased somewhere?")
         Text(account.code ?? "------")
             .fontDesign(.monospaced)
             .fontWeight(.bold)

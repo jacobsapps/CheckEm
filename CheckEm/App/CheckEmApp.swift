@@ -14,7 +14,7 @@ struct CheckEmApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     init() {
-//        timestamp("App init")
+        timestamp("App init")
         try? Tips.configure()
         initializeDefaults()
     }

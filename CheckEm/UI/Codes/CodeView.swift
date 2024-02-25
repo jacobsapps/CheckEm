@@ -47,7 +47,8 @@ struct CodeView: View {
                         placement: .automatic,
                         prompt: "Search")
             .refreshable {
-                refreshUI()
+                viewModel.resetAccountUI()
+                viewModel.onAppear()
             }
             .onReceive(timer) { _ in 
                 viewModel.refresh()
@@ -89,15 +90,9 @@ struct CodeView: View {
         }
         .onChange(of: scenePhase, initial: true) { _, newScenePhase in
             if case .active = newScenePhase {
-                refreshUI()
+                viewModel.onAppear()
             }
         }
-    }
-    
-    @MainActor
-    private func refreshUI() {
-        viewModel.onAppear()
-        viewModel.resetAccountUI()
     }
     
     @ViewBuilder
