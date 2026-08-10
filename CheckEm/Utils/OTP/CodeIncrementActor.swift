@@ -18,8 +18,10 @@ actor CodeIncrementActor {
         return _increment
     }
     
-    func newCodeFound(at date: Date) {
+    func newCodeFound(at date: Date) -> Bool {
+        guard codes < CodeGenerator.Constants.localNotificationLimit - 2 else { return false }
         codes += 1
         lastCodeDate = date
+        return true
     }
 }
