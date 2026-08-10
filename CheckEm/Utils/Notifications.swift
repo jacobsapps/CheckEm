@@ -51,7 +51,7 @@ final class NotificationScheduler {
         content.body = interestingness.body(code: otp.code)
         content.sound = UNNotificationSound.default
         content.userInfo = ["deepLink": "checkem://\(otp.code)"]
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: otp.dateStarted)
+        let components = Calendar(identifier: .gregorian).dateComponents(in: .gmt, from: otp.dateStarted)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         
@@ -72,7 +72,7 @@ final class NotificationScheduler {
         content.body = "Come back to the app so we can re-schedule notifications"
         content.sound = UNNotificationSound.default
         
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+        let components = Calendar(identifier: .gregorian).dateComponents(in: .gmt, from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
