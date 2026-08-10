@@ -66,16 +66,17 @@ final class CodeViewModel {
         }
     }
     
-    func delete(at offsets: IndexSet) {
+    func delete(account: Account) {
         cancelComputation()
-        let deletedAccounts = accounts.enumerated().filter { offsets.contains($0.offset) }.map { $0.element }
-        deletedAccounts.forEach {
-            try? AccountManager.shared.delete(account: $0)
-        }
+        try? AccountManager.shared.delete(account: account)
         withAnimation {
-            accounts.remove(atOffsets: offsets)
+            accounts.removeAll { $0.name == account.name }
         }
-        recomputeNotifications()
+        if accounts.isEmpty {
+            NotificationScheduler.shared.cancelNotifications()
+        } else {
+            recomputeNotifications()
+        }
     }
     
     func recomputeNotifications() {

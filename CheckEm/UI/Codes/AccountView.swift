@@ -6,15 +6,21 @@
 //
 
 import CachedAsyncImage
+import CoreImage.CIFilterBuiltins
+import LocalAuthentication
 import SwiftUI
 import TipKit
 
 struct AccountView: View {
     
     @ScaledMetric(relativeTo: .largeTitle) private var iconSize: CGFloat = 36
+    @State private var exportError = ""
+    @State private var secretQRCode: SecretQRCode?
     @State private var showCopied: Bool = false
-    @State private var showSecretExporter: Bool = false
+    @State private var showExportError: Bool = false
+    @State private var showQRCodeWarning: Bool = false
     let account: Account
+    let onDelete: () -> Void
     
     var body: some View {
         Section(account.name) {
@@ -33,17 +39,32 @@ struct AccountView: View {
                 Button("Copy Code", systemImage: "doc.on.doc", action: copyCode)
                     .disabled(account.code == nil)
 
-                Button("Export Secret", systemImage: "square.and.arrow.up") {
-                    showSecretExporter = true
+                Button("Show Setup QR", systemImage: "qrcode") {
+                    showQRCodeWarning = true
+                }
+
+                Divider()
+
+                Button(role: .destructive, action: onDelete) {
+                    Label("Delete Account", systemImage: "trash")
                 }
             }
-            .background {
-                SecretsExporter(isPresented: $showSecretExporter,
-                                confirmationTitle: "Export the secret for \(account.name)?",
-                                defaultFilename: "CheckEm-\(account.name)-2FA") {
-                    guard let record = try KeychainManager.shared.fetchAccount(named: account.name) else { return [] }
-                    return [record]
+            .confirmationDialog("Show the setup QR for \(account.name)?", isPresented: $showQRCodeWarning) {
+                Button("Authenticate and Show QR", role: .destructive) {
+                    authenticateAndShowQRCode()
                 }
+            } message: {
+                Text("Anyone who scans this QR code can generate the account’s 2FA codes.")
+            }
+            .sheet(item: $secretQRCode, onDismiss: {
+                secretQRCode = nil
+            }) {
+                SecretQRCodeView(accountName: account.name, uri: $0.uri)
+            }
+            .alert("Unable to Show QR Code", isPresented: $showExportError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(exportError)
             }
         }
     }
@@ -110,6 +131,95 @@ struct AccountView: View {
                 }
             }
         }
+    }
+
+    private func authenticateAndShowQRCode() {
+        Task { @MainActor in
+            do {
+                let context = LAContext()
+                guard try await context.evaluatePolicy(
+                    .deviceOwnerAuthentication,
+                    localizedReason: "Show the setup QR for your 2FA account"
+                ) else { return }
+
+                guard let record = try KeychainManager.shared.fetchAccount(named: account.name),
+                      let url = URL(string: record),
+                      url.scheme == "otpauth",
+                      url.host == "totp" else {
+                    throw KeychainManager.KeychainManagerError.accountNotFound
+                }
+                secretQRCode = SecretQRCode(uri: record)
+            } catch {
+                exportError = error.localizedDescription
+                showExportError = true
+            }
+        }
+    }
+}
+
+private struct SecretQRCode: Identifiable {
+    let id = UUID()
+    let uri: String
+}
+
+private struct SecretQRCodeView: View {
+
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
+
+    let accountName: String
+    let uri: String
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 24) {
+                if let qrCode = qrCode {
+                    Image(uiImage: qrCode)
+                        .interpolation(.none)
+                        .resizable()
+                        .scaledToFit()
+                        .padding(16)
+                        .background(.white)
+                        .clipShape(.rect(cornerRadius: 16))
+                        .accessibilityLabel("2FA setup QR code for \(accountName)")
+                }
+
+                Text("Scan this QR code with another authenticator. Anyone who scans it can generate this account’s codes.")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(24)
+            .navigationTitle(accountName)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button("Done") {
+                    dismiss()
+                }
+            }
+        }
+        .presentationDetents([.medium, .large])
+        .overlay {
+            if scenePhase != .active {
+                Color(uiColor: .systemBackground)
+                    .ignoresSafeArea()
+            }
+        }
+        .onChange(of: scenePhase) { _, newScenePhase in
+            if newScenePhase != .active {
+                dismiss()
+            }
+        }
+    }
+
+    private var qrCode: UIImage? {
+        let filter = CIFilter.qrCodeGenerator()
+        filter.message = Data(uri.utf8)
+        filter.correctionLevel = "M"
+
+        guard let outputImage = filter.outputImage else { return nil }
+        let scaledImage = outputImage.transformed(by: CGAffineTransform(scaleX: 10, y: 10))
+        guard let image = CIContext().createCGImage(scaledImage, from: scaledImage.extent) else { return nil }
+        return UIImage(cgImage: image)
     }
 }
 
