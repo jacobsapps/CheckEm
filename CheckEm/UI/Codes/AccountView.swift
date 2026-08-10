@@ -6,14 +6,20 @@
 //
 
 import CachedAsyncImage
+import CoreImage.CIFilterBuiltins
+import LocalAuthentication
 import SwiftUI
 import TipKit
 
 struct AccountView: View {
     
     @ScaledMetric(relativeTo: .largeTitle) private var iconSize: CGFloat = 36
+    @State private var exportError = ""
+    @State private var secretPresentation: SecretPresentation?
     @State private var showCopied: Bool = false
+    @State private var showExportError: Bool = false
     let account: Account
+    let onDelete: () -> Void
     
     var body: some View {
         Section(account.name) {
@@ -28,6 +34,41 @@ struct AccountView: View {
                 }
                 .contentShape(Rectangle())
             })
+            .contextMenu {
+                Button("Copy Code", systemImage: "doc.on.doc", action: copyCode)
+                    .disabled(account.code == nil)
+
+                Section("Share Secret") {
+                    Button("As Text", systemImage: "square.and.arrow.up") {
+                        authenticateAndShareSecret(as: .shareSheet)
+                    }
+
+                    Button("Via QR Code", systemImage: "qrcode") {
+                        authenticateAndShareSecret(as: .qrCode)
+                    }
+                }
+
+                Divider()
+
+                Button(role: .destructive, action: onDelete) {
+                    Label("Delete \(account.name)", systemImage: "trash")
+                }
+            }
+            .sheet(item: $secretPresentation, onDismiss: {
+                secretPresentation = nil
+            }) {
+                switch $0.mode {
+                case .shareSheet:
+                    ShareSheet(item: $0.uri)
+                case .qrCode:
+                    SecretQRCodeView(accountName: account.name, uri: $0.uri)
+                }
+            }
+            .alert("Unable to Share Secret", isPresented: $showExportError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(exportError)
+            }
         }
     }
     
@@ -93,6 +134,123 @@ struct AccountView: View {
                 }
             }
         }
+    }
+
+    private func authenticateAndShareSecret(as mode: SecretPresentation.Mode) {
+        Task { @MainActor in
+            do {
+                let context = LAContext()
+                guard try await context.evaluatePolicy(
+                    .deviceOwnerAuthentication,
+                    localizedReason: "Share your 2FA secret"
+                ) else { return }
+
+                guard let record = try KeychainManager.shared.fetchAccount(named: account.name),
+                      let url = URL(string: record),
+                      url.scheme == "otpauth",
+                      url.host == "totp" else {
+                    throw KeychainManager.KeychainManagerError.accountNotFound
+                }
+                secretPresentation = SecretPresentation(mode: mode, uri: record)
+            } catch {
+                guard !error.isAuthenticationCancellation else { return }
+                exportError = error.localizedDescription
+                showExportError = true
+            }
+        }
+    }
+}
+
+private struct SecretPresentation: Identifiable {
+
+    enum Mode {
+        case shareSheet
+        case qrCode
+    }
+
+    let id = UUID()
+    let mode: Mode
+    let uri: String
+}
+
+private struct ShareSheet: UIViewControllerRepresentable {
+
+    let item: String
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: [item], applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) { }
+}
+
+private struct SecretQRCodeView: View {
+
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
+
+    let accountName: String
+    let uri: String
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 24) {
+                if let qrCode = qrCode {
+                    Image(uiImage: qrCode)
+                        .interpolation(.none)
+                        .resizable()
+                        .scaledToFit()
+                        .padding(16)
+                        .background(.white)
+                        .clipShape(.rect(cornerRadius: 16))
+                        .accessibilityLabel("2FA setup QR code for \(accountName)")
+                }
+
+                Text("Scan QR code to share credentials with another device. Do not share with other people.")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(24)
+            .navigationTitle(accountName)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button("Done") {
+                    dismiss()
+                }
+            }
+        }
+        .presentationDetents([.medium, .large])
+        .overlay {
+            if scenePhase != .active {
+                Color(uiColor: .systemBackground)
+                    .ignoresSafeArea()
+            }
+        }
+        .onChange(of: scenePhase) { _, newScenePhase in
+            if newScenePhase != .active {
+                dismiss()
+            }
+        }
+    }
+
+    private var qrCode: UIImage? {
+        let filter = CIFilter.qrCodeGenerator()
+        filter.message = Data(uri.utf8)
+        filter.correctionLevel = "M"
+
+        guard let outputImage = filter.outputImage else { return nil }
+        let scaledImage = outputImage.transformed(by: CGAffineTransform(scaleX: 10, y: 10))
+        guard let image = CIContext().createCGImage(scaledImage, from: scaledImage.extent) else { return nil }
+        return UIImage(cgImage: image)
+    }
+}
+
+extension Error {
+    var isAuthenticationCancellation: Bool {
+        let code = (self as NSError).code
+        return code == LAError.Code.userCancel.rawValue
+            || code == LAError.Code.systemCancel.rawValue
+            || code == LAError.Code.appCancel.rawValue
     }
 }
 

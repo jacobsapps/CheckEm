@@ -17,6 +17,7 @@ struct CodeView: View {
     @AppStorage("numberOfAccounts") private var numberOfAccounts: Int = 0
     @AppStorage("requestedAppReviewSettings") private var requestedAppReviewSettings: Bool = false
     @AppStorage("requestedAppReviewCollection") private var requestedAppReviewCollection: Bool = false
+    @State private var accountPendingDeletion: Account?
     @State private var showScanner: Bool = false
     @State private var showSettings: Bool = false
     @State private var showCollection: Bool = false
@@ -54,6 +55,19 @@ struct CodeView: View {
             }
             .navigationTitle("Check 'em")
             .toolbar { toolbarView }
+            .alert("Delete 2FA account?", isPresented: deleteConfirmationPresented) {
+                Button("Delete", role: .destructive) {
+                    guard let account = accountPendingDeletion else { return }
+                    viewModel.delete(account: account)
+                    numberOfAccounts = viewModel.accounts.count
+                    accountPendingDeletion = nil
+                }
+                Button("Cancel", role: .cancel) {
+                    accountPendingDeletion = nil
+                }
+            } message: {
+                Text("This permanently removes \(accountPendingDeletion?.name ?? "this account") from your Keychain. This can’t be undone.")
+            }
             .sheet(isPresented: $showScanner) {
                 ScanView {
                     showScanner = false
@@ -101,12 +115,17 @@ struct CodeView: View {
             
         } else {
             ForEach(accountSearchResults, id: \.name) { account in
-                AccountView(account: account)
+                AccountView(account: account) {
+                    accountPendingDeletion = account
+                }
                     .onDisappear {
                         numberOfAccounts = viewModel.accounts.count
                     }
             }
-            .onDelete(perform: viewModel.delete)
+            .onDelete { offsets in
+                guard let offset = offsets.first else { return }
+                accountPendingDeletion = accountSearchResults[offset]
+            }
         }
     }
     
@@ -122,6 +141,13 @@ struct CodeView: View {
                 }
             }
         }
+    }
+
+    private var deleteConfirmationPresented: Binding<Bool> {
+        Binding(
+            get: { accountPendingDeletion != nil },
+            set: { if !$0 { accountPendingDeletion = nil } }
+        )
     }
     
     @ViewBuilder

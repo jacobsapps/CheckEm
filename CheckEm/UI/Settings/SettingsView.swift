@@ -5,11 +5,14 @@
 //  Created by Jacob Bartlett on 24/01/2024.
 //
 
+import LocalAuthentication
 import SwiftUI
+import UIKit
 
 struct SettingsView: View {
     
     @AppStorage("sortMode") private var sortMode: SortMode = .rarity
+    @State private var showBackupExporter = false
     
     enum SortMode: String {
         case rarity
@@ -32,6 +35,12 @@ struct SettingsView: View {
                 .pickerStyle(.segmented)
                 
                 settingsViewForSortMode
+
+                Section("Backup") {
+                    Button("Export 2FA Backup", systemImage: "square.and.arrow.up") {
+                        showBackupExporter = true
+                    }
+                }
             }
             .animation(.bouncy, value: sortMode)
             .navigationTitle("Settings")
@@ -40,6 +49,12 @@ struct SettingsView: View {
             }
             .onDisappear {
                 onDisappear()
+            }
+        }
+        .background {
+            SecretsExporter(isPresented: $showBackupExporter,
+                            defaultFilename: "CheckEm-2FA-Backup") {
+                try KeychainManager.shared.fetchAccounts()
             }
         }
     }
@@ -73,6 +88,120 @@ struct SettingsView: View {
         Text(sortMode.rawValue.capitalized)
             .tag(sortMode)
     }
+}
+
+struct SecretsExporter: View {
+
+    @Binding var isPresented: Bool
+    let defaultFilename: String
+    let records: () throws -> [String]
+
+    @State private var exportError = ""
+    @State private var shareItem: SecretsShareItem?
+    @State private var showExportError = false
+    @State private var temporaryExportDirectory: URL?
+
+    var body: some View {
+        Color.clear
+            .onChange(of: isPresented) { _, shouldExport in
+                if shouldExport {
+                    isPresented = false
+                    authenticateAndExport()
+                }
+            }
+            .sheet(item: $shareItem, onDismiss: removeTemporaryExport) { item in
+                SecretsActivityView(item: item.url) {
+                    shareItem = nil
+                }
+            }
+            .alert("Unable to Export", isPresented: $showExportError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(exportError)
+            }
+            .onDisappear {
+                removeTemporaryExport()
+            }
+    }
+
+    private func authenticateAndExport() {
+        Task { @MainActor in
+            do {
+                let context = LAContext()
+                guard try await context.evaluatePolicy(
+                    .deviceOwnerAuthentication,
+                    localizedReason: "Export your 2FA secret keys"
+                ) else { return }
+                exportBackup()
+            } catch {
+                guard !error.isAuthenticationCancellation else { return }
+                exportError = error.localizedDescription
+                showExportError = true
+            }
+        }
+    }
+
+    private func exportBackup() {
+        do {
+            let accounts = try records()
+                .compactMap(URL.init(string:))
+                .filter { $0.scheme == "otpauth" && $0.host == "totp" }
+                .map(\.absoluteString)
+
+            guard !accounts.isEmpty else {
+                exportError = "No 2FA accounts were found."
+                showExportError = true
+                return
+            }
+
+            let directory = FileManager.default.temporaryDirectory
+                .appendingPathComponent(UUID().uuidString, isDirectory: true)
+            try FileManager.default.createDirectory(at: directory,
+                                                    withIntermediateDirectories: true)
+
+            let fileURL = directory.appendingPathComponent("\(defaultFilename).txt")
+            try Data(accounts.joined(separator: "\n").utf8)
+                .write(to: fileURL, options: [.atomic, .completeFileProtection])
+
+            temporaryExportDirectory = directory
+            shareItem = SecretsShareItem(url: fileURL)
+        } catch {
+            exportError = error.localizedDescription
+            showExportError = true
+        }
+    }
+
+    private func removeTemporaryExport() {
+        shareItem = nil
+        if let temporaryExportDirectory {
+            try? FileManager.default.removeItem(at: temporaryExportDirectory)
+            self.temporaryExportDirectory = nil
+        }
+    }
+}
+
+private struct SecretsShareItem: Identifiable {
+
+    let id = UUID()
+    let url: URL
+}
+
+private struct SecretsActivityView: UIViewControllerRepresentable {
+
+    let item: URL
+    let onComplete: () -> Void
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: [item], applicationActivities: nil)
+        controller.completionWithItemsHandler = { _, _, _, _ in
+            Task { @MainActor in
+                onComplete()
+            }
+        }
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) { }
 }
 
 struct UltraRareSettingsView: View {
