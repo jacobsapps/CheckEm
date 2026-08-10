@@ -51,7 +51,7 @@ struct AccountView: View {
                 Divider()
 
                 Button(role: .destructive, action: onDelete) {
-                    Label("Delete Account", systemImage: "trash")
+                    Label("Delete \(account.name)", systemImage: "trash")
                 }
             }
             .sheet(item: $secretPresentation, onDismiss: {
@@ -206,7 +206,7 @@ private struct SecretQRCodeView: View {
                         .accessibilityLabel("2FA setup QR code for \(accountName)")
                 }
 
-                Text("Scan with another device")
+                Text("Scan QR code to share credentials with another device. Do not share with other people.")
                     .font(.body)
                     .multilineTextAlignment(.center)
             }

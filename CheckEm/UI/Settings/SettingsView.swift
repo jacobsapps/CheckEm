@@ -7,7 +7,7 @@
 
 import LocalAuthentication
 import SwiftUI
-import UniformTypeIdentifiers
+import UIKit
 
 struct SettingsView: View {
     
@@ -96,10 +96,10 @@ struct SecretsExporter: View {
     let defaultFilename: String
     let records: () throws -> [String]
 
-    @State private var backupDocument: SecretsBackupDocument?
     @State private var exportError = ""
+    @State private var shareItem: SecretsShareItem?
     @State private var showExportError = false
-    @State private var showExporter = false
+    @State private var temporaryExportDirectory: URL?
 
     var body: some View {
         Color.clear
@@ -109,11 +109,10 @@ struct SecretsExporter: View {
                     authenticateAndExport()
                 }
             }
-            .fileExporter(isPresented: $showExporter,
-                          document: backupDocument,
-                          contentType: .plainText,
-                          defaultFilename: defaultFilename) { _ in
-                backupDocument = nil
+            .sheet(item: $shareItem, onDismiss: removeTemporaryExport) { item in
+                SecretsActivityView(item: item.url) {
+                    shareItem = nil
+                }
             }
             .alert("Unable to Export", isPresented: $showExportError) {
                 Button("OK", role: .cancel) { }
@@ -121,7 +120,7 @@ struct SecretsExporter: View {
                 Text(exportError)
             }
             .onDisappear {
-                backupDocument = nil
+                removeTemporaryExport()
             }
     }
 
@@ -155,36 +154,54 @@ struct SecretsExporter: View {
                 return
             }
 
-            backupDocument = SecretsBackupDocument(contents: accounts.joined(separator: "\n"))
-            showExporter = true
+            let directory = FileManager.default.temporaryDirectory
+                .appendingPathComponent(UUID().uuidString, isDirectory: true)
+            try FileManager.default.createDirectory(at: directory,
+                                                    withIntermediateDirectories: true)
+
+            let fileURL = directory.appendingPathComponent("\(defaultFilename).txt")
+            try Data(accounts.joined(separator: "\n").utf8)
+                .write(to: fileURL, options: [.atomic, .completeFileProtection])
+
+            temporaryExportDirectory = directory
+            shareItem = SecretsShareItem(url: fileURL)
         } catch {
             exportError = error.localizedDescription
             showExportError = true
         }
     }
+
+    private func removeTemporaryExport() {
+        shareItem = nil
+        if let temporaryExportDirectory {
+            try? FileManager.default.removeItem(at: temporaryExportDirectory)
+            self.temporaryExportDirectory = nil
+        }
+    }
 }
 
-private struct SecretsBackupDocument: FileDocument {
+private struct SecretsShareItem: Identifiable {
 
-    static let readableContentTypes: [UTType] = [.plainText]
+    let id = UUID()
+    let url: URL
+}
 
-    let contents: String
+private struct SecretsActivityView: UIViewControllerRepresentable {
 
-    init(contents: String) {
-        self.contents = contents
-    }
+    let item: URL
+    let onComplete: () -> Void
 
-    init(configuration: ReadConfiguration) throws {
-        guard let data = configuration.file.regularFileContents,
-              let contents = String(data: data, encoding: .utf8) else {
-            throw CocoaError(.fileReadCorruptFile)
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: [item], applicationActivities: nil)
+        controller.completionWithItemsHandler = { _, _, _, _ in
+            Task { @MainActor in
+                onComplete()
+            }
         }
-        self.contents = contents
+        return controller
     }
 
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        FileWrapper(regularFileWithContents: Data(contents.utf8))
-    }
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) { }
 }
 
 struct UltraRareSettingsView: View {
