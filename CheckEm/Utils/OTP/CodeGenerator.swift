@@ -27,7 +27,7 @@ final class CodeGenerator {
         OTP(secret: secret, eligible: eligibleInterestingness())
     }
     
-    func generateCodes(accounts: [Account], incrementor: CodeIncrementActor) async {
+    func generateCodes(accounts: [Account], incrementor: CodeIncrementer) async {
         let secrets = accounts.compactMap { $0.secret }
         let userInterestingnessSettings = eligibleInterestingness()
         
