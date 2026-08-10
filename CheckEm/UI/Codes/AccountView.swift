@@ -13,6 +13,7 @@ struct AccountView: View {
     
     @ScaledMetric(relativeTo: .largeTitle) private var iconSize: CGFloat = 36
     @State private var showCopied: Bool = false
+    @State private var showSecretExporter: Bool = false
     let account: Account
     
     var body: some View {
@@ -28,6 +29,22 @@ struct AccountView: View {
                 }
                 .contentShape(Rectangle())
             })
+            .contextMenu {
+                Button("Copy Code", systemImage: "doc.on.doc", action: copyCode)
+                    .disabled(account.code == nil)
+
+                Button("Export Secret", systemImage: "square.and.arrow.up") {
+                    showSecretExporter = true
+                }
+            }
+            .background {
+                SecretsExporter(isPresented: $showSecretExporter,
+                                confirmationTitle: "Export the secret for \(account.name)?",
+                                defaultFilename: "CheckEm-\(account.name)-2FA") {
+                    guard let record = try KeychainManager.shared.fetchAccount(named: account.name) else { return [] }
+                    return [record]
+                }
+            }
         }
     }
     

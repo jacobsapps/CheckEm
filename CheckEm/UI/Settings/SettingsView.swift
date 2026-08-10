@@ -12,11 +12,7 @@ import UniformTypeIdentifiers
 struct SettingsView: View {
     
     @AppStorage("sortMode") private var sortMode: SortMode = .rarity
-    @State private var backupDocument: SecretsBackupDocument?
-    @State private var exportError = ""
-    @State private var showBackupWarning = false
-    @State private var showExportError = false
-    @State private var showExporter = false
+    @State private var showBackupExporter = false
     
     enum SortMode: String {
         case rarity
@@ -42,36 +38,24 @@ struct SettingsView: View {
 
                 Section("Backup") {
                     Button("Export 2FA Backup", systemImage: "square.and.arrow.up") {
-                        showBackupWarning = true
+                        showBackupExporter = true
                     }
                 }
             }
             .animation(.bouncy, value: sortMode)
             .navigationTitle("Settings")
-            .confirmationDialog("Export all 2FA secrets?", isPresented: $showBackupWarning) {
-                Button("Authenticate and Export", role: .destructive) {
-                    authenticateAndExport()
-                }
-            } message: {
-                Text("Face ID or your device passcode is required. Anyone with the exported file can generate your codes.")
-            }
-            .fileExporter(isPresented: $showExporter,
-                          document: backupDocument,
-                          contentType: .plainText,
-                          defaultFilename: "CheckEm-2FA-Backup") { _ in
-                backupDocument = nil
-            }
-            .alert("Unable to Export", isPresented: $showExportError) {
-                Button("OK", role: .cancel) { }
-            } message: {
-                Text(exportError)
-            }
             .onAppear {
                 onAppear()
             }
             .onDisappear {
-                backupDocument = nil
                 onDisappear()
+            }
+        }
+        .background {
+            SecretsExporter(isPresented: $showBackupExporter,
+                            confirmationTitle: "Export all 2FA secrets?",
+                            defaultFilename: "CheckEm-2FA-Backup") {
+                try KeychainManager.shared.fetchAccounts()
             }
         }
     }
@@ -105,6 +89,44 @@ struct SettingsView: View {
         Text(sortMode.rawValue.capitalized)
             .tag(sortMode)
     }
+}
+
+struct SecretsExporter: View {
+
+    @Binding var isPresented: Bool
+    let confirmationTitle: String
+    let defaultFilename: String
+    let records: () throws -> [String]
+
+    @State private var backupDocument: SecretsBackupDocument?
+    @State private var exportError = ""
+    @State private var showExportError = false
+    @State private var showExporter = false
+
+    var body: some View {
+        Color.clear
+            .confirmationDialog(confirmationTitle, isPresented: $isPresented) {
+                Button("Authenticate and Export", role: .destructive) {
+                    authenticateAndExport()
+                }
+            } message: {
+                Text("Face ID or your device passcode is required. Anyone with the exported file can generate your codes.")
+            }
+            .fileExporter(isPresented: $showExporter,
+                          document: backupDocument,
+                          contentType: .plainText,
+                          defaultFilename: defaultFilename) { _ in
+                backupDocument = nil
+            }
+            .alert("Unable to Export", isPresented: $showExportError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(exportError)
+            }
+            .onDisappear {
+                backupDocument = nil
+            }
+    }
 
     private func authenticateAndExport() {
         Task { @MainActor in
@@ -124,7 +146,7 @@ struct SettingsView: View {
 
     private func exportBackup() {
         do {
-            let accounts = try KeychainManager.shared.fetchAccounts()
+            let accounts = try records()
                 .compactMap(URL.init(string:))
                 .filter { $0.scheme == "otpauth" && $0.host == "totp" }
                 .map(\.absoluteString)

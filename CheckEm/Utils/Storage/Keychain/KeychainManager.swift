@@ -34,6 +34,10 @@ final class KeychainManager {
             .compactMap { $0["value"] as? String }
     }
 
+    func fetchAccount(named name: String) throws -> String? {
+        try keychain.get(name)
+    }
+
     func storeAccount(named name: String, url: URL) throws {
         try keychain.set(url.absoluteString, key: name)
     }
