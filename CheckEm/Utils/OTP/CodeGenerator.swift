@@ -40,8 +40,8 @@ final class CodeGenerator {
             let increment = await incrementor.increment()
             for secret in secrets {
                 let otp = OTP(secret: secret, date: date, increment: increment, eligible: userInterestingnessSettings)
-                if otp.interestingness != nil {
-                    await incrementor.newCodeFound(at: otp.dateStarted)
+                if otp.interestingness != nil,
+                   await incrementor.newCodeFound(at: otp.dateStarted) {
                     codeSubject.send(otp)
                 }
             }
