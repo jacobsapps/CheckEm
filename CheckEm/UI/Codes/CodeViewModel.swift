@@ -117,7 +117,7 @@ final class CodeViewModel {
         let accounts = accounts
         otpComputationTask?.cancel()
         otpComputationTask = Task.detached(priority: .high) {
-            let incrementor = CodeIncrementActor()
+            let incrementor = CodeIncrementer()
             guard await NotificationScheduler.shared.isAuthorized() else { return }
             await withTaskGroup(of: Void.self) { group in
                 (0..<CodeGenerator.Constants.availableBackgroundCores).forEach { startingIncrement in

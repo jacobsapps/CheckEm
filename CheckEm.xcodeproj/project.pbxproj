@@ -18,7 +18,7 @@
 		161349282B60F5AF008E4EB7 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161349272B60F5AF008E4EB7 /* Date+Extensions.swift */; };
 		1613492A2B60F89C008E4EB7 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161349292B60F89C008E4EB7 /* CodeGenerator.swift */; };
 		161349302B60FA5A008E4EB7 /* Interestingness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1613492F2B60FA5A008E4EB7 /* Interestingness.swift */; };
-		1627D3432B8B1F3700C6E677 /* CodeIncrementActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1627D3422B8B1F3700C6E677 /* CodeIncrementActor.swift */; };
+		1627D3432B8B1F3700C6E677 /* CodeIncrementer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1627D3422B8B1F3700C6E677 /* CodeIncrementer.swift */; };
 		163DB0512B62F974001E801A /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163DB0502B62F974001E801A /* KeychainManager.swift */; };
 		163DB0532B62F98A001E801A /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163DB0522B62F98A001E801A /* Account.swift */; };
 		163DB0552B62FA49001E801A /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163DB0542B62FA49001E801A /* Data+Extensions.swift */; };
@@ -54,7 +54,7 @@
 		161349272B60F5AF008E4EB7 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		161349292B60F89C008E4EB7 /* CodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
 		1613492F2B60FA5A008E4EB7 /* Interestingness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interestingness.swift; sourceTree = "<group>"; };
-		1627D3422B8B1F3700C6E677 /* CodeIncrementActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeIncrementActor.swift; sourceTree = "<group>"; };
+		1627D3422B8B1F3700C6E677 /* CodeIncrementer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeIncrementer.swift; sourceTree = "<group>"; };
 		163DB0502B62F974001E801A /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		163DB0522B62F98A001E801A /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		163DB0542B62FA49001E801A /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
@@ -208,7 +208,7 @@
 			children = (
 				161349292B60F89C008E4EB7 /* CodeGenerator.swift */,
 				161349252B60F563008E4EB7 /* OTP.swift */,
-				1627D3422B8B1F3700C6E677 /* CodeIncrementActor.swift */,
+				1627D3422B8B1F3700C6E677 /* CodeIncrementer.swift */,
 				1613492F2B60FA5A008E4EB7 /* Interestingness.swift */,
 			);
 			path = OTP;
@@ -365,7 +365,7 @@
 				1675274F2B6D8B3A001AE09E /* CollectionItem.swift in Sources */,
 				1644EF792B61823A0010C0AF /* ScanView.swift in Sources */,
 				163DB0532B62F98A001E801A /* Account.swift in Sources */,
-				1627D3432B8B1F3700C6E677 /* CodeIncrementActor.swift in Sources */,
+				1627D3432B8B1F3700C6E677 /* CodeIncrementer.swift in Sources */,
 				161349302B60FA5A008E4EB7 /* Interestingness.swift in Sources */,
 				161349262B60F563008E4EB7 /* OTP.swift in Sources */,
 				161349282B60F5AF008E4EB7 /* Date+Extensions.swift in Sources */,
@@ -516,7 +516,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -558,7 +558,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
