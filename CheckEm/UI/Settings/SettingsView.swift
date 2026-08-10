@@ -5,6 +5,7 @@
 //  Created by Jacob Bartlett on 24/01/2024.
 //
 
+import LocalAuthentication
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -48,11 +49,11 @@ struct SettingsView: View {
             .animation(.bouncy, value: sortMode)
             .navigationTitle("Settings")
             .confirmationDialog("Export all 2FA secrets?", isPresented: $showBackupWarning) {
-                Button("Export Plaintext Backup", role: .destructive) {
-                    exportBackup()
+                Button("Authenticate and Export", role: .destructive) {
+                    authenticateAndExport()
                 }
             } message: {
-                Text("Anyone with this file can generate your codes. Store it securely and delete any extra copies.")
+                Text("Face ID or your device passcode is required. Anyone with the exported file can generate your codes.")
             }
             .fileExporter(isPresented: $showExporter,
                           document: backupDocument,
@@ -69,6 +70,7 @@ struct SettingsView: View {
                 onAppear()
             }
             .onDisappear {
+                backupDocument = nil
                 onDisappear()
             }
         }
@@ -102,6 +104,22 @@ struct SettingsView: View {
     private func segmentedPickerItem(for sortMode: SortMode) -> some View {
         Text(sortMode.rawValue.capitalized)
             .tag(sortMode)
+    }
+
+    private func authenticateAndExport() {
+        Task { @MainActor in
+            do {
+                let context = LAContext()
+                guard try await context.evaluatePolicy(
+                    .deviceOwnerAuthentication,
+                    localizedReason: "Export your 2FA secret keys"
+                ) else { return }
+                exportBackup()
+            } catch {
+                exportError = error.localizedDescription
+                showExportError = true
+            }
+        }
     }
 
     private func exportBackup() {
