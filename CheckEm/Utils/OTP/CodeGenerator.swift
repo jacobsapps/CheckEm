@@ -36,7 +36,7 @@ final class CodeGenerator {
 
         let date = Date()
 
-        while Double(await incrementor.codes) < (Double(Constants.localNotificationLimit - 2)) {
+        while Double(await incrementor.codes) < (Double(Constants.localNotificationLimit - 2)) && !Task.isCancelled {
             let increment = await incrementor.increment()
             for secret in secrets {
                 let otp = OTP(secret: secret, date: date, increment: increment, eligible: userInterestingnessSettings)
