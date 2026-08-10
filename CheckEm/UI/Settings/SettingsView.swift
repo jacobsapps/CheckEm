@@ -53,7 +53,6 @@ struct SettingsView: View {
         }
         .background {
             SecretsExporter(isPresented: $showBackupExporter,
-                            confirmationTitle: "Export all 2FA secrets?",
                             defaultFilename: "CheckEm-2FA-Backup") {
                 try KeychainManager.shared.fetchAccounts()
             }
@@ -94,7 +93,6 @@ struct SettingsView: View {
 struct SecretsExporter: View {
 
     @Binding var isPresented: Bool
-    let confirmationTitle: String
     let defaultFilename: String
     let records: () throws -> [String]
 
@@ -105,12 +103,11 @@ struct SecretsExporter: View {
 
     var body: some View {
         Color.clear
-            .confirmationDialog(confirmationTitle, isPresented: $isPresented) {
-                Button("Authenticate and Export", role: .destructive) {
+            .onChange(of: isPresented) { _, shouldExport in
+                if shouldExport {
+                    isPresented = false
                     authenticateAndExport()
                 }
-            } message: {
-                Text("Face ID or your device passcode is required. Anyone with the exported file can generate your codes.")
             }
             .fileExporter(isPresented: $showExporter,
                           document: backupDocument,
@@ -138,6 +135,7 @@ struct SecretsExporter: View {
                 ) else { return }
                 exportBackup()
             } catch {
+                guard !error.isAuthenticationCancellation else { return }
                 exportError = error.localizedDescription
                 showExportError = true
             }

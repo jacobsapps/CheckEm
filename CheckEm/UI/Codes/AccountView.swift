@@ -15,10 +15,9 @@ struct AccountView: View {
     
     @ScaledMetric(relativeTo: .largeTitle) private var iconSize: CGFloat = 36
     @State private var exportError = ""
-    @State private var secretQRCode: SecretQRCode?
+    @State private var secretPresentation: SecretPresentation?
     @State private var showCopied: Bool = false
     @State private var showExportError: Bool = false
-    @State private var showQRCodeWarning: Bool = false
     let account: Account
     let onDelete: () -> Void
     
@@ -39,8 +38,14 @@ struct AccountView: View {
                 Button("Copy Code", systemImage: "doc.on.doc", action: copyCode)
                     .disabled(account.code == nil)
 
-                Button("Show Setup QR", systemImage: "qrcode") {
-                    showQRCodeWarning = true
+                Section("Share Secret") {
+                    Button("As Text", systemImage: "square.and.arrow.up") {
+                        authenticateAndShareSecret(as: .shareSheet)
+                    }
+
+                    Button("Via QR Code", systemImage: "qrcode") {
+                        authenticateAndShareSecret(as: .qrCode)
+                    }
                 }
 
                 Divider()
@@ -49,19 +54,17 @@ struct AccountView: View {
                     Label("Delete Account", systemImage: "trash")
                 }
             }
-            .confirmationDialog("Show the setup QR for \(account.name)?", isPresented: $showQRCodeWarning) {
-                Button("Authenticate and Show QR", role: .destructive) {
-                    authenticateAndShowQRCode()
-                }
-            } message: {
-                Text("Anyone who scans this QR code can generate the account’s 2FA codes.")
-            }
-            .sheet(item: $secretQRCode, onDismiss: {
-                secretQRCode = nil
+            .sheet(item: $secretPresentation, onDismiss: {
+                secretPresentation = nil
             }) {
-                SecretQRCodeView(accountName: account.name, uri: $0.uri)
+                switch $0.mode {
+                case .shareSheet:
+                    ShareSheet(item: $0.uri)
+                case .qrCode:
+                    SecretQRCodeView(accountName: account.name, uri: $0.uri)
+                }
             }
-            .alert("Unable to Show QR Code", isPresented: $showExportError) {
+            .alert("Unable to Share Secret", isPresented: $showExportError) {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text(exportError)
@@ -133,13 +136,13 @@ struct AccountView: View {
         }
     }
 
-    private func authenticateAndShowQRCode() {
+    private func authenticateAndShareSecret(as mode: SecretPresentation.Mode) {
         Task { @MainActor in
             do {
                 let context = LAContext()
                 guard try await context.evaluatePolicy(
                     .deviceOwnerAuthentication,
-                    localizedReason: "Show the setup QR for your 2FA account"
+                    localizedReason: "Share your 2FA secret"
                 ) else { return }
 
                 guard let record = try KeychainManager.shared.fetchAccount(named: account.name),
@@ -148,8 +151,9 @@ struct AccountView: View {
                       url.host == "totp" else {
                     throw KeychainManager.KeychainManagerError.accountNotFound
                 }
-                secretQRCode = SecretQRCode(uri: record)
+                secretPresentation = SecretPresentation(mode: mode, uri: record)
             } catch {
+                guard !error.isAuthenticationCancellation else { return }
                 exportError = error.localizedDescription
                 showExportError = true
             }
@@ -157,9 +161,27 @@ struct AccountView: View {
     }
 }
 
-private struct SecretQRCode: Identifiable {
+private struct SecretPresentation: Identifiable {
+
+    enum Mode {
+        case shareSheet
+        case qrCode
+    }
+
     let id = UUID()
+    let mode: Mode
     let uri: String
+}
+
+private struct ShareSheet: UIViewControllerRepresentable {
+
+    let item: String
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: [item], applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) { }
 }
 
 private struct SecretQRCodeView: View {
@@ -184,7 +206,7 @@ private struct SecretQRCodeView: View {
                         .accessibilityLabel("2FA setup QR code for \(accountName)")
                 }
 
-                Text("Scan this QR code with another authenticator. Anyone who scans it can generate this account’s codes.")
+                Text("Scan with another device")
                     .font(.body)
                     .multilineTextAlignment(.center)
             }
@@ -220,6 +242,15 @@ private struct SecretQRCodeView: View {
         let scaledImage = outputImage.transformed(by: CGAffineTransform(scaleX: 10, y: 10))
         guard let image = CIContext().createCGImage(scaledImage, from: scaledImage.extent) else { return nil }
         return UIImage(cgImage: image)
+    }
+}
+
+extension Error {
+    var isAuthenticationCancellation: Bool {
+        let code = (self as NSError).code
+        return code == LAError.Code.userCancel.rawValue
+            || code == LAError.Code.systemCancel.rawValue
+            || code == LAError.Code.appCancel.rawValue
     }
 }
 
