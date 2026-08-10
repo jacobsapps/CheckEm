@@ -6,10 +6,16 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct SettingsView: View {
     
     @AppStorage("sortMode") private var sortMode: SortMode = .rarity
+    @State private var backupDocument: SecretsBackupDocument?
+    @State private var exportError = ""
+    @State private var showBackupWarning = false
+    @State private var showExportError = false
+    @State private var showExporter = false
     
     enum SortMode: String {
         case rarity
@@ -32,9 +38,33 @@ struct SettingsView: View {
                 .pickerStyle(.segmented)
                 
                 settingsViewForSortMode
+
+                Section("Backup") {
+                    Button("Export 2FA Backup", systemImage: "square.and.arrow.up") {
+                        showBackupWarning = true
+                    }
+                }
             }
             .animation(.bouncy, value: sortMode)
             .navigationTitle("Settings")
+            .confirmationDialog("Export all 2FA secrets?", isPresented: $showBackupWarning) {
+                Button("Export Plaintext Backup", role: .destructive) {
+                    exportBackup()
+                }
+            } message: {
+                Text("Anyone with this file can generate your codes. Store it securely and delete any extra copies.")
+            }
+            .fileExporter(isPresented: $showExporter,
+                          document: backupDocument,
+                          contentType: .plainText,
+                          defaultFilename: "CheckEm-2FA-Backup") { _ in
+                backupDocument = nil
+            }
+            .alert("Unable to Export", isPresented: $showExportError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(exportError)
+            }
             .onAppear {
                 onAppear()
             }
@@ -72,6 +102,50 @@ struct SettingsView: View {
     private func segmentedPickerItem(for sortMode: SortMode) -> some View {
         Text(sortMode.rawValue.capitalized)
             .tag(sortMode)
+    }
+
+    private func exportBackup() {
+        do {
+            let accounts = try KeychainManager.shared.fetchAccounts()
+                .compactMap(URL.init(string:))
+                .filter { $0.scheme == "otpauth" && $0.host == "totp" }
+                .map(\.absoluteString)
+
+            guard !accounts.isEmpty else {
+                exportError = "No 2FA accounts were found."
+                showExportError = true
+                return
+            }
+
+            backupDocument = SecretsBackupDocument(contents: accounts.joined(separator: "\n"))
+            showExporter = true
+        } catch {
+            exportError = error.localizedDescription
+            showExportError = true
+        }
+    }
+}
+
+private struct SecretsBackupDocument: FileDocument {
+
+    static let readableContentTypes: [UTType] = [.plainText]
+
+    let contents: String
+
+    init(contents: String) {
+        self.contents = contents
+    }
+
+    init(configuration: ReadConfiguration) throws {
+        guard let data = configuration.file.regularFileContents,
+              let contents = String(data: data, encoding: .utf8) else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+        self.contents = contents
+    }
+
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: Data(contents.utf8))
     }
 }
 
