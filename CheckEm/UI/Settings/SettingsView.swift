@@ -94,7 +94,7 @@ struct SecretsExporter: View {
 
     @Binding var isPresented: Bool
     let defaultFilename: String
-    let records: () throws -> [String]
+    let records: @Sendable () throws -> [String]
 
     @State private var exportError = ""
     @State private var shareItem: SecretsShareItem?
@@ -132,7 +132,7 @@ struct SecretsExporter: View {
                     .deviceOwnerAuthentication,
                     localizedReason: "Export your 2FA secret keys"
                 ) else { return }
-                exportBackup()
+                await exportBackup()
             } catch {
                 guard !error.isAuthenticationCancellation else { return }
                 exportError = error.localizedDescription
@@ -141,9 +141,13 @@ struct SecretsExporter: View {
         }
     }
 
-    private func exportBackup() {
+    private func exportBackup() async {
         do {
-            let accounts = try records()
+            let fetchRecords = records
+            let accountRecords = try await Task.detached(priority: .userInitiated) {
+                try fetchRecords()
+            }.value
+            let accounts = accountRecords
                 .compactMap(URL.init(string:))
                 .filter { $0.scheme == "otpauth" && $0.host == "totp" }
                 .map(\.absoluteString)
