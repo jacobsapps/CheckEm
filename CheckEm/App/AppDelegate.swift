@@ -19,16 +19,20 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void) {
+                                withCompletionHandler completionHandler: @escaping @Sendable () -> Void) {
         
         let userInfo = response.notification.request.content.userInfo
         
-        if let deepLinkString = userInfo["deepLink"] as? String,
-           let deepLinkURL = URL(string: deepLinkString) {
-            guard let code = deepLinkURL.code else { return }
-            try? CollectionManager.shared.save(code: code)
+        guard let deepLinkString = userInfo["deepLink"] as? String,
+              let deepLinkURL = URL(string: deepLinkString),
+              let code = deepLinkURL.code else {
+            completionHandler()
+            return
         }
-        
-        completionHandler()
+
+        KeychainManager.accessQueue.async {
+            try? CollectionManager.shared.save(code: code)
+            completionHandler()
+        }
     }
 }

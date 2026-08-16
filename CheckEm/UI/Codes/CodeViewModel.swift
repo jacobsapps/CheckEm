@@ -17,25 +17,27 @@ final class CodeViewModel {
     private var otpComputationTask: Task<Void, Never>?
     private var notificationSchedulingTask: Task<Void, Never>?
     
-    init() {
-        configureAccounts()
-        refresh()
-    }
-    
     @MainActor
-    func onAppear() {
-        configureAccounts()
+    func onAppear() async {
+        let (accounts, collection) = await withCheckedContinuation { continuation in
+            KeychainManager.accessQueue.async {
+                continuation.resume(returning: (try? AccountManager.shared.fetchAccounts(),
+                                                try? CollectionManager.shared.fetchCollection()))
+            }
+        }
+        if let accounts {
+            configure(accounts: accounts)
+        }
         refresh()
         recomputeNotifications()
-        if let collection = try? CollectionManager.shared.fetchCollection() {
+        if let collection {
             withAnimation {
                 self.collection = collection
             }
         }
     }
     
-    private func configureAccounts() {
-        guard let accounts = try? AccountManager.shared.fetchAccounts() else { return }
+    private func configure(accounts: [Account]) {
         guard self.accounts != accounts else { return }
         withAnimation {
             self.accounts = accounts

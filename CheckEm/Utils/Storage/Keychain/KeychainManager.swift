@@ -20,6 +20,7 @@ final class KeychainManager {
     }
     
     static let shared = KeychainManager()
+    static let accessQueue = DispatchQueue(label: "CheckEm.Keychain", qos: .userInitiated)
     private let keychain: Keychain
     
     private init() {

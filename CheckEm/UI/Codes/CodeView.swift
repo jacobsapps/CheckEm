@@ -48,7 +48,7 @@ struct CodeView: View {
                         placement: .automatic,
                         prompt: "Search")
             .refreshable {
-                viewModel.onAppear()
+                await viewModel.onAppear()
             }
             .onReceive(timer) { _ in 
                 viewModel.refresh()
@@ -103,7 +103,7 @@ struct CodeView: View {
         }
         .onChange(of: scenePhase, initial: true) { _, newScenePhase in
             if case .active = newScenePhase {
-                viewModel.onAppear()
+                Task { await viewModel.onAppear() }
             }
         }
     }
